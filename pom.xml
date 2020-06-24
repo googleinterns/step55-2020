@@ -47,7 +47,7 @@
         <version>2.2.0</version>
         <configuration>
           <!-- TODO: set project ID. -->
-          <deploy.projectId>SET_PROJECT_ID</deploy.projectId>
+          <deploy.projectId>step55-2020</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
