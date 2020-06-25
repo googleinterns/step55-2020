@@ -1,0 +1,15 @@
+.light-mode nav {
+  background-color: #553A41;
+}
+
+.light-mode {
+    background-color: white;
+}
+
+.dark-mode nav {
+  background-color: #000000ff;
+}
+
+.dark-mode {
+    background-color: #434343ff;
+}
