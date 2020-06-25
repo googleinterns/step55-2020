@@ -6,10 +6,6 @@ function changeToOrFromDarkMode() {
   } else {
     body.className = 'light-mode';
   }
-//   if (typeof(Storage) !== "undefined") {
-//     // Store
-//     sessionStorage.setItem("color-mode", body.className);
-//   }
 }
 
 function createNavBar(page) {
@@ -72,10 +68,5 @@ function createNavBar(page) {
 }
 
 function onLoadFunctions(page) {
-  // Check browser support
-//   if (typeof(Storage) !== "undefined") {
-//     sessionStorage.getItem("color-mode");
-//     body.className = sessionStorage.getItem("color-mode")
-//   }
   createNavBar(page);
 }

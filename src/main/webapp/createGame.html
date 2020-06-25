@@ -35,19 +35,22 @@
         <br/>
         <input id='description' type='text' name='description' placeholder='Game Description'>  
 
-        <div id='stages'>
-          <input type='button' value='Stage 1' id="stage1">
+        <!-- Div for the stages -->
+        <div class="tabs" id='stages'>
+          <a href="#stage1"><input type='button' value='Stage 1' id='stage1' class='activeStage'></a>
         </div>
-        <input type='button' value='+ add stage' id='addStage' onclick='addStage()'>
+        <input type='button' value='+ add stage' id='addStage' onclick='addNewStage()'>
+
+        <!-- Div for the hints -->
+        <div  id='hints'>
+          <div class='stage1'>
+            <input type='text' placeholder='Starter (spawn location and first hint)' id='starter-hint' required>
+            <input type='text' placeholder='Hint 1' id="hint1">
+          </div> 
+          <input type='button' value='+ add hint' id='addHint' onclick='addNewHint()'>
+        </div> 
 
         <br/>
-        <input id='starter-hint' type='text' name='Starter Hint' placeholder='Starter (spawn location and first hint)' required>
-
-        <div id='hints'>
-            <input type='button' value='Hint 1' id="hint1">
-        </div>
-        <input type='button' value='+ add hint' id='addHint' onclick='addHint()'>
-
         <input type='button' value='Finish'>
     
     </form>
