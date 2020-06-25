@@ -36,7 +36,7 @@ public class Game {
         private final String gameName;
 
         // Optional paramters - initialized to default values
-	    private String gameDescription = null;
+        private String gameDescription = null;
         private int numStages = -1;
         private ArrayList<String> stages = null;
         private int numTimesPlayed = -1;
