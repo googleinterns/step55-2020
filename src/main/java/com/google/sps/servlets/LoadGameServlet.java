@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Given a gameID, returns the corresponding game */
 @WebServlet("/load-game-data")
-public class LoadGameServlet extends HttpServlet {    
+public class LoadGameServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect("/index.html");

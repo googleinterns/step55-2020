@@ -1,4 +1,6 @@
 com/google/sps/data/Game$Builder.class
 com/google/sps/data/Game$1.class
 com/google/sps/servlets/LoadGameServlet.class
+com/google/sps/data/Coordinates.class
+com/google/sps/servlets/CreateGameServlet.class
 com/google/sps/data/Game.class
