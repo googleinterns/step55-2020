@@ -9,6 +9,7 @@ function changeToOrFromDarkMode() {
 }
 
 function createNavBar(page) {
+    console.log(page)
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -21,7 +22,7 @@ function createNavBar(page) {
 
   var a = document.createElement('a');
   a.innerHTML = 'Street Explorer';
-  a.href = "#";
+  a.href = "index.html";
   a.className = 'brand-logo';
   containerDiv.appendChild(a);
 
@@ -35,12 +36,18 @@ function createNavBar(page) {
   liBrightness.appendChild(a);
 
   var liHome= document.createElement('li');
+  if (page == 'index') {
+      liHome.className = 'active';
+  }
   a = document.createElement('a');
   a.innerHTML = ('Home');
   a.href = "index.html";
   liHome.appendChild(a);
 
   var liCreateGame = document.createElement('li');
+  if (page == 'createGame') {
+      liCreateGame.className = 'active';
+  }
   a = document.createElement('a');
   a.innerHTML = ('Create Game');
   a.href = "createGame.html";
