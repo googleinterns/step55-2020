@@ -6,6 +6,7 @@
   <script src='https://www.gstatic.com/charts/loader.js'></script>
 
   <script src='js/script.js'></script>
+  <script src='js/createGame.js'></script>
 
   <!--Import Google Icon Font-->
   <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
@@ -26,5 +27,25 @@
 </head>
 <body class='light-mode' onload='onLoadFunctions("createGame")'>
   <div id='nav-bar'></div>
+    <div class='container'>
+      <form action='' method=''>
+        <br/>
+        <input id='title' type='text' name='title' placeholder='Title' required>
+    
+        <br/>
+        <input id='description' type='text' name='description' placeholder='Game Description'>  
+
+        <div id='stages'>
+          <input type='button' value='Stage 1' id="stage1">
+        </div>
+        <input type='button' value='+ add hint' id='addHint' onclick='addStage()'>
+
+        <br/>
+        <input id='starter-hint' type='text' name='Starter Hint' placeholder='Starter (spawn location and first hint)' required>
+
+        <input type='button' value='Finish'>
+    
+    </form>
+  </div> 
 </body>
 </html>

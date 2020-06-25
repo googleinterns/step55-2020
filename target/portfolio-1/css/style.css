@@ -13,3 +13,7 @@
 .dark-mode {
     background-color: #434343ff;
 }
+
+input {
+    background-color: gray;
+}

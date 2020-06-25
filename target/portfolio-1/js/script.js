@@ -6,10 +6,13 @@ function changeToOrFromDarkMode() {
   } else {
     body.className = 'light-mode';
   }
+//   if (typeof(Storage) !== "undefined") {
+//     // Store
+//     sessionStorage.setItem("color-mode", body.className);
+//   }
 }
 
 function createNavBar(page) {
-    console.log(page)
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -37,7 +40,7 @@ function createNavBar(page) {
 
   var liHome= document.createElement('li');
   if (page == 'index') {
-      liHome.className = 'active';
+    liHome.className = 'active';
   }
   a = document.createElement('a');
   a.innerHTML = ('Home');
@@ -69,5 +72,10 @@ function createNavBar(page) {
 }
 
 function onLoadFunctions(page) {
+  // Check browser support
+//   if (typeof(Storage) !== "undefined") {
+//     sessionStorage.getItem("color-mode");
+//     body.className = sessionStorage.getItem("color-mode")
+//   }
   createNavBar(page);
 }
