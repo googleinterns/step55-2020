@@ -23,7 +23,7 @@ function createNavBar(page) {
   a.innerHTML = 'Street Explorer';
   a.href = "#";
   a.className = 'brand-logo';
-  navWrapperDiv.appendChild(a);
+  containerDiv.appendChild(a);
 
   var ul = document.createElement('ul');
   ul.className = 'right hide-on-med-and-down';
@@ -37,13 +37,13 @@ function createNavBar(page) {
   var liHome= document.createElement('li');
   a = document.createElement('a');
   a.innerHTML = ('Home');
-  a.href = "#";
+  a.href = "index.html";
   liHome.appendChild(a);
 
   var liCreateGame = document.createElement('li');
   a = document.createElement('a');
   a.innerHTML = ('Create Game');
-  a.href = "#";
+  a.href = "createGame.html";
   liCreateGame.appendChild(a);
 
   var liLogin = document.createElement('li');
@@ -56,7 +56,7 @@ function createNavBar(page) {
   ul.appendChild(liHome);
   ul.appendChild(liCreateGame);
   ul.appendChild(liLogin);
-  navWrapperDiv.appendChild(ul);
+  containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
 }
