@@ -16,7 +16,7 @@ package com.google.sps.data;
 
 import java.util.ArrayList;
 
-// Represents the data of a single Game!
+// Represents the data of a single Game
 public class Game {
     private final String gameID;
     private final String gameName;
