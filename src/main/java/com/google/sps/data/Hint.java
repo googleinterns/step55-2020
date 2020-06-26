@@ -49,6 +49,7 @@ public class Hint {
         * Sets the longitude and latitude where this hint is located.
         * @param val a Coordinates object representing the location.
         * @return a Builder object with the new location.
+        * @see com.google.sps.data.Coordinates
         */
         public Builder setLocation(Coordinates val) {
             this.location = val;

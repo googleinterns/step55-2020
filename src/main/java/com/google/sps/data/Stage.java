@@ -75,6 +75,7 @@ public class Stage {
         * Sets the longitude and latitude where the user spawns when this stage begins.
         * @param val a Coordinates object representing the starting location.
         * @return a Builder object with the new starting location.
+        * @see com.google.sps.data.Coordinates
         */
         public Builder setStartingLocation(Coordinates val) {
             this.startingLocation = val;
