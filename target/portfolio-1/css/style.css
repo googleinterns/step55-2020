@@ -25,3 +25,12 @@ input {
 .activeStage {
     background-color: #74d3aeff;
 }
+
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+#map {
+  border: thin solid black;
+  float: right;
+  height: 500px;
+  width: 100%;
+}
