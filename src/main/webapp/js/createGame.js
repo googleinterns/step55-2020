@@ -8,7 +8,7 @@ function addNewStage() {
 
   const newStage = document.createElement('input');
   newStage.value = 'Stage ' + (numStages + 1);
-  newStage.type= 'button';
+  newStage.type = 'button';
   newStage.className = 'stage' + (numStages + 1) + ' activeStage';
 
   newStage.addEventListener("click", function(){
