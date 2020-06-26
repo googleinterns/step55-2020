@@ -4,7 +4,6 @@ com/google/sps/data/Stage$1.class
 com/google/sps/data/Game$1.class
 com/google/sps/servlets/LoadGameServlet.class
 com/google/sps/data/Hint.class
-com/google/sps/servlets/LoadHintServlet.class
 com/google/sps/data/Game.class
 com/google/sps/data/Hint$Builder.class
 com/google/sps/servlets/LoadStageServlet.class

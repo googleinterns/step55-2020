@@ -47,12 +47,36 @@ public class LoadStageServlet extends HttpServlet {
         stageBuilder.setKey("mellon");
         stageBuilder.setStartingHint("Look for the people who defy gravity");
         stageBuilder.setStartingLocation(new Coordinates(40.444240, -79.942013));
-        ArrayList<String> hints = new ArrayList<String>();
-        hints.add("hint1id"); hints.add("hint2id"); hints.add("hint3id"); hints.add("hint4id"); hints.add("hint5id"); hints.add("hint6id");
+        ArrayList<Hint> hints = new ArrayList<Hint>();
+        for(int i = 1; i <= 6; i++) hints.add(getHint(i));
         stageBuilder.setHints(hints);
         Stage stage = stageBuilder.build();
         
         String json = new Gson().toJson(stage);
         response.getWriter().println(json);
+    }
+
+    Hint getHint(int idx) {
+        Hint.Builder res = new Hint.Builder("hint" + String.valueOf(idx) + "id", idx);
+        if(idx == 1) {
+            res.setLocation(new Coordinates(40.444155, -79.942854));
+            res.setText("I need a break from all of this dra[m]a.");
+        } else if(idx == 2) {
+            res.setLocation(new Coordinates(40.443132, -79.943448));
+            res.setText("Why is ther[e] so much paint on this?!");
+        } else if(idx == 3) {
+            res.setLocation(new Coordinates(40.442228, -79.943445));
+            res.setText("Face south, then keep following the rightmost path unti[l] you reach a turtle-shaped building.");
+        } else if(idx == 4) {
+            res.setLocation(new Coordinates(40.442396, -79.945995));
+            res.setText("Nada[l] would want to be here.");
+        } else if(idx == 5) {
+            res.setLocation(new Coordinates(40.442084, -79.942227));
+            res.setText("How is this a r[o]tunda with no dome?");
+        } else if(idx == 6) {
+            res.setLocation(new Coordinates(40.441847, -79.941526));
+            res.setText("This is the final hint, [n]ow please enter the key.");
+        }
+        return res.build();
     }
 }

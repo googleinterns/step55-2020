@@ -25,7 +25,7 @@ public class Stage {
     private final String key;
     private final String startingHint;
     private final Coordinates startingLocation;
-    private final ArrayList<String> hints;
+    private final ArrayList<Hint> hints;
 
     /**
     * Builder class used to create Stage objects.
@@ -39,7 +39,7 @@ public class Stage {
         private String key = null;
         private String startingHint = null;
         private Coordinates startingLocation = null;
-        private ArrayList<String> hints = null;
+        private ArrayList<Hint> hints = null;
 
         /**
         * Constructor that sets the stage ID and the stage number.
@@ -84,11 +84,10 @@ public class Stage {
 
         /**
         * Specifies which hints are in the game.
-        * @param val an ArrayList of String representing the list of hints in the game.
-        *            Each hint is represented by its ID.
+        * @param val an ArrayList of Hint representing the list of hints in this stage.
         * @return a Builder object with the new list of hints.
         */
-        public Builder setHints(ArrayList<String> val) {
+        public Builder setHints(ArrayList<Hint> val) {
             this.hints = val;
             return this;
         }
