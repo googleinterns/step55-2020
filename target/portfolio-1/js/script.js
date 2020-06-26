@@ -9,7 +9,6 @@ function changeToOrFromDarkMode() {
 }
 
 function createNavBar(page) {
-    console.log(page)
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -37,7 +36,7 @@ function createNavBar(page) {
 
   var liHome= document.createElement('li');
   if (page == 'index') {
-      liHome.className = 'active';
+    liHome.className = 'active';
   }
   a = document.createElement('a');
   a.innerHTML = ('Home');
