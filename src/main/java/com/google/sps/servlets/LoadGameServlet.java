@@ -32,7 +32,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Given a gameID, returns the corresponding game */
+/**
+* Servlet that when given a gameID, returns the corresponding Game.
+*/
 @WebServlet("/load-game-data")
 public class LoadGameServlet extends HttpServlet {
     @Override
