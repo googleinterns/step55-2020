@@ -21,7 +21,7 @@ public class Coordinates {
     private double latitude;
     private double longitude;
 
-	/**
+    /**
     * Constructor that initializes the coordinates as (0,0).
     */
     public Coordinates() {
@@ -29,7 +29,7 @@ public class Coordinates {
         this.longitude = 0;
     }
 
-	/**
+    /**
     * Constructor with specific coordinates.
     * @param latitude a double specifying the latitude.
     * @param longitude a double specifying the longitude.
@@ -47,7 +47,7 @@ public class Coordinates {
         this.latitude = val;
     }
 
-	/**
+    /**
     * Sets the longitude of the coordinates.
     * @param val a double specifying the new longitude.
     */
@@ -55,7 +55,7 @@ public class Coordinates {
         this.longitude = val;
     }
 
-	/**
+    /**
     * Get the latitude of the coordinates.
     * @return the latitude of the coordinates.
     */
@@ -63,7 +63,7 @@ public class Coordinates {
         return this.latitude;
     }
 
-	/**
+    /**
     * Get the longitude of the coordinates.
     * @return the longitude of the coordinates.
     */

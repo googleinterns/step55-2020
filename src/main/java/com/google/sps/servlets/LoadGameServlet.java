@@ -13,8 +13,9 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
+import com.google.sps.data.*;
 
-import com.google.sps.data.Game;
+import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -33,12 +34,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that when given a gameID, returns the corresponding Game.
+* Servlet that when given a gameID, serves the corresponding Game.
 */
 @WebServlet("/load-game-data")
 public class LoadGameServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("/index.html");
+        // Currently ignores the input and just returns a fixed Game.
+        String gameID = "demogameid";
+
+        Game.Builder gameBuilder = new Game.Builder(gameID, "Demo");
+        gameBuilder.setGameCreator("username");
+        gameBuilder.setGameDescription("Demo game for testing");
+        gameBuilder.setNumStages(1);
+        ArrayList<String> stages = new ArrayList<String>();
+        stages.add("stage1id");
+        gameBuilder.setStages(stages);
+        Game game = gameBuilder.build();
+        
+        String json = new Gson().toJson(game);
+        response.getWriter().println(json);
     }
 }

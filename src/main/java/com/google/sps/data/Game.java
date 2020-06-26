@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class Game {
     private final String gameID;
     private final String gameName;
+    private final String gameCreator;
     private final String gameDescription;
     private final int numStages;
     private final ArrayList<String> stages;
@@ -41,6 +42,7 @@ public class Game {
         private final String gameName;
 
         // Optional paramters - initialized to default values
+        private String gameCreator = null;
         private String gameDescription = null;
         private int numStages = -1;
         private ArrayList<String> stages = null;
@@ -59,6 +61,16 @@ public class Game {
         public Builder(String gameID, String gameName) {
             this.gameID = gameID;
             this.gameName = gameName;
+        }
+
+        /**
+        * Sets the game's creator, which is displayed on the game's page.
+        * @param val a String representing the creator's username.
+        * @return a Builder object with the modified creator.
+        */
+        public Builder setGameCreator(String val) {
+            this.gameCreator = val;
+            return this;
         }
 
         /**
@@ -169,6 +181,7 @@ public class Game {
     private Game(Builder builder) {
         this.gameID = builder.gameID;
         this.gameName = builder.gameName;
+        this.gameCreator = builder.gameCreator;
         this.gameDescription = builder.gameDescription;
         this.numStages = builder.numStages;
         this.stages = builder.stages;
