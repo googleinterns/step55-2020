@@ -13,8 +13,9 @@
 // limitations under the License.
 
 package com.google.sps.servlets;
+import com.google.sps.data.*;
 
-import com.google.sps.data.Game;
+import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -32,11 +33,46 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Given a gameID, returns the corresponding game */
-@WebServlet("/load-game-data")
-public class LoadGameServlet extends HttpServlet {
+/** Takes the created game information and puts the new game in datastore */
+@WebServlet("/create-game-data")
+public class CreateGameServlet extends HttpServlet {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.sendRedirect("/index.html");
+    }
+
+    private String getName(HttpServletRequest request) {
+        return request.getParameter("gameName");
+    }
+
+    private String getDescription(HttpServletRequest request) {
+        return request.getParameter("gameDescription");
+    }
+
+    // Below: TODO once game creation form is done
+    private int getNumStages(HttpServletRequest request) {
+        return -1;
+    }
+
+	private ArrayList<Coordinates> getStageSpawnLocations(HttpServletRequest request) {
+        return null;
+    }
+
+    private ArrayList<String> getStageStarterHints(HttpServletRequest request) {
+        return null;
+    }
+
+    private ArrayList<Integer> getNumHints(HttpServletRequest request) {
+        return null;
+    }
+
+    private ArrayList<ArrayList<Coordinates>> getHintCoordinates(HttpServletRequest request) {
+        return null;
+    }
+
+    private ArrayList<ArrayList<String>> getHintText(HttpServletRequest request) {
+        return null;
     }
 }
