@@ -24,8 +24,7 @@ public class Stage {
     private final int stageNumber;
     private final String key;
     private final String startingHint;
-    private final double startingLongitude;
-    private final double startingLatitude;
+    private final Coordinates startingLocation;
     private final ArrayList<String> hints;
 
     /**
@@ -39,8 +38,7 @@ public class Stage {
         // Optional parameters - initialized to default values
         private String key = null;
         private String startingHint = null;
-        private double startingLongitude = 0.0;
-        private double startingLatitude = 0.0;
+        private Coordinates startingLocation = null;
         private ArrayList<String> hints = null;
 
         /**
@@ -74,22 +72,12 @@ public class Stage {
         }
 
         /**
-        * Sets the latitude where the user spawns when this stage begins.
-        * @param val the starting latitude.
-        * @return a Builder object with the new starting latitude.
+        * Sets the longitude and latitude where the user spawns when this stage begins.
+        * @param val a Coordinates object representing the starting location.
+        * @return a Builder object with the new starting location.
         */
-        public Builder setStartingLatitude(double val) {
-            this.startingLatitude = val;
-            return this;
-        }
-
-        /**
-        * Sets the longitude where the user spawns when this stage begins.
-        * @param val the starting longitude.
-        * @return a Builder object with the new starting longitude.
-        */
-        public Builder setStartingLongitude(double val) {
-            this.startingLongitude = val;
+        public Builder setStartingLocation(Coordinates val) {
+            this.startingLocation = val;
             return this;
         }
 
@@ -123,8 +111,7 @@ public class Stage {
         this.stageNumber = builder.stageNumber;
         this.key = builder.key;
         this.startingHint = builder.startingHint;
-        this.startingLongitude = builder.startingLongitude;
-        this.startingLatitude = builder.startingLatitude;
+        this.startingLocation = builder.startingLocation;
         this.hints = builder.hints;
     }
 }

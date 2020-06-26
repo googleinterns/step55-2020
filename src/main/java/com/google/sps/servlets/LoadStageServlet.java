@@ -46,8 +46,7 @@ public class LoadStageServlet extends HttpServlet {
         Stage.Builder stageBuilder = new Stage.Builder(stageID, 1);
         stageBuilder.setKey("mellon");
         stageBuilder.setStartingHint("Look for the people who defy gravity");
-        stageBuilder.setStartingLatitude(40.444240);
-        stageBuilder.setStartingLongitude(-79.942013);
+        stageBuilder.setStartingLocation(new Coordinates(40.444240, -79.942013));
         ArrayList<String> hints = new ArrayList<String>();
         hints.add("hint1id"); hints.add("hint2id"); hints.add("hint3id"); hints.add("hint4id"); hints.add("hint5id"); hints.add("hint6id");
         stageBuilder.setHints(hints);

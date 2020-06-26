@@ -120,9 +120,9 @@ public class CreateGameServlet extends HttpServlet {
     /**
     * Retrieves the text of each hint in each stage.
     * @param request the HttpServletRequest of the doPost.
-    * @return an ArrayList, where the ith element is a list of
+    * @return an ArrayList, where the ith element is an inner list of
     *         Strings of the hints on the ith stage. The jth
-    *         element of this list represents the text of
+    *         element of this inner list represents the text of
     *         the jth hint of the ith stage.
     */
     private ArrayList<ArrayList<String>> getHintText(HttpServletRequest request) {
