@@ -45,10 +45,9 @@ function getHints(stage) {
   return stage.hints;
 }
 
-function addUserMarkerOnLoad(map, latLng) {
+function addHintMarker(map, latLng) {
   var marker = new google.maps.Marker({
     position: latLng,
-    map: map,
-    icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+    map: map
   });
 }
