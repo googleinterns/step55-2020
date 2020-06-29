@@ -114,4 +114,52 @@ public class Stage {
         this.startingLocation = builder.startingLocation;
         this.hints = builder.hints;
     }
+
+    /**
+    * Retrieves the id of this stage.
+    * @return a String representing the stageID of this stage.
+    */
+    public String getStageID() {
+        return this.stageID;
+    }
+
+    /**
+    * Retrieves the number of this stage.
+    * @return an int representing the stageNumber of this stage.
+    */
+    public int getStageNumber() {
+        return this.stageNumber;
+    }
+
+    /**
+    * Retrieves the key for this stage.
+    * @return a String representing the key for this stage.
+    */
+    public String getKey() {
+        return this.key;
+    }
+
+    /**
+    * Retrieves the starting hint of this stage.
+    * @return a String representing the starting hint of this stage.
+    */
+    public String getStartingHint() {
+        return this.startingHint;
+    }
+
+    /**
+    * Retrieves the starting coordinates of this stage.
+    * @return a Coordinates representing the starting location of this stage.
+    */
+    public Coordinates getStartingLocation() {
+        return this.startingLocation;
+    }
+
+    /**
+    * Retrieves the list of hints in this stage.
+    * @return an ArrayList of Hint representing the hints that are in this stage.
+    */
+    public ArrayList<Hint> getHints() {
+        return this.hints;
+    }
 }

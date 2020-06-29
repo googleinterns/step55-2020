@@ -86,4 +86,36 @@ public class Hint {
         this.location = builder.location;
         this.text = builder.text;
     }
+
+    /**
+    * Retrieves the id of this hint.
+    * @return a String representing the hintID of this hint.
+    */
+    public String getHintID() {
+        return this.hintID;
+    }
+
+    /**
+    * Retrieves this hint's number.
+    * @return an int representing the number of this int.
+    */
+    public int getHintNumber() {
+        return this.hintNumber;
+    }
+
+    /**
+    * Retrieves this hint's location.
+    * @return a Coordinates representing the location of this int.
+    */
+    public Coordinates getLocation() {
+        return this.location;
+    }
+
+    /**
+    * Retrieves this hint's text.
+    * @return a String representing the text of this int.
+    */
+    public String getText() {
+        return this.text;
+    }
 }
