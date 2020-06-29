@@ -44,7 +44,7 @@ public class Stage {
         /**
         * Constructor that sets the stage ID and the stage number.
         * @param stageID the unique code used to identify this specific stage.
-        * @param stageNumber a int representing the stage number.
+        * @param stageNumber a int containing the stage number.
         */
         public Builder(String stageID, int stageNumber) {
             this.stageID = stageID;
@@ -53,42 +53,42 @@ public class Stage {
 
         /**
         * Sets the key used to beat this stage.
-        * @param val the key used to beat this stage.
+        * @param key the key used to beat this stage.
         * @return a Builder object with the new key.
         */
-        public Builder setKey(String val) {
-            this.key = val;
+        public Builder setKey(String key) {
+            this.key = key;
             return this;
         }
 
         /**
         * Sets the starting hint given at the beginning of this stage.
-        * @param val the starting hint.
+        * @param startingHint the starting hint.
         * @return a Builder object with the new starting hint.
         */
-        public Builder setStartingHint(String val) {
-            this.startingHint = val;
+        public Builder setStartingHint(String startingHint) {
+            this.startingHint = startingHint;
             return this;
         }
 
         /**
         * Sets the longitude and latitude where the user spawns when this stage begins.
-        * @param val a Coordinates object representing the starting location.
+        * @param startingLocation a Coordinates object containing the starting location.
         * @return a Builder object with the new starting location.
         * @see com.google.sps.data.Coordinates
         */
-        public Builder setStartingLocation(Coordinates val) {
-            this.startingLocation = val;
+        public Builder setStartingLocation(Coordinates startingLocation) {
+            this.startingLocation = startingLocation;
             return this;
         }
 
         /**
         * Specifies which hints are in the game.
-        * @param val an ArrayList of Hint representing the list of hints in this stage.
+        * @param hints an ArrayList of Hint containing the list of hints in this stage.
         * @return a Builder object with the new list of hints.
         */
-        public Builder setHints(ArrayList<Hint> val) {
-            this.hints = val;
+        public Builder setHints(ArrayList<Hint> hints) {
+            this.hints = hints;
             return this;
         }
 
@@ -117,7 +117,7 @@ public class Stage {
 
     /**
     * Retrieves the id of this stage.
-    * @return a String representing the stageID of this stage.
+    * @return a String containing the stageID of this stage.
     */
     public String getStageID() {
         return this.stageID;
@@ -125,7 +125,7 @@ public class Stage {
 
     /**
     * Retrieves the number of this stage.
-    * @return an int representing the stageNumber of this stage.
+    * @return an int containing the stageNumber of this stage.
     */
     public int getStageNumber() {
         return this.stageNumber;
@@ -133,7 +133,7 @@ public class Stage {
 
     /**
     * Retrieves the key for this stage.
-    * @return a String representing the key for this stage.
+    * @return a String containing the key for this stage.
     */
     public String getKey() {
         return this.key;
@@ -141,7 +141,7 @@ public class Stage {
 
     /**
     * Retrieves the starting hint of this stage.
-    * @return a String representing the starting hint of this stage.
+    * @return a String containing the starting hint of this stage.
     */
     public String getStartingHint() {
         return this.startingHint;
@@ -149,7 +149,7 @@ public class Stage {
 
     /**
     * Retrieves the starting coordinates of this stage.
-    * @return a Coordinates representing the starting location of this stage.
+    * @return a Coordinates containing the starting location of this stage.
     */
     public Coordinates getStartingLocation() {
         return this.startingLocation;
@@ -157,7 +157,7 @@ public class Stage {
 
     /**
     * Retrieves the list of hints in this stage.
-    * @return an ArrayList of Hint representing the hints that are in this stage.
+    * @return an ArrayList of Hint containing the hints that are in this stage.
     */
     public ArrayList<Hint> getHints() {
         return this.hints;

@@ -17,9 +17,9 @@ package com.google.sps.data;
 /**
 * Represents two objects.
 */
-public class Pair<T1, T2> {
-    public T1 first;
-    public T2 second;
+public class Pair<Type1, Type2> {
+    public Type1 first;
+    public Type2 second;
     
     /**
     * Constructor that creates a new pair of null.
@@ -34,7 +34,7 @@ public class Pair<T1, T2> {
     * @param first the first object of the pair.
     * @param second the second object of the pair.
     */
-    public Pair(T1 first, T2 second) {
+    public Pair(Type1 first, Type2 second) {
         this.first = first;
         this.second = second;
     }

@@ -17,7 +17,7 @@ package com.google.sps.data;
 import java.util.ArrayList;
 
 /**
-* Represents the static data representing progress a user has made in a game.
+* Represents the static data containing progress a user has made in a game.
 */
 public class Progress {
     private final String progressID;
@@ -51,51 +51,51 @@ public class Progress {
 
         /**
         * Sets the list of hints found on the current stage so far.
-        * @param val an ArrayList of String with the hintIDs of the hints found so far.
+        * @param hintsFound an ArrayList of String with the hintIDs of the hints found so far.
         * @return a Builder with the modified list of found hints.
         */
-        public Builder setHintsFound(ArrayList<String> val) {
-            this.hintsFound = val;
+        public Builder setHintsFound(ArrayList<String> hintsFound) {
+            this.hintsFound = hintsFound;
             return this;
         }
 
         /**
         * Sets the list of players.
-        * @param val an ArrayList of String with the userIDs of the people playing together.
+        * @param players an ArrayList of String with the userIDs of the people playing together.
         * @return a Builder with the modified list of players.
         */
-        public Builder setPlayers(ArrayList<String> val) {
-            this.players = val;
+        public Builder setPlayers(ArrayList<String> players) {
+            this.players = players;
             return this;
         }
 
         /**
         * Sets the ID of the current stage.
-        * @param val a String representing the stageID of the current stage.
+        * @param stageID a String containing the stageID of the current stage.
         * @return a Builder with the modified stageID.
         */
-        public Builder setStageID(String val) {
-            this.stageID = val;
+        public Builder setStageID(String stageID) {
+            this.stageID = stageID;
             return this;
         }
 
         /**
         * Sets the ID of the game that is being played.
-        * @param val a String representing the gameID of the current game.
+        * @param gameID a String containing the gameID of the current game.
         * @return a Builder with the modified gameID.
         */
-        public Builder setGameID(String val) {
-            this.gameID = val;
+        public Builder setGameID(String gameID) {
+            this.gameID = gameID;
             return this;
         }
 
         /**
         * Sets a flag indicating whether the game is over.
-        * @param val a boolean representing whether the game is over.
+        * @param gameOver a boolean containing whether the game is over.
         * @return a Builder with the modified game over flag.
         */
-        public Builder setGameOver(boolean val) {
-            this.gameOver = val;
+        public Builder setGameOver(boolean gameOver) {
+            this.gameOver = gameOver;
             return this;
         }
 
@@ -124,7 +124,7 @@ public class Progress {
 
     /**
     * Retrieves the progress ID.
-    * @return a String representing the progress ID.
+    * @return a String containing the progress ID.
     */
     public String getProgressID() {
         return this.progressID;
@@ -148,7 +148,7 @@ public class Progress {
 
     /**
     * Retrieves the ID of the current stage.
-    * @return a String representing the stageID of the current stage.
+    * @return a String containing the stageID of the current stage.
     */
     public String getStageID() {
         return this.stageID;
@@ -156,7 +156,7 @@ public class Progress {
 
     /**
     * Retrieves the ID of the game that is being played.
-    * @return a String representing the gameID of the current game.
+    * @return a String containing the gameID of the current game.
     */
     public String getGameID() {
         return this.gameID;
@@ -164,7 +164,7 @@ public class Progress {
 
     /**
     * Retrieves a flag indicating whether the game is over.
-    * @return a boolean representing whether the game is over.
+    * @return a boolean containing whether the game is over.
     */
     public boolean getGameOver() {
         return this.gameOver;

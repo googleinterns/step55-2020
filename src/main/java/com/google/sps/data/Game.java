@@ -56,7 +56,7 @@ public class Game {
         /**
         * Constructor that sets the game ID and the game name.
         * @param gameID the unique code used to identify this specific game.
-        * @param gameName a string representing the game's name.
+        * @param gameName a string containing the game's name.
         */
         public Builder(String gameID, String gameName) {
             this.gameID = gameID;
@@ -65,102 +65,102 @@ public class Game {
 
         /**
         * Sets the game's creator, which is displayed on the game's page.
-        * @param val a String representing the creator's username.
+        * @param gameCreator a String containing the creator's username.
         * @return a Builder object with the modified creator.
         */
-        public Builder setGameCreator(String val) {
-            this.gameCreator = val;
+        public Builder setGameCreator(String gameCreator) {
+            this.gameCreator = gameCreator;
             return this;
         }
 
         /**
         * Sets the game's description, which is displayed on the game's page.
-        * @param val a String representing the new description.
+        * @param gameDescription a String containing the new description.
         * @return a Builder object with the modified description.
         */
-        public Builder setGameDescription(String val) {
-            this.gameDescription = val;
+        public Builder setGameDescription(String gameDescription) {
+            this.gameDescription = gameDescription;
             return this;
         }
         
         /**
         * Sets the number of stages in the game.
-        * @param val an int representing the number of stages.
+        * @param numStages an int containing the number of stages.
         * @return a Builder object with the modified number of stages.
         */
-        public Builder setNumStages(int val) {
-            this.numStages = val;
+        public Builder setNumStages(int numStages) {
+            this.numStages = numStages;
             return this;
         }
 
         /**
         * Specifies which stages are in the game.
-        * @param val an ArrayList of String representing the list of stages in the game.
+        * @param stages an ArrayList of String containing the list of stages in the game.
         *            Each stage is represented by its ID.
         * @return a Builder object with the modified list of stages.
         */
-        public Builder setStages(ArrayList<String> val) {
-            this.stages = val;
+        public Builder setStages(ArrayList<String> stages) {
+            this.stages = stages;
             return this;
         }
 
         /**
         * Sets the number of times the game has been played.
-        * @param val an int representing the number of times the game has been played.
+        * @param numTimesPlayed an int containing the number of times the game has been played.
         * @return a Builder object with the modified number of times played.
         */
-        public Builder setNumTimesPlayed(int val) {
-            this.numTimesPlayed = val;
+        public Builder setNumTimesPlayed(int numTimesPlayed) {
+            this.numTimesPlayed = numTimesPlayed;
             return this;
         }
 
         /**
         * Sets the number of times the game has been played to completion.
-        * @param val an int representing the number of times this game has been finished.
+        * @param numTimesFinished an int containing the number of times this game has been finished.
         * @return a Builder object with the modified number of times finished.
         */
-        public Builder setNumTimesFinished(int val) {
-            this.numTimesFinished = val;
+        public Builder setNumTimesFinished(int numTimesFinished) {
+            this.numTimesFinished = numTimesFinished;
             return this;
         }
 
         /**
-        * Sets the number of times this game's number of stars has been voted on.
-        * @param val an int representing the number of times this game's number of stars has been voted on.
+        * Sets the number of times the game has received star votes.
+        * @param numStarVotes an int containing the number of times the game has received star votes.
         * @return a Builder object with the modified number of star votes.
         */
-        public Builder setNumStarVotes(int val) {
-            this.numStarVotes = val;
+        public Builder setNumStarVotes(int numStarVotes) {
+            this.numStarVotes = numStarVotes;
             return this;
         }
 
         /**
         * Sets the total number of stars this game has received.
-        * @param val an int representing the total number of stars this game has received.
+        * @param totalStars an int containing the total number of stars this game has received.
         * @return a Builder object with the modified total number of stars.
         */
-        public Builder setTotalStars(int val) {
-            this.totalStars = val;
+        public Builder setTotalStars(int totalStars) {
+            this.totalStars = totalStars;
             return this;
         }
 
         /**
         * Sets the number of times this game's difficulty has been voted on.
-        * @param val an int representing the number of times this game's difficulty has been voted on.
+        * @param numDifficultyVotes an int containing the number of times this game's difficulty has been voted on.
         * @return a Builder object with the modified number of difficulty votes.
         */
-        public Builder setNumDifficultyVotes(int val) {
-            this.numDifficultyVotes = val;
+        public Builder setNumDifficultyVotes(int numDifficultyVotes) {
+            this.numDifficultyVotes = numDifficultyVotes;
             return this;
         }
 
         /**
         * Sets the sum of all difficulty votes received by this game (1 = Easy, 2 = Medium, 3 = Hard).
-        * @param val an int representing the total sum of difficulty votes.
+        * @param totalDifficulty an int containing the total sum of difficulty votes.
         * @return a Builder object with the modified total difficulty.
         */
-        public Builder setTotalDifficulty(int val) {
-            this.totalDifficulty = val;
+        public Builder setTotalDifficulty(int totalDifficulty) {
+            this.totalDifficulty = totalDifficulty;
             return this;
         }
 
@@ -195,7 +195,7 @@ public class Game {
 
     /**
     * Retrieves the game ID.
-    * @return a String representing the gameID of this Game.
+    * @return a String containing the gameID for this Game.
     */
     public String getGameID() {
         return this.gameID;
@@ -203,7 +203,7 @@ public class Game {
 
     /**
     * Retrieves the game name.
-    * @return a String representing the gameName of this Game.
+    * @return a String containing the gameName of this Game.
     */
     public String getGameName() {
         return this.gameName;
@@ -211,7 +211,7 @@ public class Game {
 
     /**
     * Retrieves the game's creator.
-    * @return a String representing the userID of the creator of this game.
+    * @return a String containing the userID of the creator of this game.
     */
     public String getGameCreator() {
         return this.gameCreator;
@@ -219,7 +219,7 @@ public class Game {
 
     /**
     * Retrieves the game's description.
-    * @return a String representing the description of this game.
+    * @return a String containing the description of this game.
     */
     public String getGameDescription() {
         return this.gameDescription;
@@ -227,7 +227,7 @@ public class Game {
 
     /**
     * Retrieves the number of stages this game has.
-    * @return an int representing how many stages this game has.
+    * @return an int containing how many stages this game has.
     */
     public int getNumStages() {
         return this.numStages;
@@ -235,7 +235,7 @@ public class Game {
 
     /**
     * Retrieves the list of stages in this game.
-    * @return an ArrayList of String representing the stageIDs of the stages in this game.
+    * @return an ArrayList of String containing the stageIDs of the stages in this game.
     */
     public ArrayList<String> getStages() {
         return this.stages;
@@ -243,7 +243,7 @@ public class Game {
 
     /**
     * Retrieves the number of times this game has been played.
-    * @return an int representing how many times this game has been played.
+    * @return an int containing how many times this game has been played.
     */
     public int getNumTimesPlayed() {
         return this.numTimesPlayed;
@@ -251,15 +251,15 @@ public class Game {
 
     /**
     * Retrieves the number of times this game has been finished (won).
-    * @return an int representing how many times this game has been finished.
+    * @return an int containing how many times this game has been finished.
     */
     public int getNumTimesFinished() {
         return this.numTimesFinished;
     }
 
     /**
-    * Retrieves the number of times this game's number of stars has been voted on.
-    * @return an int representing the number of times this game's number of stars has been voted on.
+    * Retrieves the number of times the game has received star votes.
+    * @return an int containing the number of times the game has received star votes.
     */
     public int getNumStarVotes() {
         return this.numStarVotes;
@@ -267,7 +267,7 @@ public class Game {
 
     /**
     * Retrieves the number of stars this game has received.
-    * @return an int representing how many stars this game has received.
+    * @return an int containing how many stars this game has received.
     */
     public int getTotalStars() {
         return this.totalStars;
@@ -275,7 +275,7 @@ public class Game {
 
     /**
     * Retrives the number of times this game's difficulty has been voted on.
-    * @return an int representing the number of times this game's difficulty has been voted on.
+    * @return an int containing the number of times this game's difficulty has been voted on.
     */
     public int getNumDifficultyVotes() {
         return this.numDifficultyVotes;
@@ -283,7 +283,7 @@ public class Game {
 
     /**
     * Retrieves the sum of all difficulty votes received by this game (1 = Easy, 2 = Medium, 3 = Hard).
-    * @return an int representing the sum of all difficulty votes received by this game.
+    * @return an int containing the sum of all difficulty votes received by this game.
     */
     public int getTotalDifficulty() {
         return this.totalDifficulty;

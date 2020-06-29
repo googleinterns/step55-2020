@@ -57,83 +57,83 @@ public class User {
 
         /**
         * Sets the username of this user.
-        * @param val a String representing the new username.
+        * @param username a String containing the new username.
         * @return a Builder with the modified username.
         */
-        public Builder setUsername(String val) {
-            this.username = val;
+        public Builder setUsername(String username) {
+            this.username = username;
             return this;
         }
 
         /**
         * Sets the first name of this user.
-        * @param val a String representing the new first name.
+        * @param firstName a String containing the new first name.
         * @return a Builder with the modified first name.
         */
-        public Builder setFirstName(String val) {
-            this.firstName = val;
+        public Builder setFirstName(String firstName) {
+            this.firstName = firstName;
             return this;
         }
 
         /**
         * Sets the last name of this user.
-        * @param val a String representing the new last name.
+        * @param lastName a String containing the new last name.
         * @return a Builder with the modified last name.
         */
-        public Builder setLastName(String val) {
-            this.lastName = val;
+        public Builder setLastName(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
         /**
         * Sets the profile picture url for this user.
-        * @param val a String representing the new profile picture url.
+        * @param profilePicture a String containing the new profile picture url.
         * @return a Builder with the modified profile picture url.
         */
-        public Builder setProfilePicture(String val) {
-            this.profilePicture = val;
+        public Builder setProfilePicture(String profilePicture) {
+            this.profilePicture = profilePicture;
             return this;
         }
 
         /**
         * Sets the list of games this user has created.
-        * @param val an ArrayList of String representing a list of gameIDs of the games this user has created.
+        * @param gamesCreated an ArrayList of String containing a list of gameIDs of the games this user has created.
         * @return a Builder with the modified list of games created.
         */
-        public Builder setGamesCreated(ArrayList<String> val) {
-            this.gamesCreated = val;
+        public Builder setGamesCreated(ArrayList<String> gamesCreated) {
+            this.gamesCreated = gamesCreated;
             return this;
         }
 
         /**
         * Sets the number of games this user has finished (won).
-        * @param val an int representing how many games this user has finished.
+        * @param numGamesFinished an int containing how many games this user has finished.
         * @return a Builder with modified number of games finished.
         */
-        public Builder setNumGamesFinished(int val) {
-            this.numGamesFinished = val;
+        public Builder setNumGamesFinished(int numGamesFinished) {
+            this.numGamesFinished = numGamesFinished;
             return this;
         }
 
         /**
         * Sets the number of games this user has created.
-        * @param val an int representing how many games this user has created.
+        * @param numGamesCreated an int containing how many games this user has created.
         * @return a Builder with modified number of games created.
         */
-        public Builder setNumGamesCreated(int val) {
-            this.numGamesCreated = val;
+        public Builder setNumGamesCreated(int numGamesCreated) {
+            this.numGamesCreated = numGamesCreated;
             return this;
         }
 
         /**
         * Sets the list of games the user has finished, along with the times it took for them to finish them.
-        * @param val an ArrayList of pairs of String and Long, where the first element of the pair contains the
+        * @param gamesCompletedWithTime an ArrayList of pairs of String and Long, where the first element of the pair contains the
         * gameID, and the second element contains the amount of time in milliseconds it took for them to
         * complete the game.
         * @return a Builder with modified list of games completed and their times.
         */
-        public Builder setGamesCompletedWithTime(ArrayList<Pair<String, Long>> val) {
-            this.gamesCompletedWithTime = val;
+        public Builder setGamesCompletedWithTime(ArrayList<Pair<String, Long>> gamesCompletedWithTime) {
+            this.gamesCompletedWithTime = gamesCompletedWithTime;
             return this;
         }
 
@@ -165,7 +165,7 @@ public class User {
 
     /**
     * Retrieves the id of this user.
-    * @return a String representing the userID of this user.
+    * @return a String containing the userID of this user.
     */
     public String getUserID() {
         return this.userID;
@@ -173,7 +173,7 @@ public class User {
 
     /**
     * Retrieves the username of this user.
-    * @return a String representing the username of this user.
+    * @return a String containing the username of this user.
     */
     public String getUsername() {
         return this.username;
@@ -181,7 +181,7 @@ public class User {
 
     /**
     * Retrieves the first name of this user.
-    * @return a String representing the first name of this user.
+    * @return a String containing the first name of this user.
     */
     public String getFirstName() {
         return this.firstName;
@@ -189,7 +189,7 @@ public class User {
 
     /**
     * Retrieves the last name of this user.
-    * @return a String representing the last name of this user.
+    * @return a String containing the last name of this user.
     */
     public String getLastName() {
         return this.lastName;
@@ -197,7 +197,7 @@ public class User {
 
     /**
     * Retrieves the profile picture of this user.
-    * @return a String representing the profile picture of this user.
+    * @return a String containing the profile picture of this user.
     */
     public String getProfilePicture() {
         return this.profilePicture;
@@ -213,7 +213,7 @@ public class User {
 
     /**
     * Retrieves the number of games this user has finished (won).
-    * @return an int representing the number of games this user has finished (won).
+    * @return an int containing the number of games this user has finished (won).
     */
     public int getNumGamesFinished() {
         return this.numGamesFinished;
@@ -221,7 +221,7 @@ public class User {
 
     /**
     * Retrieves the number of games this user has created.
-    * @return an int representing the number of games this user has created.
+    * @return an int containing the number of games this user has created.
     */
     public int getNumGamesCreated() {
         return this.numGamesCreated;

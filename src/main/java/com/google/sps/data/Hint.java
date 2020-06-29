@@ -38,7 +38,7 @@ public class Hint {
         /**
         * Constructor that sets the hint ID and the hint number.
         * @param hintID the unique code used to identify this specific hint.
-        * @param hintNumber a int representing the hint number.
+        * @param hintNumber a int containing the hint number.
         */
         public Builder(String hintID, int hintNumber) {
             this.hintID = hintID;
@@ -47,22 +47,22 @@ public class Hint {
 
         /**
         * Sets the longitude and latitude where this hint is located.
-        * @param val a Coordinates object representing the location.
+        * @param location a Coordinates object containing the location.
         * @return a Builder object with the new location.
         * @see com.google.sps.data.Coordinates
         */
-        public Builder setLocation(Coordinates val) {
-            this.location = val;
+        public Builder setLocation(Coordinates location) {
+            this.location = location;
             return this;
         }
 
         /**
         * Sets the text that appears when this hint is found.
-        * @param val a String representing the text of the hint.
+        * @param text a String containing the text of the hint.
         * @return a Builder object with the new text.
         */
-        public Builder setText(String val) {
-            this.text = val;
+        public Builder setText(String text) {
+            this.text = text;
             return this;
         }
 
@@ -89,7 +89,7 @@ public class Hint {
 
     /**
     * Retrieves the id of this hint.
-    * @return a String representing the hintID of this hint.
+    * @return a String containing the hintID of this hint.
     */
     public String getHintID() {
         return this.hintID;
@@ -97,7 +97,7 @@ public class Hint {
 
     /**
     * Retrieves this hint's number.
-    * @return an int representing the number of this hint.
+    * @return an int containing the number of this hint.
     */
     public int getHintNumber() {
         return this.hintNumber;
@@ -105,7 +105,7 @@ public class Hint {
 
     /**
     * Retrieves this hint's location.
-    * @return a Coordinates representing the location of this hint.
+    * @return a Coordinates containing the location of this hint.
     */
     public Coordinates getLocation() {
         return this.location;
@@ -113,7 +113,7 @@ public class Hint {
 
     /**
     * Retrieves this hint's text.
-    * @return a String representing the text of this hint.
+    * @return a String containing the text of this hint.
     */
     public String getText() {
         return this.text;
