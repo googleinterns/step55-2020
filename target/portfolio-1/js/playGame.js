@@ -3,7 +3,6 @@ async function initMapPlayGame() {
   params.append('gameID', 'demogameid')
   var request = new Request('/load-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then(async (data) => {
-   
     var stage1 =  await getStage(data.stages[0]);
     var startingLocation = {lat: stage1.startingLocation.latitude, lng: stage1.startingLocation.longitude};
     var map = new google.maps.Map(
@@ -11,22 +10,30 @@ async function initMapPlayGame() {
       zoom: 1, 
       center: startingLocation, 
       mapTypeId: 'hybrid',
-      gestureHandling: 'greedy'
+      gestureHandling: 'greedy',
+      streetViewControl: false
     });
-    var panorama = new google.maps.StreetViewPanorama(
-      document.getElementById('playMap'), {
-      position: startingLocation
-    });
-    map.setStreetView(panorama);
+
+    getHints(stage1).forEach(hint => 
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text)
+    );
+
+    var panorama = map.getStreetView();
+    panorama.setPosition(startingLocation);
+    panorama.setPov(/** @type {google.maps.StreetViewPov} */({
+      heading: 265,
+      pitch: 0
+    }));
+    panorama.setVisible(true);
 
     var gameInfo = document.getElementById('game-info');
     
-    var h1 = document.createElement('h1');
-    h1.innerHTML = data.gameName;
-    h1.className = 'center'
-    gameInfo.appendChild(h1);
+    var gameName = document.createElement('h1');
+    gameName.innerHTML = data.gameName;
+    gameName.className = 'center'
+    gameInfo.appendChild(gameName);
     
-    console.log(stage1);
+    
   });
 }
 
@@ -41,6 +48,25 @@ async function getStage(stageID) {
   return currStage;
 }
 
-// async function getHints(stage) {
+function getHints(stage) {
+  return stage.hints;
+}
 
-// }
+function addHintMarker(map, latLng, hint) {
+  console.log(latLng);
+  
+  var infowindow = new google.maps.InfoWindow({
+    content: hint
+  });
+
+  var marker = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+  });
+
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+    console.log(hint);
+  });
+}

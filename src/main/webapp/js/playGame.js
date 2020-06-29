@@ -10,14 +10,21 @@ async function initMapPlayGame() {
       zoom: 1, 
       center: startingLocation, 
       mapTypeId: 'hybrid',
-      gestureHandling: 'greedy'
+      gestureHandling: 'greedy',
+      streetViewControl: false
     });
 
-    var panorama = new google.maps.StreetViewPanorama(
-      document.getElementById('playMap'), {
-      position: startingLocation
-    });
-    map.setStreetView(panorama);
+    getHints(stage1).forEach(hint => 
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text)
+    );
+
+    var panorama = map.getStreetView();
+    panorama.setPosition(startingLocation);
+    panorama.setPov(/** @type {google.maps.StreetViewPov} */({
+      heading: 265,
+      pitch: 0
+    }));
+    panorama.setVisible(true);
 
     var gameInfo = document.getElementById('game-info');
     
@@ -26,7 +33,7 @@ async function initMapPlayGame() {
     gameName.className = 'center'
     gameInfo.appendChild(gameName);
     
-    console.log(stage1);
+    
   });
 }
 
@@ -45,9 +52,21 @@ function getHints(stage) {
   return stage.hints;
 }
 
-function addHintMarker(map, latLng) {
+function addHintMarker(map, latLng, hint) {
+  console.log(latLng);
+  
+  var infowindow = new google.maps.InfoWindow({
+    content: hint
+  });
+
   var marker = new google.maps.Marker({
     position: latLng,
-    map: map
+    map: map,
+    icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+  });
+
+  marker.addListener('click', function() {
+    infowindow.open(map, marker);
+    console.log(hint);
   });
 }
