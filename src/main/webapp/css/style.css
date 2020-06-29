@@ -1,3 +1,4 @@
+/* CSS for if the user is playing in light mode */
 .light-mode nav {
   background-color: #553A41;
 }
@@ -6,12 +7,21 @@
   background-color: white;
 }
 
+.light-mode .activeStage {
+    background-color: #74d3aeff;
+}
+
+/* CSS for if the user is playing in dark mode */
 .dark-mode nav {
   background-color: #000000ff;
 }
 
 .dark-mode {
   background-color: #434343ff;
+}
+
+.dark-mode .activeStage {
+    background-color: #32908F;
 }
 
 input {
@@ -22,15 +32,30 @@ input {
   display:none;
 }
 
-.activeStage {
-    background-color: #74d3aeff;
-}
-
-/* Always set the map height explicitly to define the size of the div
- * element that contains the map. */
+/* Sets the map to about half of the screen height
+ */
 #map {
   border: thin solid black;
-  float: right;
-  height: 500px;
+  height: 25vw;
   width: 100%;
+}
+
+/* Sets the map the user plays on to the height of the screen */
+#playMap {
+  border: thin solid black;
+  height: 49vw;
+  width: 70%;
+  float:left
+}
+
+.square {
+  height: 50px;
+  width: 50px;
+  background-color: #555;
+}
+
+.rectangle {
+  height: 25px;
+  width: 50px;
+  background-color: #555;
 }

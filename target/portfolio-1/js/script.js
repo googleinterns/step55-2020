@@ -6,6 +6,9 @@ function changeToOrFromDarkMode() {
   } else {
     body.className = 'light-mode';
   }
+  if (typeof(Storage) !== "undefined") {
+    sessionStorage.setItem("colorMode", body.className);
+  } 
 }
 
 function createNavBar(page) {
@@ -69,4 +72,18 @@ function createNavBar(page) {
 
 function onLoadFunctions(page) {
   createNavBar(page);
+  if (page == 'playGame') {
+    initMapPlayGame();
+  } else if (page == 'createGame') {
+      initMapCreateGame();
+  }
+  
+  if (typeof(Storage) !== "undefined") {
+    var color = sessionStorage.getItem("colorMode");
+    if (color == null) {
+      sessionStorage.setItem("colorMode", "dark-mode");
+    }
+    document.body.className = color;
+    console.log(color);
+  }
 }
