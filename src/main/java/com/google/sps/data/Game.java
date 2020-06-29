@@ -125,8 +125,8 @@ public class Game {
         }
 
         /**
-        * Sets the number of star votes this game has received.
-        * @param val an int representing the number of times this game has been voted on.
+        * Sets the number of times this game's number of stars has been voted on.
+        * @param val an int representing the number of times this game's number of stars has been voted on.
         * @return a Builder object with the modified number of star votes.
         */
         public Builder setNumStarVotes(int val) {
@@ -145,8 +145,8 @@ public class Game {
         }
 
         /**
-        * Sets the number of difficulty votes this game has received.
-        * @param val an int representing the number of times this game has received a difficulty vote.
+        * Sets the number of times this game's difficulty has been voted on.
+        * @param val an int representing the number of times this game's difficulty has been voted on.
         * @return a Builder object with the modified number of difficulty votes.
         */
         public Builder setNumDifficultyVotes(int val) {
@@ -191,5 +191,101 @@ public class Game {
         this.totalStars = builder.totalStars;
         this.numDifficultyVotes = builder.numDifficultyVotes;
         this.totalDifficulty = builder.totalDifficulty;
+    }
+
+    /**
+    * Retrieves the game ID.
+    * @return a String representing the gameID of this Game.
+    */
+    public String getGameID() {
+        return this.gameID;
+    }
+
+    /**
+    * Retrieves the game name.
+    * @return a String representing the gameName of this Game.
+    */
+    public String getGameName() {
+        return this.gameName;
+    }
+
+    /**
+    * Retrieves the game's creator.
+    * @return a String representing the userID of the creator of this game.
+    */
+    public String getGameCreator() {
+        return this.gameCreator;
+    }
+
+    /**
+    * Retrieves the game's description.
+    * @return a String representing the description of this game.
+    */
+    public String getGameDescription() {
+        return this.gameDescription;
+    }
+
+    /**
+    * Retrieves the number of stages this game has.
+    * @return an int representing how many stages this game has.
+    */
+    public int getNumStages() {
+        return this.numStages;
+    }
+
+    /**
+    * Retrieves the list of stages in this game.
+    * @return an ArrayList of String representing the stageIDs of the stages in this game.
+    */
+    public ArrayList<String> getStages() {
+        return this.stages;
+    }
+
+    /**
+    * Retrieves the number of times this game has been played.
+    * @return an int representing how many times this game has been played.
+    */
+    public int getNumTimesPlayed() {
+        return this.numTimesPlayed;
+    }
+
+    /**
+    * Retrieves the number of times this game has been finished (won).
+    * @return an int representing how many times this game has been finished.
+    */
+    public int getNumTimesFinished() {
+        return this.numTimesFinished;
+    }
+
+    /**
+    * Retrieves the number of times this game's number of stars has been voted on.
+    * @return an int representing the number of times this game's number of stars has been voted on.
+    */
+    public int getNumStarVotes() {
+        return this.numStarVotes;
+    }
+
+    /**
+    * Retrieves the number of stars this game has received.
+    * @return an int representing how many stars this game has received.
+    */
+    public int getTotalStars() {
+        return this.totalStars;
+    }
+
+    /**
+    * Retrives the number of times this game's difficulty has been voted on.
+    * @return an int representing the number of times this game's difficulty has been voted on.
+    */
+    public int getNumDifficultyVotes() {
+        return this.numDifficultyVotes;
+    }
+
+    /**
+    * Retrieves the sum of all difficulty votes received by this game (1 = Easy, 2 = Medium, 3 = Hard).
+    * @return an int representing the sum of all difficulty votes received by this game.
+    */
+    public int getTotalDifficulty() {
+        return this.totalDifficulty;
     }
 }

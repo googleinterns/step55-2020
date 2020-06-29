@@ -113,7 +113,7 @@ public class CreateGameServlet extends HttpServlet {
     *         the jth hint of the ith stage.
     * @see com.google.sps.data.Coordinates
     */
-    private ArrayList<ArrayList<Coordinates>> getHintCoordinates(HttpServletRequest request) {
+    private ArrayList<ArrayList<Coordinates>> getHintLocations(HttpServletRequest request) {
         return null;
     }
 

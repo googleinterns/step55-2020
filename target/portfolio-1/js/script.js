@@ -69,4 +69,5 @@ function createNavBar(page) {
 
 function onLoadFunctions(page) {
   createNavBar(page);
+  initMap();
 }
