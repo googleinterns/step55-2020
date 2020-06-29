@@ -97,7 +97,7 @@ public class Hint {
 
     /**
     * Retrieves this hint's number.
-    * @return an int representing the number of this int.
+    * @return an int representing the number of this hint.
     */
     public int getHintNumber() {
         return this.hintNumber;
@@ -105,7 +105,7 @@ public class Hint {
 
     /**
     * Retrieves this hint's location.
-    * @return a Coordinates representing the location of this int.
+    * @return a Coordinates representing the location of this hint.
     */
     public Coordinates getLocation() {
         return this.location;
@@ -113,7 +113,7 @@ public class Hint {
 
     /**
     * Retrieves this hint's text.
-    * @return a String representing the text of this int.
+    * @return a String representing the text of this hint.
     */
     public String getText() {
         return this.text;
