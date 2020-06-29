@@ -15,11 +15,7 @@ async function initMapPlayGame() {
     });
     var panorama = new google.maps.StreetViewPanorama(
       document.getElementById('playMap'), {
-      position: startingLocation,
-      pov: {
-        heading: 34,
-        pitch: 10
-      }
+      position: startingLocation
     });
     map.setStreetView(panorama);
 
@@ -29,6 +25,8 @@ async function initMapPlayGame() {
     h1.innerHTML = data.gameName;
     h1.className = 'center'
     gameInfo.appendChild(h1);
+    
+    console.log(stage1);
   });
 }
 
@@ -42,3 +40,7 @@ async function getStage(stageID) {
   });
   return currStage;
 }
+
+// async function getHints(stage) {
+
+// }

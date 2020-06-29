@@ -28,7 +28,6 @@ function addNewStage() {
   const stagesList = document.getElementById('stages');
   const numStages = stagesList.getElementsByTagName('input').length;
   
-
   const newStage = document.createElement('input');
   newStage.value = 'Stage ' + (numStages + 1);
   newStage.type = 'button';
@@ -38,7 +37,6 @@ function addNewStage() {
   newStage.addEventListener("click", function(){
     setActive('stage' + (numStages + 1));
   });
-
   stagesList.appendChild(newStage);
 
   const newStageHints = document.createElement('div');

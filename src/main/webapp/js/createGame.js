@@ -1,5 +1,5 @@
 function initMapCreateGame() {
-  var myLatlng = {lat: -0.21874964312341205, lng: 12.221368164062483};
+  var myLatlng = {lat: 0.0, lng: 0.0};
 
   var map = new google.maps.Map(
     document.getElementById('map'), {
