@@ -11,6 +11,7 @@ function changeToOrFromDarkMode() {
   } 
 }
 
+// Depreciated
 function createNavBar(page) {
   var navbar = document.createElement('nav');
 
@@ -75,7 +76,7 @@ function onLoadFunctions(page) {
   if (page == 'playGame') {
     initMapPlayGame();
   } else if (page == 'createGame') {
-      initMapCreateGame();
+    initMapCreateGame();
   }
   
   if (typeof(Storage) !== "undefined") {
@@ -84,6 +85,5 @@ function onLoadFunctions(page) {
       sessionStorage.setItem("colorMode", "dark-mode");
     }
     document.body.className = color;
-    console.log(color);
   }
 }

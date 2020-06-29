@@ -1,4 +1,7 @@
+/home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadStageServlet.java
+/home/smissak/step55-2020/src/main/java/com/google/sps/data/Hint.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Coordinates.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
+/home/smissak/step55-2020/src/main/java/com/google/sps/data/Stage.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Game.java

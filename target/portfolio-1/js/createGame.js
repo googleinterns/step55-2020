@@ -53,7 +53,7 @@ function addNewStage() {
 }
 
 function addNewHint() {
-  const activeStageNum = (document.getElementsByClassName('activeStage')[0]).classList[0] + 'Hints';
+  const activeStageNum = getActiveStageElement().classList[0] + 'Hints';
   const activeHints = document.getElementById(activeStageNum);
   const numHints = activeHints.getElementsByTagName('input').length;
 
