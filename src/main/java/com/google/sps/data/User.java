@@ -17,7 +17,7 @@ package com.google.sps.data;
 import java.util.ArrayList;
 
 /**
-* Represents the static data of a single stage of a game.
+* Represents the static data of a user.
 */
 public class User {
     private final String userID;
@@ -30,6 +30,9 @@ public class User {
     private final int numGamesCreated;
     private final ArrayList<Pair<String, Long>> gamesCompletedWithTime;
 
+    /**
+    * Builder class used to create User objects.
+    */
     public static class Builder {
         // Required parameters
         private final String userID;
