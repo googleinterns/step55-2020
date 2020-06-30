@@ -161,7 +161,7 @@ function createHintPlaceHolder(hintNum) {
 
 /** 
 * Gets the data from the server about the current stage
-* @param {String} stageID is the ID of the stage to be retrieved from the sserver
+* @param {String} stageID is the ID of the stage to be retrieved from the server
 * @return {String} the JSON data from the server for the stage with the stageID passed in
 */
 async function getStage(stageID) {

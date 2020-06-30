@@ -2,12 +2,12 @@
 * Adds a map to a page where the id "map" is
 */
 function initMapToCreateGame() {
-  var myLatlng = {lat: 0.0, lng: 0.0};
+  var latlng = {lat: 0.0, lng: 0.0};
 
   var map = new google.maps.Map(
     document.getElementById('map'), {
       zoom: 1, 
-      center: myLatlng, 
+      center: latlng, 
       mapTypeId: 'hybrid',
       gestureHandling: 'greedy'
   });
