@@ -16,12 +16,15 @@ async function initMapPlayGame() {
       addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
     );
 
+    // gets the street view
     var panorama = map.getStreetView();
+    // removes the option to exit streetview
     var panoramaOptions = {
       enableCloseButton:false
     };
     panorama.setOptions(panoramaOptions);
     panorama.setPosition(startingLocation);
+    // puts the user in streetView
     panorama.setVisible(true);
 
     createGameInfoOnSideOfMap(data, stage1, panorama);
