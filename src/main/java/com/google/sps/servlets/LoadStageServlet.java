@@ -66,9 +66,13 @@ public class LoadStageServlet extends HttpServlet {
         } else {
             Stage.Builder stageBuilder = new Stage.Builder(stageID, 2);
             stageBuilder.setKey("test");
-            stageBuilder.setStartingHint("testing multiple stages. the key is 'test'");
+            stageBuilder.setStartingHint("Testing multiple stages");
             stageBuilder.setStartingLocation(new Coordinates(33.748439, -84.415932));
             ArrayList<Hint> hints = new ArrayList<Hint>();
+            Hint.Builder h = new Hint.Builder("stage2hint", 1);
+            h.setLocation(new Coordinates(33.748530, -84.414718));
+            h.setText("The key is 'test'");
+            hints.add(h.build());
             stageBuilder.setHints(hints);
             return stageBuilder.build();
         }
