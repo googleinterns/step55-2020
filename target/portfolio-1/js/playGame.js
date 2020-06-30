@@ -7,23 +7,21 @@ async function initMapPlayGame() {
     var startingLocation = {lat: stage1.startingLocation.latitude, lng: stage1.startingLocation.longitude};
     var map = new google.maps.Map(
       document.getElementById('playMap'), {
-      zoom: 1, 
       center: startingLocation, 
-      mapTypeId: 'hybrid',
       gestureHandling: 'greedy',
       streetViewControl: false
     });
 
     getHints(stage1).forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text)
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
     );
 
     var panorama = map.getStreetView();
+    var panoramaOptions = {
+      enableCloseButton:false
+    };
+    panorama.setOptions(panoramaOptions);
     panorama.setPosition(startingLocation);
-    panorama.setPov(/** @type {google.maps.StreetViewPov} */({
-      heading: 265,
-      pitch: 0
-    }));
     panorama.setVisible(true);
 
     var gameInfo = document.getElementById('game-info');
@@ -32,9 +30,37 @@ async function initMapPlayGame() {
     gameName.innerHTML = data.gameName;
     gameName.className = 'center'
     gameInfo.appendChild(gameName);
-    
-    
+
+    var gameStage = document.createElement('h2');
+    gameStage.innerHTML = 'You are on stage:' + stage1.stageNumber + '/' + data.stages.length;
+    gameStage.className = 'center'
+    gameInfo.appendChild(gameStage);
+
+    var theWordHints = document.createElement('h3');
+    theWordHints.innerHTML = 'Hints:';
+    gameInfo.appendChild(theWordHints);
+
+    var starterHint = document.createElement('h3');
+    starterHint.innerHTML = 'Starter: ' + stage1.startingHint;
+    gameInfo.appendChild(starterHint);
+
+    var hintsDiv = document.createElement('div');
+    var hintsOl = document.createElement('ol');
+    hintsOl.id = 'hints';
+
+    getHints(stage1).forEach(hint => 
+      hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
+    );
+
+    hintsDiv.appendChild(hintsOl);
+    gameInfo.appendChild(hintsDiv);
   });
+}
+
+function createHintPlaceHolder(hintNum) {
+    var hintLi = document.createElement('li');
+    hintLi.id = hintNum;
+    return hintLi;
 }
 
 async function getStage(stageID) {
@@ -52,9 +78,7 @@ function getHints(stage) {
   return stage.hints;
 }
 
-function addHintMarker(map, latLng, hint) {
-  console.log(latLng);
-  
+function addHintMarker(map, latLng, hint, hintNum) {  
   var infowindow = new google.maps.InfoWindow({
     content: hint
   });
@@ -62,11 +86,15 @@ function addHintMarker(map, latLng, hint) {
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+    icon: "images/marker_exclamation_point.png"
   });
 
   marker.addListener('click', function() {
-    infowindow.open(map, marker);
-    console.log(hint);
+    addHint(hint, hintNum)
   });
+}
+
+function addHint(hint, hintNum) {
+  var hintsWithNum= document.getElementById(hintNum);
+  hintsWithNum.innerText = hint;
 }

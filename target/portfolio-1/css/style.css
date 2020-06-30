@@ -44,7 +44,7 @@ input {
 /* Sets the map the user plays on to the height of the screen */
 #playMap {
   border: thin solid black;
-  height: 98vh;
+  height: 96vh;
   width: 70%;
   float:left
 }
@@ -64,4 +64,8 @@ input {
   width: 10vw;
   background-color: rgb(0, 0, 0);
   margin: auto;
+}
+
+ol#hints {
+  list-style-position: inside
 }
