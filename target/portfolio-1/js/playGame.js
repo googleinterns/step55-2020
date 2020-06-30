@@ -68,6 +68,7 @@ function createGameInfoOnSideOfMap(data, stage) {
     var inputKeyBox = document.createElement('input');
     inputKeyBox.type = 'text';
     inputKeyBox.className = 'center';
+    inputKeyBox.classList = 'input-text-color';
     inputKeyBox.id = 'key-input';
     inputKeyBox.style = 'width: 30%';
 

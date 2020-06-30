@@ -8,7 +8,12 @@
 }
 
 .light-mode .activeStage {
-    background-color: #74d3aeff;
+  background-color: #74d3aeff;
+}
+
+.light-mode .input-text-color {
+  color: black;
+  text-align: center;
 }
 
 /* CSS for if the user is playing in dark mode */
@@ -22,7 +27,12 @@
 }
 
 .dark-mode .activeStage {
-    background-color: #32908F;
+  background-color: #32908F;
+}
+
+.dark-mode .input-text-color {
+  color: white;
+  text-align: center;
 }
 
 input {
@@ -43,27 +53,27 @@ input {
 
 /* Sets the map the user plays on to the height of the screen */
 #playMap {
+  float:left;
   border: thin solid black;
   height: 96vh;
   width: 70%;
-  float:left
 }
 
 .mapToPlay {
-    margin: auto;
+  margin: auto;
 }
 .square {
-  height: 10vh;
-  width: 10vw;
   background-color: #555;
+  height: 10vh;
   margin: auto;
+  width: 10vw;
 }
 
 .rectangle {
+  background-color: black;
   height: 25px;
-  width: 10vw;
-  background-color: rgb(0, 0, 0);
   margin: auto;
+  width: 10vw;
 }
 
 ol#hints {
@@ -71,5 +81,5 @@ ol#hints {
 }
 
 .widthChange {
-    width: 20%;
+  width: 20%;
 }

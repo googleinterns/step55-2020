@@ -68,6 +68,7 @@ function createGameInfoOnSideOfMap(data, stage) {
     var inputKeyBox = document.createElement('input');
     inputKeyBox.type = 'text';
     inputKeyBox.className = 'center';
+    inputKeyBox.classList = 'input-text-color';
     inputKeyBox.id = 'key-input';
     inputKeyBox.style = 'width: 30%';
 
@@ -81,6 +82,7 @@ function createGameInfoOnSideOfMap(data, stage) {
 
     var buttonToCheckKey = document.createElement('input');
     buttonToCheckKey.type = 'button';
+    buttonToCheckKey.className = 'center';
     buttonToCheckKey.value = 'Submit';
     buttonToCheckKey.addEventListener('click', function() {
       checkKey(data, stage.key);
@@ -130,7 +132,7 @@ function addHintMarker(map, latLng, hint, hintNum) {
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    icon: "images/marker_exclamation_point.png"
+    icon: 'images/marker_exclamation_point.png'
   });
 
   marker.addListener('click', function() {
