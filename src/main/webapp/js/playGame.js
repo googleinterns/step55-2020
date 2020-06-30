@@ -178,15 +178,11 @@ async function getStage(stageID) {
 /** 
 * Adds a marker to the map containing the hint's data
 * @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
-* @param {LatLng} latLng an odject that contains the latitude and longitude of where the marker should be
+* @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {String} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 */
 function addHintMarker(map, latLng, hint, hintNum) {  
-  var infowindow = new google.maps.InfoWindow({
-    content: hint
-  });
-
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
