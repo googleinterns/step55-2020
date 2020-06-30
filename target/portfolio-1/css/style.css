@@ -55,7 +55,7 @@ input {
 #playMap {
   float:left;
   border: thin solid black;
-  height: 96vh;
+  height: 95vh;
   width: 70%;
 }
 
@@ -82,8 +82,4 @@ ol#hints {
 
 .widthChange {
   width: 20%;
-}
-
-#game-info {
-  margin: 1%;
 }

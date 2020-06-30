@@ -24,11 +24,11 @@ async function initMapPlayGame() {
     panorama.setPosition(startingLocation);
     panorama.setVisible(true);
 
-    createGameInfoOnSideOfMap(data, stage1);
+    createGameInfoOnSideOfMap(data, stage1, panorama);
   });
 }
 
-function createGameInfoOnSideOfMap(data, stage) {
+function createGameInfoOnSideOfMap(data, stage, map) {
     var gameInfo = document.getElementById('game-info');
     
     var gameName = document.createElement('h1');
@@ -75,7 +75,7 @@ function createGameInfoOnSideOfMap(data, stage) {
     // This checks if the user clicked enter in the key box
     inputKeyBox.addEventListener('keydown', function(e) {
       if (e.which == 13) {
-        checkKey(data, stage.key);
+        checkKey(data, stage.key, stage, map);
       }
     });
     gameInfo.appendChild(inputKeyBox);
@@ -85,22 +85,32 @@ function createGameInfoOnSideOfMap(data, stage) {
     buttonToCheckKey.className = 'center';
     buttonToCheckKey.value = 'Submit';
     buttonToCheckKey.addEventListener('click', function() {
-      checkKey(data, stage.key);
+      checkKey(data, stage.key, stage, map);
     });
     gameInfo.appendChild(buttonToCheckKey);
 }
 
 //TODO: Change this so if there is more than one page and the input key is correct,
 // it adds the new stage rather than redirecting to the after game page
-function checkKey(data, key) {
+function checkKey(data, key, stage, map) {
   var keyInput = document.getElementById('key-input');
   var inputValue = keyInput.value;
-
-  if (key == inputValue ) {
-      window.location.replace('afterGame.html');
-  } else {
-      window.alert('Wrong key, please try again!');
+  if (key != inputValue) {
+    window.alert('Wrong key, please try again!');
+    return;
   }
+  if (data.stages.length == stage.stageNumber) {
+    window.location.replace('afterGame.html');
+    return;
+  }
+
+  // This reloads the map and the game info on the side of the map with the next stage data
+  var nextStageNumber = stage.stageNumber + 1;
+  var nextStage = getStage(data.stages[nextStageNumber]);
+  var startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
+  map.setPosition(startingLocation);
+  document.getElementById('game-info').innerHTML = '';
+  createGameInfoOnSideOfMap(data, stage, map);
 }
 
 function createHintPlaceHolder(hintNum) {
