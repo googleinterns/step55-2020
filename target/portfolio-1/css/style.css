@@ -83,3 +83,7 @@ ol#hints {
 .widthChange {
   width: 20%;
 }
+
+#game-info {
+  margin: 1%;
+}
