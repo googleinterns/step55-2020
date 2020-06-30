@@ -48,6 +48,8 @@ public class CreateGameServlet extends HttpServlet {
             System.out.println("Input json is not valid");
             System.exit(1);
         }
+        String gameID = IDGenerator.gen();
+        response.getWriter().println(gameID);
     }
 
     /**

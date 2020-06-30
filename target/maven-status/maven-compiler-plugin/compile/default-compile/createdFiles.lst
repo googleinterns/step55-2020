@@ -19,6 +19,7 @@ com/google/sps/servlets/CreateGameServlet$2.class
 com/google/sps/servlets/CreateGameServlet$4.class
 com/google/sps/data/Pair.class
 com/google/sps/data/Stage$1.class
+com/google/sps/data/IDGenerator.class
 com/google/sps/servlets/LoadGameServlet.class
 com/google/sps/data/Coordinates.class
 com/google/sps/data/Game$Builder.class
