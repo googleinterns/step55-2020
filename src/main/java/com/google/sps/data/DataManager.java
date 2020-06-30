@@ -17,17 +17,14 @@ package com.google.sps.servlets;
 public interface DataManager {
   public void storeUser(User user);
   public void updateUser(User user);
-	public User retrieveUser(String userID);
-
-	public void storeGame(Game game);
-	public void updateGame(Game game);
-	public Game retrieveGame(String gameID);
-
-	public void storeStage(Stage stage);
+  public User retrieveUser(String userID);
+  public void storeGame(Game game);
+  public void updateGame(Game game);
+  public Game retrieveGame(String gameID);
+  public void storeStage(Stage stage);
   public void updateStage(Stage stage);
-	public Stage retrieveStage(String stageID);
-
-	public void storeProgress(Progress progress);
-	public void updateProgress(Progress progress);
-	public Progress retrieveProgress(String progressID);
+  public Stage retrieveStage(String stageID);
+  public void storeProgress(Progress progress);
+  public void updateProgress(Progress progress);
+  public Progress retrieveProgress(String progressID);
 }
