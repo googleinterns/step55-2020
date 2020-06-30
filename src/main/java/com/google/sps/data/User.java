@@ -24,7 +24,7 @@ public class User {
     private final String username;
     private final String firstName;
     private final String lastName;
-    private final String profilePicture;
+    private final String profilePictureUrl;
     private final ArrayList<String> gamesCreated;
     private final int numGamesFinished;
     private final int numGamesCreated;
@@ -41,7 +41,7 @@ public class User {
         private String username = null;
         private String firstName = null;
         private String lastName = null;
-        private String profilePicture = null;
+        private String profilePictureUrl = null;
         private ArrayList<String> gamesCreated = null;
         private int numGamesFinished = -1;
         private int numGamesCreated = -1;
@@ -87,11 +87,11 @@ public class User {
 
         /**
         * Sets the profile picture url for this user.
-        * @param profilePicture a String containing the new profile picture url.
+        * @param profilePictureUrl a String containing the new profile picture url.
         * @return a Builder with the modified profile picture url.
         */
-        public Builder setProfilePicture(String profilePicture) {
-            this.profilePicture = profilePicture;
+        public Builder setprofilePictureUrl(String profilePictureUrl) {
+            this.profilePictureUrl = profilePictureUrl;
             return this;
         }
 
@@ -156,7 +156,7 @@ public class User {
         this.username = builder.username;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
-        this.profilePicture = builder.profilePicture;
+        this.profilePictureUrl = builder.profilePictureUrl;
         this.gamesCreated = builder.gamesCreated;
         this.numGamesFinished = builder.numGamesFinished;
         this.numGamesCreated = builder.numGamesCreated;
@@ -199,8 +199,8 @@ public class User {
     * Retrieves the profile picture of this user.
     * @return a String containing the profile picture of this user.
     */
-    public String getProfilePicture() {
-        return this.profilePicture;
+    public String getprofilePictureUrl() {
+        return this.profilePictureUrl;
     }
 
     /**

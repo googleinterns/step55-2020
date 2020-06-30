@@ -44,7 +44,28 @@ public class CreateGameServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("/index.html");
+        if(!isInputValid(request)) {
+            System.out.println("Input json is not valid");
+            System.exit(1);
+        }
+    }
+
+    boolean isInputValid(HttpServletRequest request) {
+        int numStages = getNumStages(request);
+        ArrayList<Integer> numHints = getNumHints(request);
+        ArrayList<Coordinates> stageSpawnLocations = getStageSpawnLocations(request);
+        ArrayList<String> stageStarterHints = getStageStarterHints(request);
+        if(numHints.size() != numStages) return false;
+        if(stageSpawnLocations.size() != numStages) return false;
+        if(stageStarterHints.size() != numStages) return false;
+
+        ArrayList<ArrayList<Coordinates>> hintLocations = getHintLocations(request);
+        ArrayList<ArrayList<String>> hintTexts = getHintTexts(request);
+        for(int i = 0; i < numStages; i++) {
+            if(hintLocations.get(i).size() != numHints.get(i)) return false;
+            if(hintTexts.get(i).size() != numHints.get(i)) return false;
+        }
+        return true;
     }
 
     /**
