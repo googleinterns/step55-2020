@@ -50,6 +50,12 @@ public class CreateGameServlet extends HttpServlet {
         }
     }
 
+    /**
+    * Checks that the values/sizes of numStages, numHints, stageSpawnLocations, stageStarterHints,
+    * hintLocations, and hintTexts all are consistent with one another.
+    * @param request the HttpServletRequest of the doPost.
+    * @return a boolean marking whether or not the request is consistent with itself.
+    */
     boolean isInputValid(HttpServletRequest request) {
         int numStages = getNumStages(request);
         ArrayList<Integer> numHints = getNumHints(request);

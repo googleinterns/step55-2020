@@ -40,19 +40,28 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadGameServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Currently ignores the input and just returns a fixed Game.
-        String gameID = "demogameid";
+        String gameID = getGameID(request);
 
         Game.Builder gameBuilder = new Game.Builder(gameID, "Demo");
         gameBuilder.setGameCreator("usernameid12345");
         gameBuilder.setGameDescription("Demo game for testing");
-        gameBuilder.setNumStages(1);
+        gameBuilder.setNumStages(2);
         ArrayList<String> stages = new ArrayList<String>();
         stages.add("stage1id");
+        stages.add("stage2id");
         gameBuilder.setStages(stages);
         Game game = gameBuilder.build();
         
         String json = new Gson().toJson(game);
         response.getWriter().println(json);
+    }
+    
+    /**
+    * Retrieves the gameID.
+    * @param request the HttpServletRequest of the doPost.
+    * @return a String representing the gameID.
+    */
+    private String getGameID(HttpServletRequest request) {
+        return request.getParameter("gameID");
     }
 }

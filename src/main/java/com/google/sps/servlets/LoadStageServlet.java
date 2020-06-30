@@ -40,20 +40,38 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadStageServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Currently ignores the input and just returns a fixed Stage.
-        String stageID = "stage1id";
-
-        Stage.Builder stageBuilder = new Stage.Builder(stageID, 1);
-        stageBuilder.setKey("mellon");
-        stageBuilder.setStartingHint("Look for the people who defy gravity");
-        stageBuilder.setStartingLocation(new Coordinates(40.444240, -79.942013));
-        ArrayList<Hint> hints = new ArrayList<Hint>();
-        for(int i = 1; i <= 6; i++) hints.add(getHint(i));
-        stageBuilder.setHints(hints);
-        Stage stage = stageBuilder.build();
+        String stageID = getStageID(request);
+        int idx = -1;
+        if(stageID.equals("stage1id")) {
+            idx = 1;
+        } else {
+            idx = 2;
+        }
+        Stage stage = getStage(stageID, idx);
         
         String json = new Gson().toJson(stage);
         response.getWriter().println(json);
+    }
+
+    Stage getStage(String stageID, int idx) {
+        if(idx == 1) {
+            Stage.Builder stageBuilder = new Stage.Builder(stageID, 1);
+            stageBuilder.setKey("mellon");
+            stageBuilder.setStartingHint("Look for the people who defy gravity");
+            stageBuilder.setStartingLocation(new Coordinates(40.444240, -79.942013));
+            ArrayList<Hint> hints = new ArrayList<Hint>();
+            for(int i = 1; i <= 6; i++) hints.add(getHint(i));
+            stageBuilder.setHints(hints);
+            return stageBuilder.build();
+        } else {
+            Stage.Builder stageBuilder = new Stage.Builder(stageID, 2);
+            stageBuilder.setKey("test");
+            stageBuilder.setStartingHint("testing multiple stages. the key is 'test'");
+            stageBuilder.setStartingLocation(new Coordinates(33.748439, -84.415932));
+            ArrayList<Hint> hints = new ArrayList<Hint>();
+            stageBuilder.setHints(hints);
+            return stageBuilder.build();
+        }
     }
 
     Hint getHint(int idx) {
@@ -78,5 +96,14 @@ public class LoadStageServlet extends HttpServlet {
             res.setText("This is the final hint, [n]ow please enter the key.");
         }
         return res.build();
+    }
+
+    /**
+    * Retrieves the stageID.
+    * @param request the HttpServletRequest of the doPost.
+    * @return a String representing the stageID.
+    */
+    private String getStageID(HttpServletRequest request) {
+        return request.getParameter("stageID");
     }
 }
