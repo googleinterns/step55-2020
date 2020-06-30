@@ -1,4 +1,7 @@
-function initMapCreateGame() {
+/**
+* Adds a map to a page where the id "map" is
+*/
+function initMapToCreateGame() {
   var myLatlng = {lat: 0.0, lng: 0.0};
 
   var map = new google.maps.Map(
@@ -24,6 +27,9 @@ function initMapCreateGame() {
   });
 }
 
+/**
+* Adds a stage button to the page and a corresponding div for the hints
+*/
 function addNewStage() {
   const stagesList = document.getElementById('stages');
   const numStages = stagesList.getElementsByTagName('input').length;
@@ -50,6 +56,9 @@ function addNewStage() {
   setActive('stage' + (numStages + 1));
 }
 
+/**
+* Adds a hint to the corresponding active stage
+*/
 function addNewHint() {
   const activeStageNum = getActiveStageElement().classList[0] + 'Hints';
   const activeHints = document.getElementById(activeStageNum);
@@ -68,6 +77,10 @@ function addNewHint() {
   activeHints.appendChild(newHint);
 }
 
+/**
+* Removes whichever stage is active and sets the element with the class being passed in to have the class 'activeStage'
+* @param {String} toSetActive is a class name of the element have the class 'activeStage
+*/
 function setActive(toSetActive) {
   const activeStage = getActiveStageElement();
   activeStage.classList.remove('activeStage');
@@ -79,10 +92,19 @@ function setActive(toSetActive) {
   document.getElementById(toSetActive + 'Hints').classList.remove('hidden');
 }
 
+/**
+* Returns the first element with the class 'activeStage'
+* @return {Element} the first element with the class 'activeStage'
+*/
 function getActiveStageElement() {
   return document.getElementsByClassName('activeStage')[0];
 }
 
+/**
+* Returns the first class of the element being passed in
+* @param {Element} stageElement the element of which the first className wants to be retrieved
+* @return {String} the first className of the element which should be in the form of "stage" + [the stage number]
+*/
 function getStageNumber(stageElement) {
     return stageElement.classList[0];
 }

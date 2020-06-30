@@ -1,33 +1,61 @@
-async function initMapPlayGame() {
+/** 
+* Initalizes a map where there is an id of 'playMap'
+*/
+async function initMapToPlayGame() {
   const params = new URLSearchParams();
   params.append('gameID', 'demogameid')
   var request = new Request('/load-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then(async (data) => {
-    var stage1 =  await getStage(data.stages[0]);
-    var startingLocation = {lat: stage1.startingLocation.latitude, lng: stage1.startingLocation.longitude};
+    if (data == null) {
+      window.alert('The data for this game does not exist, failure to initialize game');
+      window.location.replace('index.html');
+      return;
+    }
+    if (data.stages == null || data.stages.length <= 0) {
+      window.alert('There are no stages, failure to initialize game');
+      window.location.replace('index.html');
+      return;
+    }
+    var initStage =  await getStage(data.stages[0]);
+    var startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     var map = new google.maps.Map(
       document.getElementById('playMap'), {
       center: startingLocation, 
       gestureHandling: 'greedy',
       streetViewControl: false
     });
+    var stageHints = getHints(initStage);
+    if (stageHints.length == null) {
+      window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
+      window.location.replace('index.html');
+      return;
+    }
 
-    getHints(stage1).forEach(hint => 
+    stageHints.forEach(hint => 
       addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
     );
 
+    // gets the street view
     var panorama = map.getStreetView();
+    // removes the option to exit streetview
     var panoramaOptions = {
       enableCloseButton:false
     };
     panorama.setOptions(panoramaOptions);
     panorama.setPosition(startingLocation);
+    // puts the user in streetView
     panorama.setVisible(true);
 
-    createGameInfoOnSideOfMap(data, stage1, panorama);
+    createGameInfoOnSideOfMap(data, initStage, panorama);
   });
 }
 
+/** 
+* Creates the game game info that is on the side of the map on playGame.html
+* @param {String} data is the JSON from the server ‘/load-game-data’ 
+* @param {String} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
+* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+*/
 function createGameInfoOnSideOfMap(data, stage, map) {
     var gameInfo = document.getElementById('game-info');
     
@@ -49,7 +77,9 @@ function createGameInfoOnSideOfMap(data, stage, map) {
     starterHint.innerHTML = 'Starter: ' + stage.startingHint;
     gameInfo.appendChild(starterHint);
 
+    // This div is a container for where the hints will be placed on the site
     var hintsDiv = document.createElement('div');
+    // This is the ordered list (or <ol> in HTML) for where the hints will be listed
     var hintsOl = document.createElement('ol');
     hintsOl.id = 'hints';
 
@@ -75,7 +105,7 @@ function createGameInfoOnSideOfMap(data, stage, map) {
     // This checks if the user clicked enter in the key box
     inputKeyBox.addEventListener('keydown', function(e) {
       if (e.which == 13) {
-        checkKey(data, stage.key, stage, map);
+        checkKey(data, stage, map);
       }
     });
     gameInfo.appendChild(inputKeyBox);
@@ -85,17 +115,23 @@ function createGameInfoOnSideOfMap(data, stage, map) {
     buttonToCheckKey.className = 'center';
     buttonToCheckKey.value = 'Submit';
     buttonToCheckKey.addEventListener('click', function() {
-      checkKey(data, stage.key, stage, map);
+      checkKey(data, stage, map);
     });
     gameInfo.appendChild(buttonToCheckKey);
 }
 
-//TODO: Change this so if there is more than one page and the input key is correct,
+//TODO(smissak): TEST this so if there is more than one page and the input key is correct,
 // it adds the new stage rather than redirecting to the after game page
-function checkKey(data, key, stage, map) {
+/** 
+* Checks if the key is the correct key for the current stage
+* @param {String} data is the JSON from the server ‘/load-game-data’ 
+* @param {String} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
+* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+*/
+function checkKey(data, stage, map) {
   var keyInput = document.getElementById('key-input');
   var inputValue = keyInput.value;
-  if (key != inputValue) {
+  if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
     window.alert('Wrong key, please try again!');
     return;
   }
@@ -151,6 +187,6 @@ function addHintMarker(map, latLng, hint, hintNum) {
 }
 
 function addHint(hint, hintNum) {
-  var hintsWithNum= document.getElementById(hintNum);
+  var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
 }

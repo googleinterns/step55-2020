@@ -1,3 +1,6 @@
+/** 
+* Changes the page to light mode or dark mode
+*/
 function changeToOrFromDarkMode() {
   const body = document.body;
   const mode = body.classList;
@@ -12,6 +15,12 @@ function changeToOrFromDarkMode() {
 }
 
 // Depreciated
+
+/** 
+* Creates the navigation bar and specifies which page is active
+* @param {String} page is which HTML the navbar should be placed on
+* @example createNavBar("index")
+*/
 function createNavBar(page) {
   var navbar = document.createElement('nav');
 
@@ -71,12 +80,17 @@ function createNavBar(page) {
   document.getElementById('nav-bar').appendChild(navbar);
 }
 
+/** 
+* This function is a wrapper function for all of the functions to be called onload of any page
+* @param {String} page is which page the onLoadFunction is being called from without the .html 
+* @example onLoadFunction("index")
+*/
 function onLoadFunctions(page) {
   createNavBar(page);
   if (page == 'playGame') {
-    initMapPlayGame();
+    initMapToPlayGame();
   } else if (page == 'createGame') {
-    initMapCreateGame();
+    initMapToCreateGame();
   }
   
   if (typeof(Storage) !== "undefined") {
