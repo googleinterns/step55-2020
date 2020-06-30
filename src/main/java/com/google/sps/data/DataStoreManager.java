@@ -32,9 +32,6 @@ public class DatastoreManager implements DataManager {
 
   private DatastoreService datastore = DatastoreServiceFactory.getDataStoreService();
   Gson gson = new Gson();
-  
-  public DataStoreManager() {  
-  }
 
   /**
     * Stores the static data of a single game in datastore as an entity
@@ -158,8 +155,7 @@ public class DatastoreManager implements DataManager {
     stageEntity.setProperty("startingHint", stage.getStartingHint());
     stageEntity.setProperty("latitude", stage.getStartingLocation().getLatitude());
     stageEntity.setProperty("longitude", stage.getStartingLocation().getLongitude());
-    for (Hint hint : stage.getHints())
-    {
+    for (Hint hint : stage.getHints()) {
       updateHint(hint);
     }
     ArrayList<String> hints;
@@ -192,8 +188,8 @@ public class DatastoreManager implements DataManager {
     double longitude = (double) stageEntity.getProperty("longitude");
     Coordinates startingLocation;
     startingLocation = new Coordinates(latitude, longitude);
-    ArrayList<String> hintIDs = stageEntity.getProperty("hints");
-    ArrayLIst<Hint> hints = new ArrayList<Hint>();
+    ArrayList<String> hintIDs = (ArrayList<String>)stageEntity.getProperty("hints");
+    ArrayList<Hint> hints = new ArrayList<Hint>();
     for (String hintid : hintIDs) {
       hints.add(retrieveHint(hintid));
     }
@@ -329,7 +325,7 @@ public class DatastoreManager implements DataManager {
     String profilePictureUrl = (String) userEntity.getProperty("profilePictureUrl");
     String gamesCompletedWithTimeJson = (String) userEntity.getProperty("gamesCompletedWithTime");
     Type pairListType = new TypeToken<ArrayList<Pair<String, Long>>>(){}.getType();
-    ArrayList<Pair<String, Long>> gamesCompletedWithTime =gson.from.Json(gamesCompletedWithTimeJson, pairListType);
+    ArrayList<Pair<String, Long>> gamesCompletedWithTime = gson.from.Json(gamesCompletedWithTimeJson, pairListType);
     int numGamesFinished = (int) userEntity.getProperty("numGamesFinished");
     String numGamesCreated = (int) userEntity.getProperty("numGamesCreated");
   
