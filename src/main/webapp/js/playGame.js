@@ -24,6 +24,11 @@ async function initMapPlayGame() {
     panorama.setPosition(startingLocation);
     panorama.setVisible(true);
 
+    createGameInfoOnSideOfMap(data, stage1);
+  });
+}
+
+function createGameInfoOnSideOfMap(data, stage) {
     var gameInfo = document.getElementById('game-info');
     
     var gameName = document.createElement('h1');
@@ -32,7 +37,7 @@ async function initMapPlayGame() {
     gameInfo.appendChild(gameName);
 
     var gameStage = document.createElement('h2');
-    gameStage.innerHTML = 'You are on stage:' + stage1.stageNumber + '/' + data.stages.length;
+    gameStage.innerHTML = 'You are on stage:' + stage.stageNumber + '/' + data.stages.length;
     gameStage.className = 'center'
     gameInfo.appendChild(gameStage);
 
@@ -41,20 +46,59 @@ async function initMapPlayGame() {
     gameInfo.appendChild(theWordHints);
 
     var starterHint = document.createElement('h3');
-    starterHint.innerHTML = 'Starter: ' + stage1.startingHint;
+    starterHint.innerHTML = 'Starter: ' + stage.startingHint;
     gameInfo.appendChild(starterHint);
 
     var hintsDiv = document.createElement('div');
     var hintsOl = document.createElement('ol');
     hintsOl.id = 'hints';
 
-    getHints(stage1).forEach(hint => 
+    getHints(stage).forEach(hint => 
       hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
     );
 
     hintsDiv.appendChild(hintsOl);
     gameInfo.appendChild(hintsDiv);
-  });
+
+    var enterKeyText = document.createElement('h2');
+    enterKeyText.innerHTML = 'Please Enter The Key To Complete The Stage:';
+    enterKeyText.className = 'center'
+    gameInfo.appendChild(enterKeyText);
+
+    var inputKeyBox = document.createElement('input');
+    inputKeyBox.type = 'text';
+    inputKeyBox.className = 'center';
+    inputKeyBox.id = 'key-input';
+    inputKeyBox.style = 'width: 30%';
+
+    // This checks if the user clicked enter in the key box
+    inputKeyBox.addEventListener('keydown', function(e) {
+      if (e.which == 13) {
+        checkKey(data, stage.key);
+      }
+    });
+    gameInfo.appendChild(inputKeyBox);
+
+    var buttonToCheckKey = document.createElement('input');
+    buttonToCheckKey.type = 'button';
+    buttonToCheckKey.value = 'Submit';
+    buttonToCheckKey.addEventListener('click', function() {
+      checkKey(data, stage.key);
+    });
+    gameInfo.appendChild(buttonToCheckKey);
+}
+
+//TODO: Change this so if there is more than one page and the input key is correct,
+// it adds the new stage rather than redirecting to the after game page
+function checkKey(data, key) {
+  var keyInput = document.getElementById('key-input');
+  var inputValue = keyInput.value;
+
+  if (key == inputValue ) {
+      window.location.replace('afterGame.html');
+  } else {
+      window.alert('Wrong key, please try again!');
+  }
 }
 
 function createHintPlaceHolder(hintNum) {

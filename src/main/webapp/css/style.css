@@ -69,3 +69,7 @@ input {
 ol#hints {
   list-style-position: inside
 }
+
+.widthChange {
+    width: 20%;
+}
