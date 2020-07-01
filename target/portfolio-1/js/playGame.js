@@ -54,7 +54,8 @@ async function initMapToPlayGame() {
 * Creates the game game info that is on the side of the map on playGame.html
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
-* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+* @param {object} panorama the panorama of the map created in initMapPlayGame()
+* @param {object} map is map created in initMapPlayGame()
 */
 function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     var gameInfo = document.getElementById('game-info');
@@ -126,7 +127,8 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
 * Checks if the key is the correct key for the current stage
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
-* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+* @param {object} panorama the panorama of the map created in initMapPlayGame()
+* @param {object} map is map created in initMapPlayGame()
 */
 async function checkKey(data, stage, panorama, map) {
   var keyInput = document.getElementById('key-input');
@@ -190,7 +192,7 @@ async function getStage(stageID) {
 
 /** 
 * Adds a marker to the map containing the hint's data
-* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+* @param {object} map the panorama of the map created in initMapPlayGame()
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)

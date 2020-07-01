@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
-
   <script src='https://www.gstatic.com/charts/loader.js'></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk&libraries=places"></script>
 
   <script src='js/createGame.js'></script>
   <script src='js/script.js'></script>
@@ -55,7 +55,8 @@
       <br/>
       <input type='button' value='Finish'>
     </form>
-    <div id='map'></div> 
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
+    <div id='map' class='black-text'></div> 
   </div>
 </body>
 </html>
