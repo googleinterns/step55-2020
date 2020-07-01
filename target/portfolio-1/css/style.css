@@ -16,6 +16,13 @@
   text-align: center;
 }
 
+.light-mode #featured-map-info {
+  margin: auto;
+  margin-top: 0;
+  width: 300px;
+  background-color: #efefefff;
+}
+
 /* CSS for if the user is playing in dark mode */
 .dark-mode nav {
   background-color: #000000ff;
@@ -33,6 +40,13 @@
 .dark-mode .input-text-color {
   color: white;
   text-align: center;
+}
+
+.dark-mode #featured-map-info {
+  margin: auto;
+  margin-top: 0;
+  width: 300px;
+  background-color: #021b32ff;
 }
 
 input {
@@ -62,24 +76,16 @@ input {
 .mapToPlay {
   margin: auto;
 }
-.square {
-  background-color: #555;
-  height: 10vh;
-  margin: auto;
-  width: 10vw;
-}
 
-.rectangle {
-  background-color: black;
-  height: 25px;
+#featured-map {
   margin: auto;
-  width: 10vw;
+  margin-bottom: 0;
 }
 
 ol#hints {
   list-style-position: inside
 }
 
-.widthChange {
-  width: 20%;
+.cursor-pointer {
+  cursor: pointer;
 }

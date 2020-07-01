@@ -24,7 +24,7 @@ async function initMapToPlayGame() {
       gestureHandling: 'greedy',
       streetViewControl: false
     });
-    var stageHints = getHints(initStage);
+    var stageHints = initStage.hints;
     if (stageHints.length == null) {
       window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
       window.location.replace('index.html');
@@ -52,8 +52,8 @@ async function initMapToPlayGame() {
 
 /** 
 * Creates the game game info that is on the side of the map on playGame.html
-* @param {String} data is the JSON from the server ‘/load-game-data’ 
-* @param {String} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
+* @param {string} data is the JSON from the server ‘/load-game-data’ 
+* @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
 * @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
 */
 function createGameInfoOnSideOfMap(data, stage, map) {
@@ -83,7 +83,7 @@ function createGameInfoOnSideOfMap(data, stage, map) {
     var hintsOl = document.createElement('ol');
     hintsOl.id = 'hints';
 
-    getHints(stage).forEach(hint => 
+    stage.hints.forEach(hint => 
       hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
     );
 
@@ -124,8 +124,8 @@ function createGameInfoOnSideOfMap(data, stage, map) {
 // it adds the new stage rather than redirecting to the after game page
 /** 
 * Checks if the key is the correct key for the current stage
-* @param {String} data is the JSON from the server ‘/load-game-data’ 
-* @param {String} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
+* @param {string} data is the JSON from the server ‘/load-game-data’ 
+* @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
 * @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
 */
 function checkKey(data, stage, map) {
@@ -149,12 +149,21 @@ function checkKey(data, stage, map) {
   createGameInfoOnSideOfMap(data, stage, map);
 }
 
+/** 
+* Creates an li for the hint to be places in the ol with the id being the hintNum
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+*/
 function createHintPlaceHolder(hintNum) {
     var hintLi = document.createElement('li');
     hintLi.id = hintNum;
     return hintLi;
 }
 
+/** 
+* Gets the data from the server about the current stage
+* @param {string} stageID is the ID of the stage to be retrieved from the server
+* @return {string} the JSON data from the server for the stage with the stageID passed in
+*/
 async function getStage(stageID) {
   var currStage;
   const params = new URLSearchParams();
@@ -166,15 +175,14 @@ async function getStage(stageID) {
   return currStage;
 }
 
-function getHints(stage) {
-  return stage.hints;
-}
-
+/** 
+* Adds a marker to the map containing the hint's data
+* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+* @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
+* @param {string} hint the plain text of the hint
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+*/
 function addHintMarker(map, latLng, hint, hintNum) {  
-  var infowindow = new google.maps.InfoWindow({
-    content: hint
-  });
-
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
@@ -186,6 +194,11 @@ function addHintMarker(map, latLng, hint, hintNum) {
   });
 }
 
+/** 
+* Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
+* @param {string} hint the plain text of the hint
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+*/
 function addHint(hint, hintNum) {
   var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;

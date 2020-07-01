@@ -18,7 +18,7 @@ function changeToOrFromDarkMode() {
 
 /** 
 * Creates the navigation bar and specifies which page is active
-* @param {String} page is which HTML the navbar should be placed on
+* @param {string} page is which HTML the navbar should be placed on
 * @example createNavBar("index")
 */
 function createNavBar(page) {
@@ -80,9 +80,107 @@ function createNavBar(page) {
   document.getElementById('nav-bar').appendChild(navbar);
 }
 
+//TODO(smissak): add this function to the javascript API docs
+//TODO(smissak): add marker for each starting position of each stage to the image
+/** 
+* Creates a static maps image where below the image is information on the game
+* @param {float} latitude is the latitude where the center of the image should be
+* @param {float} longitiude is the longitiude where the center of the image should be
+* @param {string} mapData the JSON data with the map's information
+* @param {string} captionID the id of the game info that is under the static image
+*/
+function createStaticMap(latitude, longitiude) { // TODO(smissak): rather than pass in the lat and lng, pass in an array of the lat and lngs to add a marker for the TODO
+  var staticImage = document.createElement('img');
+  var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
+  staticMapURL += latitude + ',' + longitiude;
+  staticMapURL += '&zoom=13&size=300x300&maptype=roadmap';
+  staticMapURL += '&markers=color:red%7C' + latitude + ',' + longitiude;
+  staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
+  staticImage.src = staticMapURL;
+  staticImage.classList.add('cursor-pointer');
+  staticImage.addEventListener('click', function() {
+    window.location.replace('playGame.html');
+  });
+  return staticImage;
+}
+
+function createStaticMapCaption(mapData, captionID) {
+  var numDifficultyVotes = mapData.numDifficultyVotes;
+  var totalDifficulty = mapData.totalDifficulty;
+  var avgDifficulty = 0;
+  if (numDifficultyVotes > 0 || totalDifficulty > 0) {
+    avgDifficulty = math.round(numDifficultyVotes/totalDifficulty);
+  }
+
+  var difficulty = 'Easy';
+  var difficultyColor = 'green';
+  if (avgDifficulty == 2) {
+    difficulty = 'Medium';
+    difficultyColor = 'orange';
+  } else if (avgDifficulty == 3) {
+    difficulty = 'Hard';
+    difficultyColor = 'red';
+  }
+
+  var fiveStars = getStarRating(mapData);
+
+  var staticMapInfo = document.createElement('div');
+  staticMapInfo.id = captionID;
+  staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
+  staticMapInfo.innerHTML += mapData.gameName + ' <i style="color:' + difficultyColor + '">[' + difficulty + "]</i>";
+  staticMapInfo.innerHTML += '<br> By ' + mapData.gameCreator;
+  staticMapInfo.style = 'text-align:left; padding: 6px';
+  staticMapInfo.classList.add('cursor-pointer');
+  staticMapInfo.addEventListener('click', function() {
+    window.location.replace('playGame.html');
+  });
+  return staticMapInfo;
+}
+
+function getStarRating(mapData) {
+  var numStarVotes = mapData.numStarVotes;
+  var totalStars = mapData.totalStars;
+  var avgStars = 0.0;
+  if (numStarVotes > 0 || totalStars > 0) {
+    avgStars = numStarVotes/totalStars;
+  }
+  
+  var fullStar = '<i class="material-icons md-18">star</i>';
+  var halfStar = '<i class="material-icons md-18">star_half</i>';
+  var emptyStar = '<i class="material-icons md-18">star_border</i>';
+
+  var fiveStars = '';
+  var avgStarsTemp = avgStars;
+  for (var i = 0; i < 5; i++) {
+    if(avgStarsTemp >= 1.0) {
+       fiveStars += fullStar;
+    } else if (avgStarsTemp <= 0) {
+      fiveStars += emptyStar;
+    } else {
+      fiveStars += halfStar;
+    }
+    avgStarsTemp -= 1.0;
+  }
+  return fiveStars
+}
+
+function loadFeaturedMap() {
+  const params = new URLSearchParams();
+  params.append('gameID', 'demogameid')
+  var request = new Request('/load-game-data', {method: 'POST', body: params});
+  fetch(request).then(response => response.json()).then(async (data) => {
+    var stage = await getStage(data.stages[0]);
+    var featuredMap = createStaticMap(stage.startingLocation.latitude, stage.startingLocation.longitude);
+    var featuredMapCaption = createStaticMapCaption(data, 'featured-map-info');
+    var featuredMapDiv = document.getElementById('featured-map');
+    featuredMapDiv.append(featuredMap);
+    featuredMapDiv.append(featuredMapCaption);
+  });
+}
+
 /** 
 * This function is a wrapper function for all of the functions to be called onload of any page
-* @param {String} page is which page the onLoadFunction is being called from without the .html 
+* @param {string} page is which page the onLoadFunction is being called from without the .html 
 * @example onLoadFunction("index")
 */
 function onLoadFunctions(page) {
@@ -91,6 +189,8 @@ function onLoadFunctions(page) {
     initMapToPlayGame();
   } else if (page == 'createGame') {
     initMapToCreateGame();
+  } else if (page == 'index') {
+    loadFeaturedMap();
   }
   
   if (typeof(Storage) !== "undefined") {

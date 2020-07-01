@@ -2,12 +2,12 @@
 * Adds a map to a page where the id "map" is
 */
 function initMapToCreateGame() {
-  var myLatlng = {lat: 0.0, lng: 0.0};
+  var latlng = {lat: 0.0, lng: 0.0};
 
   var map = new google.maps.Map(
     document.getElementById('map'), {
       zoom: 1, 
-      center: myLatlng, 
+      center: latlng, 
       mapTypeId: 'hybrid',
       gestureHandling: 'greedy'
   });
@@ -79,7 +79,7 @@ function addNewHint() {
 
 /**
 * Removes whichever stage is active and sets the element with the class being passed in to have the class 'activeStage'
-* @param {String} toSetActive is a class name of the element have the class 'activeStage
+* @param {string} toSetActive is a class name of the element have the class 'activeStage
 */
 function setActive(toSetActive) {
   const activeStage = getActiveStageElement();
@@ -103,7 +103,7 @@ function getActiveStageElement() {
 /**
 * Returns the first class of the element being passed in
 * @param {Element} stageElement the element of which the first className wants to be retrieved
-* @return {String} the first className of the element which should be in the form of "stage" + [the stage number]
+* @return {string} the first className of the element which should be in the form of "stage" + [the stage number]
 */
 function getStageNumber(stageElement) {
     return stageElement.classList[0];
