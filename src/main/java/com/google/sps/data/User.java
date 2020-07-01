@@ -26,8 +26,6 @@ public class User {
     private final String lastName;
     private final String profilePictureUrl;
     private final ArrayList<String> gamesCreated;
-    private final int numGamesFinished;
-    private final int numGamesCreated;
     private final ArrayList<Pair<String, Long>> gamesCompletedWithTime;
 
     /**
@@ -43,8 +41,6 @@ public class User {
         private String lastName = null;
         private String profilePictureUrl = null;
         private ArrayList<String> gamesCreated = null;
-        private int numGamesFinished = -1;
-        private int numGamesCreated = -1;
         private ArrayList<Pair<String, Long>> gamesCompletedWithTime = null;
 
         /**
@@ -90,7 +86,7 @@ public class User {
         * @param profilePictureUrl a String containing the new profile picture url.
         * @return a Builder with the modified profile picture url.
         */
-        public Builder setprofilePictureUrl(String profilePictureUrl) {
+        public Builder setProfilePictureUrl(String profilePictureUrl) {
             this.profilePictureUrl = profilePictureUrl;
             return this;
         }
@@ -102,26 +98,6 @@ public class User {
         */
         public Builder setGamesCreated(ArrayList<String> gamesCreated) {
             this.gamesCreated = gamesCreated;
-            return this;
-        }
-
-        /**
-        * Sets the number of games this user has finished (won).
-        * @param numGamesFinished an int containing how many games this user has finished.
-        * @return a Builder with modified number of games finished.
-        */
-        public Builder setNumGamesFinished(int numGamesFinished) {
-            this.numGamesFinished = numGamesFinished;
-            return this;
-        }
-
-        /**
-        * Sets the number of games this user has created.
-        * @param numGamesCreated an int containing how many games this user has created.
-        * @return a Builder with modified number of games created.
-        */
-        public Builder setNumGamesCreated(int numGamesCreated) {
-            this.numGamesCreated = numGamesCreated;
             return this;
         }
 
@@ -158,8 +134,6 @@ public class User {
         this.lastName = builder.lastName;
         this.profilePictureUrl = builder.profilePictureUrl;
         this.gamesCreated = builder.gamesCreated;
-        this.numGamesFinished = builder.numGamesFinished;
-        this.numGamesCreated = builder.numGamesCreated;
         this.gamesCompletedWithTime = builder.gamesCompletedWithTime;
     }
 
@@ -209,22 +183,6 @@ public class User {
     */
     public ArrayList<String> getGamesCreated() {
         return this.gamesCreated;
-    }
-
-    /**
-    * Retrieves the number of games this user has finished (won).
-    * @return an int containing the number of games this user has finished (won).
-    */
-    public int getNumGamesFinished() {
-        return this.numGamesFinished;
-    }
-
-    /**
-    * Retrieves the number of games this user has created.
-    * @return an int containing the number of games this user has created.
-    */
-    public int getNumGamesCreated() {
-        return this.numGamesCreated;
     }
 
     /**

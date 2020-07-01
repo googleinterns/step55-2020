@@ -14,6 +14,8 @@
 
 package com.google.sps.data;
 
+import java.util.Objects;
+
 /**
 * Represents two objects.
 */
@@ -37,5 +39,27 @@ public class Pair<Type1, Type2> {
     public Pair(Type1 first, Type2 second) {
         this.first = first;
         this.second = second;
+    }
+
+    /**
+    * Checks whether two Pair objects are equal. Two Pair objects are equal if and only if
+    * their corresponding firsts and seconds are equal.
+    * @param other the Pair that this is being compared with.
+    * @return a boolean indicating whether this is equal to other.
+    */
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Pair)) return false;
+        Pair otherPair = (Pair) other;
+        return this.first.equals(otherPair.first) && this.second.equals(otherPair.second);
+    }
+
+    /**
+    * Generates the hash code for this Pair.
+    * @return an int containing the hash code of this Pair.
+    */
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.first, this.second);
     }
 }

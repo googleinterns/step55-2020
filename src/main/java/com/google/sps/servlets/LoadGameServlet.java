@@ -45,7 +45,6 @@ public class LoadGameServlet extends HttpServlet {
         Game.Builder gameBuilder = new Game.Builder(gameID, "Demo");
         gameBuilder.setGameCreator("usernameid12345");
         gameBuilder.setGameDescription("Demo game for testing");
-        gameBuilder.setNumStages(2);
         ArrayList<String> stages = new ArrayList<String>();
         stages.add("stage1id");
         stages.add("stage2id");

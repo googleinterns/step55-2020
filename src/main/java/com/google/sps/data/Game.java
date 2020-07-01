@@ -24,7 +24,6 @@ public class Game {
     private final String gameName;
     private final String gameCreator;
     private final String gameDescription;
-    private final int numStages;
     private final ArrayList<String> stages;
     private final int numTimesPlayed;
     private final int numTimesFinished;
@@ -44,7 +43,6 @@ public class Game {
         // Optional paramters - initialized to default values
         private String gameCreator = null;
         private String gameDescription = null;
-        private int numStages = -1;
         private ArrayList<String> stages = null;
         private int numTimesPlayed = -1;
         private int numTimesFinished = -1;
@@ -80,16 +78,6 @@ public class Game {
         */
         public Builder setGameDescription(String gameDescription) {
             this.gameDescription = gameDescription;
-            return this;
-        }
-        
-        /**
-        * Sets the number of stages in the game.
-        * @param numStages an int containing the number of stages.
-        * @return a Builder object with the modified number of stages.
-        */
-        public Builder setNumStages(int numStages) {
-            this.numStages = numStages;
             return this;
         }
 
@@ -183,7 +171,6 @@ public class Game {
         this.gameName = builder.gameName;
         this.gameCreator = builder.gameCreator;
         this.gameDescription = builder.gameDescription;
-        this.numStages = builder.numStages;
         this.stages = builder.stages;
         this.numTimesPlayed = builder.numTimesPlayed;
         this.numTimesFinished = builder.numTimesFinished;
@@ -223,14 +210,6 @@ public class Game {
     */
     public String getGameDescription() {
         return this.gameDescription;
-    }
-
-    /**
-    * Retrieves the number of stages this game has.
-    * @return an int containing how many stages this game has.
-    */
-    public int getNumStages() {
-        return this.numStages;
     }
 
     /**
