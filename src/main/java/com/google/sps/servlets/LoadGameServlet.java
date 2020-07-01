@@ -42,19 +42,10 @@ public class LoadGameServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String gameID = getGameID(request);
+        String gameID = request.getParameter("gameID");
         Game game = datastoreManager.retrieveGame(gameID);
         
         String json = new Gson().toJson(game);
         response.getWriter().println(json);
-    }
-    
-    /**
-    * Retrieves the gameID.
-    * @param request the HttpServletRequest of the doPost.
-    * @return a String representing the gameID.
-    */
-    private String getGameID(HttpServletRequest request) {
-        return request.getParameter("gameID");
     }
 }
