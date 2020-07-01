@@ -1,8 +1,4 @@
 function addNewStage() {
-//   const activeStage = getActiveStageElement();
-//   activeStage.classList.remove('activeStage');
-//   const divToHide = getStageNumber(activeStage);
-//   document.getElementById(divToHide + 'Hints').classList.add('hidden');
   const stagesList = document.getElementById('stages');
   const numStages = stagesList.getElementsByTagName('input').length;
   
