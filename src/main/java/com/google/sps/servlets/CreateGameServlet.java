@@ -52,6 +52,9 @@ public class CreateGameServlet extends HttpServlet {
     ArrayList<ArrayList<Coordinates>> hintLocations;
     ArrayList<ArrayList<String>> hintTexts;
 
+    /**
+    * Creates a game with the given fetch parameters.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         parseInput(request);
@@ -84,6 +87,14 @@ public class CreateGameServlet extends HttpServlet {
         response.getWriter().println(gameID);
     }
 
+    /**
+    * Creates a Hint object given the stage index and the hint index.
+    * stageIdx = 0 corresponds to the 1st stage, and hintIdx = 0
+    * corresponds to the 1st hint.
+    * @param stageIdx the stage index.
+    * @param hintIdx the hint index within the stage.
+    * @return a Hint object corresponding to the stage and hint indices.
+    */
     Hint buildHint(int stageIdx, int hintIdx) {
         String hintID = IDGenerator.gen();
         Hint.Builder res = new Hint.Builder(hintID, hintIdx+1);
@@ -92,6 +103,12 @@ public class CreateGameServlet extends HttpServlet {
         return res.build();
     }
 
+    /**
+    * Creates a Stage object given the stage index.
+    * stageIdx = 0 corresponds to the 1st stage.
+    * @param stageIdx the stage index.
+    * @return a Stage object corresponding to the stage index.
+    */
     Stage buildStage(int idx) {
         String stageID = IDGenerator.gen();
         Stage.Builder res = new Stage.Builder(stageID, idx+1);
