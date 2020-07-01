@@ -27,7 +27,7 @@ public interface IDataManager {
     public void updateStage(Stage stage);
     public Stage retrieveStage(String stageID);
 
-    public void storeProgress(Progress progress);
-    public void updateProgress(Progress progress);
-    public Progress retrieveProgress(String progressID);
+    public void storeSingleplayerProgress(SingleplayerProgress progress);
+    public void updateSingleplayerProgress(SingleplayerProgress progress);
+    public SingleplayerProgress retrieveSingleplayerProgress(String userID, String gameID);
 }
