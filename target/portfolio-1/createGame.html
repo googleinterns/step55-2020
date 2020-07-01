@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyB6Z9-Fs5ZPU67bQl5Wehpzw81FQUODf-U'></script>
+
+  <script src='https://www.gstatic.com/charts/loader.js'></script>
+
+  <script src='js/map.js'></script>
+  <script src='js/script.js'></script>
+  <script src='js/createGame.js'></script>
+
+  <!--Import Google Icon Font-->
+  <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    
+  <!--Import materialize.css from maeralizecss.com-->
+  <link rel='stylesheet' href='css/materialize.min.css'>
+   
+  <!-- Compiled and minified JavaScript from materalizecss.com-->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js'></script>
+
+  <!--  Scripts from materalizecss.com-->
+  <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
+  <script src='js/materialize.min.js'></script>
+
+  <link rel='stylesheet' href='css/style.css'>
+  <title>Create Game</title>
+
+</head>
+<body class='light-mode' onload='onLoadFunctions("createGame")'>
+  <div id='nav-bar'></div>
+  <div class='container'>
+    <form action='' method=''>
+      <br/>
+      <input id='title' type='text' name='title' placeholder='Title' required>
+  
+      <br/>
+      <input id='description' type='text' name='description' placeholder='Game Description'>  
+
+      <!-- Div for the stages -->
+      <div id='stages'>
+        <input type='button' value='Stage 1' class='stage1 activeStage' onclick="setActive('stage1');">
+      </div>
+      <input type='button' value='+ add stage' id='addStage' onclick='addNewStage()'>
+
+      <!-- Div for the hints -->
+      <div id='hints'>
+        <div id='stage1Hints'>
+          <input type='text' id='started-postion' placeholder='Starter Postion (click on map to get corrdinates)'>
+          <input type='text' placeholder='Starter Hint' id='starter-hint' required>
+          <input type='text' id='hint1-postion' placeholder='Hint 1 Postion (click on map to get corrdinates)'>
+          <input type='text' placeholder='Hint 1' id='hint1'>
+        </div> 
+      </div>
+      <input type='button' value='+ add hint' id='addHint' onclick='addNewHint()'> 
+
+      <br/>
+      <input type='button' value='Finish'>
+    </form>
+    <div id='map'></div>
+  </div> 
+</body>
+</html>

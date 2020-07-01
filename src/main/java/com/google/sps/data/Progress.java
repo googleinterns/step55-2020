@@ -35,10 +35,10 @@ public class Progress {
         private final String progressID;
 
         // Optional parameters - initialized to default values
-        private ArrayList<String> hintsFound = null;
-        private ArrayList<String> players = null;
-        private String stageID = null;
-        private String gameID = null;
+        private ArrayList<String> hintsFound = new ArrayList<>();
+        private ArrayList<String> players = new ArrayList<>();
+        private String stageID = "N/A";
+        private String gameID = "N/A";
         private boolean gameOver = false;
 
         /**

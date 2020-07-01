@@ -41,15 +41,15 @@ public class Game {
         private final String gameName;
 
         // Optional paramters - initialized to default values
-        private String gameCreator = null;
-        private String gameDescription = null;
-        private ArrayList<String> stages = null;
-        private int numTimesPlayed = -1;
-        private int numTimesFinished = -1;
-        private int numStarVotes = -1;
-        private int totalStars = -1;
-        private int numDifficultyVotes = -1;
-        private int totalDifficulty = -1;
+        private String gameCreator = "N/A";
+        private String gameDescription = "N/A";
+        private ArrayList<String> stages = new ArrayList<>();
+        private int numTimesPlayed = 0;
+        private int numTimesFinished = 0;
+        private int numStarVotes = 0;
+        private int totalStars = 0;
+        private int numDifficultyVotes = 0;
+        private int totalDifficulty = 0;
 
         /**
         * Constructor that sets the game ID and the game name.

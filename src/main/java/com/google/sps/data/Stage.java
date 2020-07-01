@@ -36,10 +36,10 @@ public class Stage {
         private final int stageNumber;
 
         // Optional parameters - initialized to default values
-        private String key = null;
-        private String startingHint = null;
-        private Coordinates startingLocation = null;
-        private ArrayList<Hint> hints = null;
+        private String key = "N/A";
+        private String startingHint = "N/A";
+        private Coordinates startingLocation = new Coordinates();
+        private ArrayList<Hint> hints = new ArrayList<>();
 
         /**
         * Constructor that sets the stage ID and the stage number.

@@ -32,8 +32,8 @@ public class Hint {
         private final int hintNumber;
 
         // Optional parameters - initialized to default values
-        private Coordinates location;
-        private String text;
+        private Coordinates location = new Coordinates();
+        private String text = "N/A";
 
         /**
         * Constructor that sets the hint ID and the hint number.

@@ -36,12 +36,12 @@ public class User {
         private final String userID;
 
         // Optional parameters - initialized to default values
-        private String username = null;
-        private String firstName = null;
-        private String lastName = null;
-        private String profilePictureUrl = null;
-        private ArrayList<String> gamesCreated = null;
-        private ArrayList<Pair<String, Long>> gamesCompletedWithTime = null;
+        private String username = "N/A";
+        private String firstName = "N/A";
+        private String lastName = "N/A";
+        private String profilePictureUrl = "N/A";
+        private ArrayList<String> gamesCreated = new ArrayList<>();
+        private ArrayList<Pair<String, Long>> gamesCompletedWithTime = new ArrayList<>();
 
         /**
         * Constructor for a new User Builder with the given user ID.
