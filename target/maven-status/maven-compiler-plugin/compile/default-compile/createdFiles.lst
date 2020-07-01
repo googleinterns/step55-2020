@@ -14,6 +14,7 @@ com/google/sps/data/Hint$Builder.class
 com/google/sps/servlets/LoadStageServlet.class
 com/google/sps/data/Progress.class
 com/google/sps/data/User$1.class
+com/google/sps/data/IDataManager.class
 com/google/sps/servlets/CreateGameServlet.class
 com/google/sps/servlets/CreateGameServlet$2.class
 com/google/sps/servlets/CreateGameServlet$4.class
@@ -24,3 +25,4 @@ com/google/sps/servlets/LoadGameServlet.class
 com/google/sps/data/Coordinates.class
 com/google/sps/data/Game$Builder.class
 com/google/sps/data/Stage.class
+com/google/sps/data/MockDatastoreManager.class

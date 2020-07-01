@@ -38,18 +38,12 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-game-data")
 public class LoadGameServlet extends HttpServlet {
+    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String gameID = getGameID(request);
-
-        Game.Builder gameBuilder = new Game.Builder(gameID, "Demo");
-        gameBuilder.setGameCreator("usernameid12345");
-        gameBuilder.setGameDescription("Demo game for testing");
-        ArrayList<String> stages = new ArrayList<String>();
-        stages.add("stage1id");
-        stages.add("stage2id");
-        gameBuilder.setStages(stages);
-        Game game = gameBuilder.build();
+        Game game = datastoreManager.retrieveGame(gameID);
         
         String json = new Gson().toJson(game);
         response.getWriter().println(json);
