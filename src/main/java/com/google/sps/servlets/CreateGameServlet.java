@@ -89,35 +89,35 @@ public class CreateGameServlet extends HttpServlet {
 
     /**
     * Creates a Hint object given the stage index and the hint index.
-    * stageIdx = 0 corresponds to the 1st stage, and hintIdx = 0
+    * stageIndex = 0 corresponds to the 1st stage, and hintIndex = 0
     * corresponds to the 1st hint.
-    * @param stageIdx the stage index.
-    * @param hintIdx the hint index within the stage.
+    * @param stageIndex the stage index.
+    * @param hintIndex the hint index within the stage.
     * @return a Hint object corresponding to the stage and hint indices.
     */
-    Hint buildHint(int stageIdx, int hintIdx) {
+    Hint buildHint(int stageIndex, int hintIndex) {
         String hintID = IDGenerator.gen();
-        Hint.Builder res = new Hint.Builder(hintID, hintIdx+1);
-        res.setLocation(hintLocations.get(stageIdx).get(hintIdx));
-        res.setText(hintTexts.get(stageIdx).get(hintIdx));
+        Hint.Builder res = new Hint.Builder(hintID, hintIndex+1);
+        res.setLocation(hintLocations.get(stageIndex).get(hintIndex));
+        res.setText(hintTexts.get(stageIndex).get(hintIndex));
         return res.build();
     }
 
     /**
     * Creates a Stage object given the stage index.
-    * stageIdx = 0 corresponds to the 1st stage.
-    * @param stageIdx the stage index.
+    * stageIndex = 0 corresponds to the 1st stage.
+    * @param stageIndex the stage index.
     * @return a Stage object corresponding to the stage index.
     */
-    Stage buildStage(int idx) {
+    Stage buildStage(int stageIndex) {
         String stageID = IDGenerator.gen();
-        Stage.Builder res = new Stage.Builder(stageID, idx+1);
-        res.setKey(stageKeys.get(idx));
-        res.setStartingHint(stageStarterHints.get(idx));
-        res.setStartingLocation(stageSpawnLocations.get(idx));
+        Stage.Builder res = new Stage.Builder(stageID, stageIndex+1);
+        res.setKey(stageKeys.get(stageIndex));
+        res.setStartingHint(stageStarterHints.get(stageIndex));
+        res.setStartingLocation(stageSpawnLocations.get(stageIndex));
         ArrayList<Hint> hints = new ArrayList<>();
-        for(int i = 0; i < hintLocations.get(idx).size(); i++) {
-            hints.add(buildHint(idx, i));
+        for(int i = 0; i < hintLocations.get(stageIndex).size(); i++) {
+            hints.add(buildHint(stageIndex, i));
         }
         res.setHints(hints);
         return res.build();
