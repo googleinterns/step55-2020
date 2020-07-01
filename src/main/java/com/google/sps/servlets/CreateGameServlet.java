@@ -40,38 +40,100 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/create-game-data")
 public class CreateGameServlet extends HttpServlet {
+    MockDatastoreManager datastoreManager = new MockDatastoreManager();
     Gson gson = new Gson();
+    String gameID;
+    String userID;
+    String gameName;
+    String gameDescription;
+    ArrayList<String> stageKeys;
+    ArrayList<Coordinates> stageSpawnLocations;
+    ArrayList<String> stageStarterHints;
+    ArrayList<ArrayList<Coordinates>> hintLocations;
+    ArrayList<ArrayList<String>> hintTexts;
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(!isInputValid(request)) {
+        parseInput(request);
+        if(!isInputValid()) {
             System.out.println("Input json is not valid");
             System.exit(1);
         }
-        String gameID = IDGenerator.gen();
+
+        gameID = IDGenerator.gen();
+
+        Game.Builder gameBuilder = new Game.Builder(gameID, gameName);
+        gameBuilder.setGameCreator(userID);
+        gameBuilder.setGameDescription(gameDescription);
+        ArrayList<String> stages = new ArrayList<>();
+        for(int i = 0; i < stageKeys.size(); i++) {
+            Stage stage = buildStage(i);
+            stages.add(stage.getStageID());
+            datastoreManager.storeStage(stage);
+        }
+        gameBuilder.setStages(stages);
+        gameBuilder.setNumTimesPlayed(0);
+        gameBuilder.setNumTimesFinished(0);
+        gameBuilder.setNumStarVotes(0);
+        gameBuilder.setTotalStars(0);
+        gameBuilder.setNumDifficultyVotes(0);
+        gameBuilder.setTotalDifficulty(0);
+        Game game = gameBuilder.build();
+        datastoreManager.storeGame(game);
+
         response.getWriter().println(gameID);
     }
 
-    /**
-    * Checks that the values/sizes of numStages, numHints, stageSpawnLocations, stageStarterHints,
-    * hintLocations, and hintTexts all are consistent with one another.
-    * @param request the HttpServletRequest of the doPost.
-    * @return a boolean marking whether or not the request is consistent with itself.
-    */
-    boolean isInputValid(HttpServletRequest request) {
-        int numStages = getNumStages(request);
-        ArrayList<Integer> numHints = getNumHints(request);
-        ArrayList<Coordinates> stageSpawnLocations = getStageSpawnLocations(request);
-        ArrayList<String> stageStarterHints = getStageStarterHints(request);
-        if(numHints.size() != numStages) return false;
-        if(stageSpawnLocations.size() != numStages) return false;
-        if(stageStarterHints.size() != numStages) return false;
+    Hint buildHint(int stageIdx, int hintIdx) {
+        String hintID = IDGenerator.gen();
+        Hint.Builder res = new Hint.Builder(hintID, hintIdx+1);
+        res.setLocation(hintLocations.get(stageIdx).get(hintIdx));
+        res.setText(hintTexts.get(stageIdx).get(hintIdx));
+        return res.build();
+    }
 
-        ArrayList<ArrayList<Coordinates>> hintLocations = getHintLocations(request);
-        ArrayList<ArrayList<String>> hintTexts = getHintTexts(request);
+    Stage buildStage(int idx) {
+        String stageID = IDGenerator.gen();
+        Stage.Builder res = new Stage.Builder(stageID, idx+1);
+        res.setKey(stageKeys.get(idx));
+        res.setStartingHint(stageStarterHints.get(idx));
+        res.setStartingLocation(stageSpawnLocations.get(idx));
+        ArrayList<Hint> hints = new ArrayList<>();
+        for(int i = 0; i < hintLocations.get(idx).size(); i++) {
+            hints.add(buildHint(idx, i));
+        }
+        res.setHints(hints);
+        return res.build();
+    }
+
+    /**
+    * Parses all the inputs of the request and sets the corresponding variables.
+    * @param request the HttpServletRequest of the doPost.
+    */
+    void parseInput(HttpServletRequest request) {
+        userID = getUserID(request);
+        gameName = getGameName(request);
+        gameDescription = getGameDescription(request);
+        stageKeys = getStageKeys(request);
+        stageSpawnLocations = getStageSpawnLocations(request);
+        stageStarterHints = getStageStarterHints(request);
+        hintLocations = getHintLocations(request);
+        hintTexts = getHintTexts(request);
+    }
+
+    /**
+    * Checks that the sizes of stageSpawnLocations, stageStarterHints,
+    * hintLocations, and hintTexts all are consistent with one another.
+    * @return a boolean marking whether or not the values are consistent.
+    */
+    boolean isInputValid() {
+        int numStages = stageSpawnLocations.size();
+        if(stageStarterHints.size() != numStages) return false;
+        if(stageKeys.size() != numStages) return false;
+
         for(int i = 0; i < numStages; i++) {
-            if(hintLocations.get(i).size() != numHints.get(i)) return false;
-            if(hintTexts.get(i).size() != numHints.get(i)) return false;
+            int numHints = hintLocations.get(i).size();
+            if(hintTexts.get(i).size() != numHints) return false;
         }
         return true;
     }
@@ -90,7 +152,7 @@ public class CreateGameServlet extends HttpServlet {
     * @param request the HttpServletRequest of the doPost.
     * @return a String representing the name/title of the game.
     */
-    private String getName(HttpServletRequest request) {
+    private String getGameName(HttpServletRequest request) {
         return request.getParameter("gameName");
     }
 
@@ -99,17 +161,21 @@ public class CreateGameServlet extends HttpServlet {
     * @param request the HttpServletRequest of the doPost.
     * @return a String representing the description of the game.
     */
-    private String getDescription(HttpServletRequest request) {
+    private String getGameDescription(HttpServletRequest request) {
         return request.getParameter("gameDescription");
     }
 
     /**
-    * Retrieves the number of stages in the game.
+    * Retrieves the key for each stage.
     * @param request the HttpServletRequest of the doPost.
-    * @return an int representing the number of stages.
+    * @return an ArrayList, where the ith element is a String containing the
+    *         key for the ith stage.
     */
-    private int getNumStages(HttpServletRequest request) {
-        return Integer.parseInt(request.getParameter("numStages"));
+    private ArrayList<String> getStageKeys(HttpServletRequest request) {
+        String json = request.getParameter("stageKeys");
+        Type stringListType = new TypeToken<ArrayList<String>>(){}.getType();
+        ArrayList<String> res = gson.fromJson(json, stringListType);
+        return res;
     }
 
     /**
@@ -136,19 +202,6 @@ public class CreateGameServlet extends HttpServlet {
         String json = request.getParameter("stageStarterHints");
         Type stringListType = new TypeToken<ArrayList<String>>(){}.getType();
         ArrayList<String> res = gson.fromJson(json, stringListType);
-        return res;
-    }
-
-    /**
-    * Retrieves the number of hints (excluding the starter hint) in each stage.
-    * @param request the HttpServletRequest of the doPost.
-    * @return an ArrayList, where the ith element is an int representing
-    *         the number of hints in the ith stage.
-    */
-    private ArrayList<Integer> getNumHints(HttpServletRequest request) {
-        String json = request.getParameter("numHints");
-        Type integerListType = new TypeToken<ArrayList<Integer>>(){}.getType();
-        ArrayList<Integer> res = gson.fromJson(json, integerListType);
         return res;
     }
 

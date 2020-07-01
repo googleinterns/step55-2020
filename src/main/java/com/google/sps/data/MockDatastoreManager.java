@@ -19,8 +19,20 @@ import java.util.ArrayList;
 public class MockDatastoreManager {
     public void storeUser(User user) {}
     public void updateUser(User user) {}
+    /**
+    * Returns a mock user.
+    * @param userID a string containing a userID. The userID of the mock user will be set to this.
+    * @return a User object.
+    */
     public User retrieveUser(String userID) {
-        return null;
+        User.Builder userBuilder = new User.Builder(userID);
+        userBuilder.setUsername("username");
+        userBuilder.setFirstName("Firstname");
+        userBuilder.setLastName("Lastname");
+        userBuilder.setProfilePictureUrl("images/defaultProfilePicture.jpg");
+        userBuilder.setGamesCreated(new ArrayList<String>());
+        userBuilder.setGamesCompletedWithTime(new ArrayList<Pair<String, Long>>());
+        return userBuilder.build();
     }
 
     public void storeGame(Game game) {}
