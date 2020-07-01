@@ -1,3 +1,4 @@
+/* CSS for if the user is playing in light mode */
 .light-mode nav {
   background-color: #553A41;
 }
@@ -6,12 +7,46 @@
   background-color: white;
 }
 
+.light-mode .activeStage {
+  background-color: #74d3aeff;
+}
+
+.light-mode .input-text-color {
+  color: black;
+  text-align: center;
+}
+
+.light-mode #featured-map-info {
+  margin: auto;
+  margin-top: 0;
+  width: 300px;
+  background-color: #efefefff;
+}
+
+/* CSS for if the user is playing in dark mode */
 .dark-mode nav {
   background-color: #000000ff;
 }
 
 .dark-mode {
   background-color: #434343ff;
+  color: white;
+}
+
+.dark-mode .activeStage {
+  background-color: #32908F;
+}
+
+.dark-mode .input-text-color {
+  color: white;
+  text-align: center;
+}
+
+.dark-mode #featured-map-info {
+  margin: auto;
+  margin-top: 0;
+  width: 300px;
+  background-color: #021b32ff;
 }
 
 input {
@@ -22,15 +57,35 @@ input {
   display:none;
 }
 
-.activeStage {
-    background-color: #74d3aeff;
-}
-
-/* Always set the map height explicitly to define the size of the div
- * element that contains the map. */
+/* Sets the map to about half of the screen height
+ */
 #map {
   border: thin solid black;
-  float: right;
-  height: 500px;
+  height: 25vw;
   width: 100%;
+}
+
+/* Sets the map the user plays on to the height of the screen */
+#playMap {
+  float:left;
+  border: thin solid black;
+  height: 95vh;
+  width: 70%;
+}
+
+.mapToPlay {
+  margin: auto;
+}
+
+#featured-map {
+  margin: auto;
+  margin-bottom: 0;
+}
+
+ol#hints {
+  list-style-position: inside
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
