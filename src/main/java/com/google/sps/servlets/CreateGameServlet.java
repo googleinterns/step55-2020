@@ -16,6 +16,8 @@ package com.google.sps.servlets;
 import com.google.sps.data.*;
 
 import java.util.ArrayList;
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -38,11 +40,49 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/create-game-data")
 public class CreateGameServlet extends HttpServlet {
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Gson gson = new Gson();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("/index.html");
+        if(!isInputValid(request)) {
+            System.out.println("Input json is not valid");
+            System.exit(1);
+        }
+        String gameID = IDGenerator.gen();
+        response.getWriter().println(gameID);
+    }
+
+    /**
+    * Checks that the values/sizes of numStages, numHints, stageSpawnLocations, stageStarterHints,
+    * hintLocations, and hintTexts all are consistent with one another.
+    * @param request the HttpServletRequest of the doPost.
+    * @return a boolean marking whether or not the request is consistent with itself.
+    */
+    boolean isInputValid(HttpServletRequest request) {
+        int numStages = getNumStages(request);
+        ArrayList<Integer> numHints = getNumHints(request);
+        ArrayList<Coordinates> stageSpawnLocations = getStageSpawnLocations(request);
+        ArrayList<String> stageStarterHints = getStageStarterHints(request);
+        if(numHints.size() != numStages) return false;
+        if(stageSpawnLocations.size() != numStages) return false;
+        if(stageStarterHints.size() != numStages) return false;
+
+        ArrayList<ArrayList<Coordinates>> hintLocations = getHintLocations(request);
+        ArrayList<ArrayList<String>> hintTexts = getHintTexts(request);
+        for(int i = 0; i < numStages; i++) {
+            if(hintLocations.get(i).size() != numHints.get(i)) return false;
+            if(hintTexts.get(i).size() != numHints.get(i)) return false;
+        }
+        return true;
+    }
+
+    /**
+    * Retrieves the userID of the creator of the game.
+    * @param request the HttpServletRequest of the doPost.
+    * @return a String representing the userID.
+    */
+    private String getUserID(HttpServletRequest request) {
+        return request.getParameter("userID");
     }
 
     /**
@@ -63,14 +103,13 @@ public class CreateGameServlet extends HttpServlet {
         return request.getParameter("gameDescription");
     }
 
-    // Below: TODO once game creation form is done
     /**
     * Retrieves the number of stages in the game.
     * @param request the HttpServletRequest of the doPost.
     * @return an int representing the number of stages.
     */
     private int getNumStages(HttpServletRequest request) {
-        return -1;
+        return Integer.parseInt(request.getParameter("numStages"));
     }
 
     /**
@@ -81,7 +120,10 @@ public class CreateGameServlet extends HttpServlet {
     * @see com.google.sps.data.Coordinates
     */
 	private ArrayList<Coordinates> getStageSpawnLocations(HttpServletRequest request) {
-        return null;
+        String json = request.getParameter("stageSpawnLocations");
+        Type coordinatesListType = new TypeToken<ArrayList<Coordinates>>(){}.getType();
+        ArrayList<Coordinates> res = gson.fromJson(json, coordinatesListType);
+        return res;
     }
 
     /**
@@ -91,7 +133,10 @@ public class CreateGameServlet extends HttpServlet {
     *         the starting hint for the ith stage.
     */
     private ArrayList<String> getStageStarterHints(HttpServletRequest request) {
-        return null;
+        String json = request.getParameter("stageStarterHints");
+        Type stringListType = new TypeToken<ArrayList<String>>(){}.getType();
+        ArrayList<String> res = gson.fromJson(json, stringListType);
+        return res;
     }
 
     /**
@@ -101,7 +146,10 @@ public class CreateGameServlet extends HttpServlet {
     *         the number of hints in the ith stage.
     */
     private ArrayList<Integer> getNumHints(HttpServletRequest request) {
-        return null;
+        String json = request.getParameter("numHints");
+        Type integerListType = new TypeToken<ArrayList<Integer>>(){}.getType();
+        ArrayList<Integer> res = gson.fromJson(json, integerListType);
+        return res;
     }
 
     /**
@@ -113,8 +161,11 @@ public class CreateGameServlet extends HttpServlet {
     *         the jth hint of the ith stage.
     * @see com.google.sps.data.Coordinates
     */
-    private ArrayList<ArrayList<Coordinates>> getHintCoordinates(HttpServletRequest request) {
-        return null;
+    private ArrayList<ArrayList<Coordinates>> getHintLocations(HttpServletRequest request) {
+        String json = request.getParameter("hintLocations");
+        Type coordinatesListListType = new TypeToken<ArrayList<ArrayList<Coordinates>>>(){}.getType();
+        ArrayList<ArrayList<Coordinates>> res = gson.fromJson(json, coordinatesListListType);
+        return res;
     }
 
     /**
@@ -125,7 +176,10 @@ public class CreateGameServlet extends HttpServlet {
     *         element of this inner list represents the text of
     *         the jth hint of the ith stage.
     */
-    private ArrayList<ArrayList<String>> getHintText(HttpServletRequest request) {
-        return null;
+    private ArrayList<ArrayList<String>> getHintTexts(HttpServletRequest request) {
+        String json = request.getParameter("hintTexts");
+        Type stringListListType = new TypeToken<ArrayList<ArrayList<String>>>(){}.getType();
+        ArrayList<ArrayList<String>> res = gson.fromJson(json, stringListListType);
+        return res;
     }
 }

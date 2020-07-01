@@ -41,18 +41,18 @@ public class Coordinates {
 	
     /**
     * Sets the latitude of the coordinates.
-    * @param val a double specifying the new latitude.
+    * @param latitude a double specifying the new latitude.
     */
-    public void setLatitude(double val) {
-        this.latitude = val;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     /**
     * Sets the longitude of the coordinates.
-    * @param val a double specifying the new longitude.
+    * @param longitude a double specifying the new longitude.
     */
-    public void setLongitude(double val) {
-        this.longitude = val;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     /**

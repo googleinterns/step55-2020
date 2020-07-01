@@ -38,21 +38,23 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-game-data")
 public class LoadGameServlet extends HttpServlet {
+    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Currently ignores the input and just returns a fixed Game.
-        String gameID = "demogameid";
-
-        Game.Builder gameBuilder = new Game.Builder(gameID, "Demo");
-        gameBuilder.setGameCreator("username");
-        gameBuilder.setGameDescription("Demo game for testing");
-        gameBuilder.setNumStages(1);
-        ArrayList<String> stages = new ArrayList<String>();
-        stages.add("stage1id");
-        gameBuilder.setStages(stages);
-        Game game = gameBuilder.build();
+        String gameID = getGameID(request);
+        Game game = datastoreManager.retrieveGame(gameID);
         
         String json = new Gson().toJson(game);
         response.getWriter().println(json);
+    }
+    
+    /**
+    * Retrieves the gameID.
+    * @param request the HttpServletRequest of the doPost.
+    * @return a String representing the gameID.
+    */
+    private String getGameID(HttpServletRequest request) {
+        return request.getParameter("gameID");
     }
 }
