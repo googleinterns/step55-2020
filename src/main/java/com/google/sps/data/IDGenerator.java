@@ -17,9 +17,15 @@ package com.google.sps.data;
 import java.util.UUID;
 
 /**
-* A simple class that generates random IDs.
+* A simple class that generates random ID strings that are extremely
+* likely to be unique. These IDs are used for users, games, stages, hints,
+* etc.
 */
 public class IDGenerator {
+    /**
+    * Generates a random (and unique) ID.
+    * @return a String containing a random ID.
+    */
     public static String gen() {
         return UUID.randomUUID().toString();
     }

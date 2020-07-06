@@ -34,18 +34,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that when given a stageID, serves the corresponding Stage.
+* Servlet that when given a userID, serves the corresponding User.
 */
-@WebServlet("/load-stage-data")
-public class LoadStageServlet extends HttpServlet {
+@WebServlet("/load-user-data")
+public class LoadUserServlet extends HttpServlet {
     MockDatastoreManager datastoreManager = new MockDatastoreManager();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String stageID = request.getParameter("stageID");
-        Stage stage = datastoreManager.retrieveStage(stageID);
+        String userID = request.getParameter("userID");
+        User user = datastoreManager.retrieveUser(userID);
         
-        String json = new Gson().toJson(stage);
+        String json = new Gson().toJson(user);
         response.getWriter().println(json);
     }
 }

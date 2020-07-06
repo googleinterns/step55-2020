@@ -223,7 +223,6 @@ function getDataFromForm() {
   params.append('hintLocations', JSON.stringify(hintLocations));
   params.append('hintTexts', JSON.stringify(hintTexts));
   params.append('userID', 'username');
-  params.append('numStages', numStages);
   console.log(JSON.stringify(stageKeys))
   console.log(JSON.stringify(stageSpawnLocations))
   console.log(JSON.stringify(stageStarterHints))

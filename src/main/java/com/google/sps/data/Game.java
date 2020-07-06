@@ -63,7 +63,7 @@ public class Game {
 
         /**
         * Sets the game's creator, which is displayed on the game's page.
-        * @param gameCreator a String containing the creator's username.
+        * @param gameCreator a String containing the creator's userID.
         * @return a Builder object with the modified creator.
         */
         public Builder setGameCreator(String gameCreator) {
