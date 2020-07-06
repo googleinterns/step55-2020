@@ -125,7 +125,7 @@ function createStaticMapCaption(mapData, captionID) {
   var totalDifficulty = mapData.totalDifficulty;
   var avgDifficulty = 0;
   if (numDifficultyVotes > 0 && totalDifficulty > 0) {
-    avgDifficulty = math.round(numDifficultyVotes/totalDifficulty);
+    avgDifficulty = Math.round(numDifficultyVotes/totalDifficulty);
   }
 
   var difficulty = 'Easy';
@@ -212,6 +212,7 @@ function loadFeaturedMap() {
 function onLoadFunctions(page) {
   createNavBar(page);
 
+  // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   var elems = document.querySelectorAll('.sidenav');
   var instances = M.Sidenav.init(elems, {});
   
