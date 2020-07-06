@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
 * Represents the static data containing progress a single user has made in a game.
 */
-public class SingleplayerProgress {
+public class SinglePlayerProgress {
     private final String userID;
     private final String gameID;
     private final Coordinates location;
@@ -27,7 +27,7 @@ public class SingleplayerProgress {
     private final String stageID;
 
     /**
-    * Builder class used to create SingleplayerProgress objects.
+    * Builder class used to create SinglePlayerProgress objects.
     */
     public static class Builder {
         // Required parameters
@@ -81,20 +81,20 @@ public class SingleplayerProgress {
         }
 
         /**
-        * Gets the SingleplayerProgress object created by this Builder.
-        * @return a SingleplayerProgress object with the properties specified in the Builder.
+        * Gets the SinglePlayerProgress object created by this Builder.
+        * @return a SinglePlayerProgress object with the properties specified in the Builder.
         */
-        public SingleplayerProgress build() {
-            return new SingleplayerProgress(this);
+        public SinglePlayerProgress build() {
+            return new SinglePlayerProgress(this);
         }
     }
 
     /**
-    * Constructor that converts a Builder into a SingleplayerProgress.
+    * Constructor that converts a Builder into a SinglePlayerProgress.
     * @param builder the Builder object to be converted.
     * @see Builder#build()
     */
-    private SingleplayerProgress(Builder builder) {
+    private SinglePlayerProgress(Builder builder) {
         this.userID = builder.userID;
         this.gameID = builder.gameID;
         this.location = builder.location;
