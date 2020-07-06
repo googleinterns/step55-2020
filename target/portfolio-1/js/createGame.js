@@ -109,9 +109,10 @@ function addNewStage() {
 
   const newStageHints = document.createElement('div');
   newStageHints.id = getStageNumber(newStage) + 'Hints';
-  newStageHints.innerHTML = "<input type='text' id='starter-postion' placeholder='Starter Postion (click on map to get corrdinates)'>" +
+  newStageHints.innerHTML = "<input type='text' id='key' placeholder='Stage Key'>" +
+                            "<input type='text' id='starter-position' placeholder='Starter Position (click on map to get corrdinates)'>" +
                             "<input type='text' placeholder='Starter Hint' id='starter-hint' required>" +
-                            "<input type='text' id='hint1-postion' placeholder='Hint 1 Postion (click on map to get corrdinates)'>" + 
+                            "<input type='text' id='hint1-position' placeholder='Hint 1 Position (click on map to get corrdinates)'>" + 
                             "<input type='text' placeholder='Hint 1' id='hint1'>";
 
   document.getElementById('hints').appendChild(newStageHints);
@@ -124,11 +125,11 @@ function addNewStage() {
 function addNewHint() {
   const activeStageNum = getActiveStageElement().classList[0] + 'Hints';
   const activeHints = document.getElementById(activeStageNum);
-  const numHints = activeHints.getElementsByTagName('input').length;
+  const numHints = activeHints.getElementsByTagName('input').length - 1;
 
   const newHintPos = document.createElement('input');
   newHintPos.id = 'hint' + (numHints/2) + '-position';
-  newHintPos.placeholder = 'Hint ' + (numHints/2) + ' Postion (click on map to get corrdinates)';
+  newHintPos.placeholder = 'Hint ' + (numHints/2) + ' Position (click on map to get corrdinates)';
   newHintPos.type= 'text';
   activeHints.appendChild(newHintPos);
 
@@ -184,26 +185,25 @@ function getDataFromForm() {
   var hintTexts = [];
   for (; count <= numStages; count++) {
     var stage = document.getElementById('stage' + count + 'Hints');
-    var starterPos = stage.querySelector('#starter-postion').value;
-    console.log('staterPOS' + starterPos)
+    var starterPos = stage.querySelector('#starter-position').value;
     starterPos = starterPos.replace(")", "").replace("(", "").replace(" ", "").split(",");
-    console.log('staterPOS AFTER' + starterPos)
 
     var dict = {};
     dict['latitude'] = starterPos[0];
     dict['longitude'] = starterPos[1];
     stageSpawnLocations.push(dict);
     stageStarterHints.push(stage.querySelector('#starter-hint').value);
-    console.log(stageSpawnLocations)
 
-    var numHintsForThisStage = stage.getElementsByTagName('input').length;
+    stageKeys.push(stage.querySelector('#key').value);
+
+    var numHintsForThisStage = stage.getElementsByTagName('input').length - 1;
     var stageHintsLocation = []
     var stageHintsText = []
     for (var hint = 1; hint < numHintsForThisStage/2; hint++) {
       console.log(hint);
       console.log(numHintsForThisStage);
-      var hintPos = stage.querySelector('#hint' + hint + '-postion').value;
-      hintPos.replace(")", "").replace("(", "").split(",");
+      var hintPos = stage.querySelector('#hint' + hint + '-position').value;
+      hintPos = hintPos.replace(")", "").replace("(", "").split(",");
       dict = {};
       dict['latitude'] = hintPos[0];
       dict['longitude'] = hintPos[1];
@@ -223,7 +223,6 @@ function getDataFromForm() {
   params.append('hintLocations', JSON.stringify(hintLocations));
   params.append('hintTexts', JSON.stringify(hintTexts));
   params.append('userID', 'username');
-  params.append('numStages', numStages);
   console.log(JSON.stringify(stageKeys))
   console.log(JSON.stringify(stageSpawnLocations))
   console.log(JSON.stringify(stageStarterHints))
@@ -232,38 +231,3 @@ function getDataFromForm() {
   var request = new Request('/create-game-data', {method: 'POST', body: params});
   fetch(request);
 }
-
-
-
-//      <div id="hints">
-//         <div id="stage1Hints" class="hidden">
-//           <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
-//           <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
-//           <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
-//           <input type="text" placeholder="Hint 1" id="hint1">
-//         </div> 
-//         <div id="stage2Hints" class="hidden">
-//           <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
-//           <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
-//           <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
-//           <input type="text" placeholder="Hint 1" id="hint1">
-//          </div>
-//          <div id="stage3Hints" class="hidden">
-//             <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
-//             <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
-//             <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
-//             <input type="text" placeholder="Hint 1" id="hint1">
-//             <input id="hint2-position" placeholder="Hint 2 Postion (click on map to get corrdinates)" type="text">
-//             <input id="hint2" placeholder="Hint 2" type="text">
-//             <input id="hint3-position" placeholder="Hint 3 Postion (click on map to get corrdinates)" type="text">
-//             <input id="hint3" placeholder="Hint 3" type="text">
-//           </div>
-//           <div id="stage4Hints">
-//             <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
-//             <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
-//             <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
-//             <input type="text" placeholder="Hint 1" id="hint1">
-//             <input id="hint2-position" placeholder="Hint 2 Postion (click on map to get corrdinates)" type="text">
-//             <input id="hint2" placeholder="Hint 2" type="text">
-//           </div>
-//        </div>

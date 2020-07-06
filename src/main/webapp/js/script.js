@@ -85,15 +85,13 @@ function createNavBar(page) {
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
-  document.getElementById('nav-bar').innerHTML += ' <ul class="sidenav" id="mobile-demo"><li><a href="sass.html">Sass</a></li><li><a href="badges.html">Components</a></li><li><a href="collapsible.html">Javascript</a></li><li><a href="mobile.html">Mobile</a></li> </ul>';
+//   TODO(smissak): add side nav bar for mobile view
+  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
+                                                  '<li><a href="sass.html">Sass</a></li>' + 
+                                                  '<li><a href="badges.html">Components</a></li>' + 
+                                                  '<li><a href="collapsible.html">Javascript</a></li>' + 
+                                                  '<li><a href="mobile.html">Mobile</a></li> </ul>';
 }
-
-//   <ul class="sidenav" id="mobile-demo">
-//     <li><a href="sass.html">Sass</a></li>
-//     <li><a href="badges.html">Components</a></li>
-//     <li><a href="collapsible.html">Javascript</a></li>
-//     <li><a href="mobile.html">Mobile</a></li>
-//   </ul>
 
 //TODO(smissak): add marker for each starting position of each stage to the image
 /** 
@@ -214,16 +212,15 @@ function loadFeaturedMap() {
 function onLoadFunctions(page) {
   createNavBar(page);
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems, {});
-    console.log(instances);
-  });
-
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
     initMapToCreateGame();
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems, {});
+      console.log(instances);
+    });
   } else if (page == 'index') {
     loadFeaturedMap();
   }
