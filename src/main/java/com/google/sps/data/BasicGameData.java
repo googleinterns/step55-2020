@@ -39,8 +39,8 @@ public class BasicGameData {
     private String gameID = "N/A";
     private String gameName = "N/A";
     private String creatorUsername = "N/A";
-    private double difficulty = 0;
-    private double stars = 0;
+    private float difficulty = 0;
+    private float stars = 0;
     private ArrayList<Coordinates> stageLocations = new ArrayList<>();
 
     /**
@@ -51,8 +51,8 @@ public class BasicGameData {
         this.gameID = game.getGameID();
         this.gameName = game.getGameName();
         this.creatorUsername = getRandomWord() + getRandomWord();
-        this.difficulty = (double)game.getTotalDifficulty() / (double)game.getNumDifficultyVotes();
-        this.stars = (double)game.getTotalStars() / (double)game.getNumStarVotes();
+        this.difficulty = (float)game.getTotalDifficulty() / (float)game.getNumDifficultyVotes();
+        this.stars = (float)game.getTotalStars() / (float)game.getNumStarVotes();
         int numStages = 1 + ((int)Math.random() * 5);
         Coordinates gameCenter = Coordinates.getRandomCoordinates();
         for(int i = 0; i < numStages; i++) {
