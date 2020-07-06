@@ -125,7 +125,7 @@ function createStaticMapCaption(mapData, captionID) {
   var totalDifficulty = mapData.totalDifficulty;
   var avgDifficulty = 0;
   if (numDifficultyVotes > 0 && totalDifficulty > 0) {
-    avgDifficulty = math.round(numDifficultyVotes/totalDifficulty);
+    avgDifficulty = Math.round(numDifficultyVotes/totalDifficulty);
   }
 
   var difficulty = 'Easy';
