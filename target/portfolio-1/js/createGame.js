@@ -211,7 +211,7 @@ function getDataFromGameCreationForm() {
       dict['latitude'] = hintPos[0];
       dict['longitude'] = hintPos[1];
       if (isNaN(hintPos[0]) || isNaN(hintPos[1])) {
-        window.alert("Input for latitude and longistude must be numbers! In format (123, 456) or 123, 456");
+        window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
         return;
       }
       stageHintsLocation.push(dict);
