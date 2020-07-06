@@ -85,7 +85,7 @@ function createNavBar(page) {
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
-//   TODO(smissak): add side nav bar for mobile view
+  //   TODO(smissak): add side nav bar for mobile view
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                   '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
                                                   '<li><a href="index.html">Home</a></li>' + 
@@ -121,12 +121,7 @@ function createStaticMap(latitude, longitude) { // TODO(smissak): rather than pa
 * @param {string} captionID the id of the game info that is under the static image
 */
 function createStaticMapCaption(mapData, captionID) {
-  var numDifficultyVotes = mapData.numDifficultyVotes;
-  var totalDifficulty = mapData.totalDifficulty;
-  var avgDifficulty = 0;
-  if (numDifficultyVotes > 0 && totalDifficulty > 0) {
-    avgDifficulty = Math.round(numDifficultyVotes/totalDifficulty);
-  }
+  var avgDifficulty = mapData.difficulty;
 
   var difficulty = 'Easy';
   var difficultyColor = 'green';
@@ -144,7 +139,7 @@ function createStaticMapCaption(mapData, captionID) {
   staticMapInfo.id = captionID;
   staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
   staticMapInfo.innerHTML += mapData.gameName + ' <i style="color:' + difficultyColor + '">[' + difficulty + "]</i>";
-  staticMapInfo.innerHTML += '<br> By ' + mapData.gameCreator;
+  staticMapInfo.innerHTML += '<br> By ' + mapData.creatorUsername;
   staticMapInfo.style = 'text-align:left; padding: 6px';
   staticMapInfo.classList.add('cursor-pointer');
 
@@ -160,19 +155,13 @@ function createStaticMapCaption(mapData, captionID) {
 * @param {string} mapData the JSON data with the map's information
 */
 function getStarRating(mapData) {
-  var numStarVotes = mapData.numStarVotes;
-  var totalStars = mapData.totalStars;
-  var avgStars = 0.0;
-  if (numStarVotes > 0 || totalStars > 0) {
-    avgStars = numStarVotes/totalStars;
-  }
+  var avgStarsTemp = mapData.stars;
   
   var fullStar = '<i class="material-icons md-18">star</i>';
   var halfStar = '<i class="material-icons md-18">star_half</i>';
   var emptyStar = '<i class="material-icons md-18">star_border</i>';
 
   var fiveStars = '';
-  var avgStarsTemp = avgStars;
   for (var i = 0; i < 5; i++) {
     if(avgStarsTemp >= 1.0) {
        fiveStars += fullStar;
@@ -190,12 +179,8 @@ function getStarRating(mapData) {
 * Adds a featured map where the ID 'featured-map' is
 */
 function loadFeaturedMap() {
-  const params = new URLSearchParams();
-  params.append('gameID', 'demogameid')
-  var request = new Request('/load-game-data', {method: 'POST', body: params});
-  fetch(request).then(response => response.json()).then(async (data) => {
-    var stage = await getStage(data.stages[0]);
-    var featuredMap = createStaticMap(stage.startingLocation.latitude, stage.startingLocation.longitude);
+  fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
+    var featuredMap = createStaticMap(data.stageLocations[0].latitude, data.stageLocations[0].longitude);
     var featuredMapCaption = createStaticMapCaption(data, 'featured-map-info');
     var featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');

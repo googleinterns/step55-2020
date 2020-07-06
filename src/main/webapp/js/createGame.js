@@ -110,9 +110,9 @@ function addNewStage() {
   const newStageHints = document.createElement('div');
   newStageHints.id = getStageNumber(newStage) + 'Hints';
   newStageHints.innerHTML = "<input type='text' id='key' placeholder='Stage Key'>" +
-                            "<input type='text' id='starter-position' placeholder='Starter Position (click on map to get corrdinates)'>" +
+                            "<input type='text' id='starter-position' placeholder='Starter Position (click on map to get coordinates)'>" +
                             "<input type='text' placeholder='Starter Hint' id='starter-hint' required>" +
-                            "<input type='text' id='hint1-position' placeholder='Hint 1 Position (click on map to get corrdinates)'>" + 
+                            "<input type='text' id='hint1-position' placeholder='Hint 1 Position (click on map to get coordinates)'>" + 
                             "<input type='text' placeholder='Hint 1' id='hint1'>";
 
   document.getElementById('hints').appendChild(newStageHints);
@@ -129,7 +129,7 @@ function addNewHint() {
 
   const newHintPos = document.createElement('input');
   newHintPos.id = 'hint' + (numHints/2) + '-position';
-  newHintPos.placeholder = 'Hint ' + (numHints/2) + ' Position (click on map to get corrdinates)';
+  newHintPos.placeholder = 'Hint ' + (numHints/2) + ' Position (click on map to get coordinates)';
   newHintPos.type= 'text';
   activeHints.appendChild(newHintPos);
 
@@ -175,7 +175,7 @@ function getStageNumber(stageElement) {
 /**
 * Gets the data from the form on the createGame.html page and sends it to the server
 */
-function getDataFromForm() {
+function getDataFromGameCreationForm() {
   const numStages = document.getElementById('stages').getElementsByTagName('input').length;
   var stageKeys = [];
   var stageSpawnLocations = []; // ex: [{'latitude': 1, 'longitude':2}, {'latitude': 3, 'longitude': 4}]
@@ -193,7 +193,7 @@ function getDataFromForm() {
     dict['latitude'] = starterPos[0];
     dict['longitude'] = starterPos[1];
     if (isNaN(starterPos[0]) || isNaN(starterPos[1])) {
-      window.alert("Input for latitude and longistude must be numbers! In format (123, 456) or 123, 456");
+      window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
       return;
     }
     stageSpawnLocations.push(dict);
@@ -211,7 +211,7 @@ function getDataFromForm() {
       dict['latitude'] = hintPos[0];
       dict['longitude'] = hintPos[1];
       if (isNaN(hintPos[0]) || isNaN(hintPos[1])) {
-        window.alert("Input for latitude and longistude must be numbers! In format (123, 456) or 123, 456");
+        window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
         return;
       }
       stageHintsLocation.push(dict);

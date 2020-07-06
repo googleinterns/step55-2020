@@ -145,9 +145,6 @@ public class CreateGameServlet extends HttpServlet {
     */
     boolean isInputValid() {
         int numStages = stageSpawnLocations.size();
-        System.out.println(stageSpawnLocations);
-        System.out.println(stageStarterHints);
-        System.out.println(stageKeys);
         if(stageStarterHints.size() != numStages) return false;
         if(stageKeys.size() != numStages) return false;
 
