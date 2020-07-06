@@ -5,12 +5,14 @@ com/google/sps/data/Stage$Builder.class
 com/google/sps/data/Game$1.class
 com/google/sps/servlets/CreateGameServlet$1.class
 com/google/sps/data/Hint.class
+com/google/sps/servlets/LoadMainPageServlet.class
 com/google/sps/data/Game.class
 com/google/sps/data/SinglePlayerProgress$Builder.class
 com/google/sps/servlets/CreateGameServlet$5.class
 com/google/sps/data/User.class
 com/google/sps/data/Hint$Builder.class
 com/google/sps/servlets/LoadStageServlet.class
+com/google/sps/data/BasicGameData.class
 com/google/sps/data/User$1.class
 com/google/sps/data/IDataManager.class
 com/google/sps/data/SinglePlayerProgress$1.class

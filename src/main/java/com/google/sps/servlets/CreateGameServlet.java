@@ -72,7 +72,7 @@ public class CreateGameServlet extends HttpServlet {
         for(int i = 0; i < stageKeys.size(); i++) {
             Stage stage = buildStage(i);
             stages.add(stage.getStageID());
-            datastoreManager.storeStage(stage);
+            datastoreManager.createOrReplaceStage(stage);
         }
         gameBuilder.setStages(stages);
         gameBuilder.setNumTimesPlayed(0);
@@ -82,7 +82,7 @@ public class CreateGameServlet extends HttpServlet {
         gameBuilder.setNumDifficultyVotes(0);
         gameBuilder.setTotalDifficulty(0);
         Game game = gameBuilder.build();
-        datastoreManager.storeGame(game);
+        datastoreManager.createOrReplaceGame(game);
 
         response.getWriter().println(gameID);
     }
@@ -164,7 +164,8 @@ public class CreateGameServlet extends HttpServlet {
     * @return a String representing the userID.
     */
     private String getUserID(HttpServletRequest request) {
-        return request.getParameter("userID");
+        // TODO(ldchen): actually get the user ID once authentication works.
+        return IDGenerator.gen();
     }
 
     /**
