@@ -22,11 +22,12 @@ import java.lang.Math;
 */
 public class BasicGameData {
     //TODO(ldchen): delete all of the mocking once datastore is working.
-    private int getRandomIntegerBetween(int l, int r) {
-        int res = l + (int)(Math.random()*(r-l+1));
-        if(res > r) res = r; // happens if Math.random() somehow gives exactly 1
+    private int getRandomIntegerBetween(int left, int right) {
+        int res = left + (int)(Math.random()*(right-left+1));
+        if(res > right) res = right; // happens if Math.random() somehow gives exactly 1
         return res;
     }
+
     private String getRandomWord() {
         String[] words = {"absorption", "knowledge", "wear", "egg",
                           "befall", "staking", "light", "muddled",
@@ -38,8 +39,8 @@ public class BasicGameData {
     private String gameID = "N/A";
     private String gameName = "N/A";
     private String creatorUsername = "N/A";
-    private double difficulty = 0;
-    private double stars = 0;
+    private float difficulty = 0;
+    private float stars = 0;
     private ArrayList<Coordinates> stageLocations = new ArrayList<>();
 
     /**
@@ -50,12 +51,12 @@ public class BasicGameData {
         this.gameID = game.getGameID();
         this.gameName = game.getGameName();
         this.creatorUsername = getRandomWord() + getRandomWord();
-        this.difficulty = (double)game.getTotalDifficulty() / (double)game.getNumDifficultyVotes();
-        this.stars = (double)game.getTotalStars() / (double)game.getNumStarVotes();
+        this.difficulty = (float)game.getTotalDifficulty() / (float)game.getNumDifficultyVotes();
+        this.stars = (float)game.getTotalStars() / (float)game.getNumStarVotes();
         int numStages = 1 + ((int)Math.random() * 5);
         Coordinates gameCenter = Coordinates.getRandomCoordinates();
         for(int i = 0; i < numStages; i++) {
-            stageLocations.add(gameCenter.getRandomWithin(0.0001));
+            stageLocations.add(gameCenter.getRandomWithin(0.001));
         }
     }
 }

@@ -143,14 +143,14 @@ public class MockDatastoreManager {
     }
 
     /**
-    * Returns a random integer in the interval [l,r].
-    * @param l the left endpoint of the interval (inclusive).
-    * @param r the right endpoint of the interval (inclusive).
-    * @return a random integer in [l,r].
+    * Returns a random integer in the interval [left,right].
+    * @param left the left endpoint of the interval (inclusive).
+    * @param right the right endpoint of the interval (inclusive).
+    * @return a random integer in [left,right].
     */
-    private int getRandomIntegerBetween(int l, int r) {
-        int res = l + (int)(Math.random()*(r-l+1));
-        if(res > r) res = r; // happens if Math.random() somehow gives exactly 1
+    private int getRandomIntegerBetween(int left, int right) {
+        int res = left + (int)(Math.random()*(right-left+1));
+        if(res > right) res = right; // happens if Math.random() somehow gives exactly 1.0
         return res;
     }
 
@@ -174,7 +174,7 @@ public class MockDatastoreManager {
         res.setTotalStars(getRandomIntegerBetween(numStarVotes, 5*numStarVotes));
         int numDifficultyVotes = getRandomIntegerBetween(0, 10);
         res.setNumDifficultyVotes(numDifficultyVotes);
-        res.setTotalDifficulty(getRandomIntegerBetween(0, 2*numDifficultyVotes));
+        res.setTotalDifficulty(getRandomIntegerBetween(numDifficultyVotes, 3*numDifficultyVotes));
         return res.build();
     }
 }

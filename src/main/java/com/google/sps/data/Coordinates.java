@@ -90,15 +90,15 @@ public class Coordinates {
     }
 
     /**
-    * Get random coordinates whose latitude and longitude values are at most d away from this.
-    * If these coordinates are (x,y), then this will return a point whose x is between x-d and x+d,
-    * and whose y is between y-d and y+d.
-    * @param d the upper bound on the difference between the coordinates.
+    * Get random coordinates whose latitude and longitude values are at most maxDelta away from this.
+    * If these coordinates are (x,y), then this will return a point whose x is between x-maxDelta and x+maxDelta,
+    * and whose y is between y-maxDelta and y+maxDelta.
+    * @param maxDelta the upper bound on the difference between the coordinates.
     */
-    public Coordinates getRandomWithin(double d) {
-        Coordinates res = new Coordinates(-d+this.latitude*(2*d), -d+this.longitude*(2*d));
+    public Coordinates getRandomWithin(double maxDelta) {
+        Coordinates res = new Coordinates(-maxDelta+this.latitude*(2*maxDelta), -maxDelta+this.longitude*(2*maxDelta));
         while(!res.isValid()) {
-            res = new Coordinates(-d+this.latitude*(2*d), -d+this.longitude*(2*d));
+            res = new Coordinates(-maxDelta+this.latitude*(2*maxDelta), -maxDelta+this.longitude*(2*maxDelta));
         }
         return res;
     }
