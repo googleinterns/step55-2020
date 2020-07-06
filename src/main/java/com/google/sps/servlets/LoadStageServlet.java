@@ -42,19 +42,10 @@ public class LoadStageServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String stageID = getStageID(request);
+        String stageID = request.getParameter("stageID");
         Stage stage = datastoreManager.retrieveStage(stageID);
         
         String json = new Gson().toJson(stage);
         response.getWriter().println(json);
-    }
-
-    /**
-    * Retrieves the stageID.
-    * @param request the HttpServletRequest of the doPost.
-    * @return a String representing the stageID.
-    */
-    private String getStageID(HttpServletRequest request) {
-        return request.getParameter("stageID");
     }
 }
