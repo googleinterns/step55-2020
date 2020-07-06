@@ -87,10 +87,10 @@ function createNavBar(page) {
   document.getElementById('nav-bar').appendChild(navbar);
 //   TODO(smissak): add side nav bar for mobile view
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-                                                  '<li><a href="sass.html">Sass</a></li>' + 
-                                                  '<li><a href="badges.html">Components</a></li>' + 
-                                                  '<li><a href="collapsible.html">Javascript</a></li>' + 
-                                                  '<li><a href="mobile.html">Mobile</a></li> </ul>';
+                                                  '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
+                                                  '<li><a href="index.html">Home</a></li>' + 
+                                                  '<li><a href="createGame.html">Create Game</a></li>' + 
+                                                  '<li><a href="#">Login</a></li> </ul>';
 }
 
 //TODO(smissak): add marker for each starting position of each stage to the image
@@ -212,12 +212,10 @@ function loadFeaturedMap() {
 function onLoadFunctions(page) {
   createNavBar(page);
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems, {});
-    console.log(instances);
-  });
-
+  // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
+  var elems = document.querySelectorAll('.sidenav');
+  var instances = M.Sidenav.init(elems, {});
+  
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {

@@ -176,14 +176,15 @@ function getStageNumber(stageElement) {
 * Gets the data from the form on the createGame.html page and sends it to the server
 */
 function getDataFromForm() {
-  var count = 1;
   const numStages = document.getElementById('stages').getElementsByTagName('input').length;
   var stageKeys = [];
   var stageSpawnLocations = []; // ex: [{'latitude': 1, 'longitude':2}, {'latitude': 3, 'longitude': 4}]
   var stageStarterHints = [];
-  var hintLocations = []; // 2d array [[{},{}], [{}]]
+  var hintLocations = []; // 2d array [[{'latitude': 1, 'longitude':2},{'latitude': 1, 'longitude':2}], [{'latitude': 1, 'longitude':2}]]
   var hintTexts = [];
-  for (; count <= numStages; count++) {
+
+  // Stages and hints are 1 indexed
+  for (var count = 1; count <= numStages; count++) {
     var stage = document.getElementById('stage' + count + 'Hints');
     var starterPos = stage.querySelector('#starter-position').value;
     starterPos = starterPos.replace(")", "").replace("(", "").replace(" ", "").split(",");
@@ -191,6 +192,10 @@ function getDataFromForm() {
     var dict = {};
     dict['latitude'] = starterPos[0];
     dict['longitude'] = starterPos[1];
+    if (isNaN(starterPos[0]) || isNaN(starterPos[1])) {
+      window.alert("Input for latitude and longistude must be numbers! In format (123, 456) or 123, 456");
+      return;
+    }
     stageSpawnLocations.push(dict);
     stageStarterHints.push(stage.querySelector('#starter-hint').value);
 
@@ -200,8 +205,6 @@ function getDataFromForm() {
     var stageHintsLocation = []
     var stageHintsText = []
     for (var hint = 1; hint < numHintsForThisStage/2; hint++) {
-      console.log(hint);
-      console.log(numHintsForThisStage);
       var hintPos = stage.querySelector('#hint' + hint + '-position').value;
       hintPos = hintPos.replace(")", "").replace("(", "").split(",");
       dict = {};
@@ -222,12 +225,6 @@ function getDataFromForm() {
   params.append('stageStarterHints', JSON.stringify(stageStarterHints));
   params.append('hintLocations', JSON.stringify(hintLocations));
   params.append('hintTexts', JSON.stringify(hintTexts));
-  params.append('userID', 'username');
-  console.log(JSON.stringify(stageKeys))
-  console.log(JSON.stringify(stageSpawnLocations))
-  console.log(JSON.stringify(stageStarterHints))
-  console.log(JSON.stringify(hintLocations))
-  console.log(JSON.stringify(hintTexts))
   var request = new Request('/create-game-data', {method: 'POST', body: params});
   fetch(request);
 }
