@@ -212,15 +212,16 @@ function loadFeaturedMap() {
 function onLoadFunctions(page) {
   createNavBar(page);
 
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, {});
+    console.log(instances);
+  });
+
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
     initMapToCreateGame();
-    document.addEventListener('DOMContentLoaded', function() {
-      var elems = document.querySelectorAll('.sidenav');
-      var instances = M.Sidenav.init(elems, {});
-      console.log(instances);
-    });
   } else if (page == 'index') {
     loadFeaturedMap();
   }
