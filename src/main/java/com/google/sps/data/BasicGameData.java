@@ -22,11 +22,12 @@ import java.lang.Math;
 */
 public class BasicGameData {
     //TODO(ldchen): delete all of the mocking once datastore is working.
-    private int getRandomIntegerBetween(int l, int r) {
-        int res = l + (int)(Math.random()*(r-l+1));
-        if(res > r) res = r; // happens if Math.random() somehow gives exactly 1
+    private int getRandomIntegerBetween(int left, int right) {
+        int res = left + (int)(Math.random()*(right-left+1));
+        if(res > right) res = right; // happens if Math.random() somehow gives exactly 1
         return res;
     }
+
     private String getRandomWord() {
         String[] words = {"absorption", "knowledge", "wear", "egg",
                           "befall", "staking", "light", "muddled",
@@ -55,7 +56,7 @@ public class BasicGameData {
         int numStages = 1 + ((int)Math.random() * 5);
         Coordinates gameCenter = Coordinates.getRandomCoordinates();
         for(int i = 0; i < numStages; i++) {
-            stageLocations.add(gameCenter.getRandomWithin(0.0001));
+            stageLocations.add(gameCenter.getRandomWithin(0.001));
         }
     }
 }
