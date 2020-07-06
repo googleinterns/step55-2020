@@ -41,6 +41,10 @@
   text-align: center;
 }
 
+.dark-mode input {
+  color: white;
+}
+
 .dark-mode #featured-map-info {
   margin: auto;
   margin-top: 0;

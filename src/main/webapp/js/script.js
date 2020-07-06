@@ -38,6 +38,13 @@ function createNavBar(page) {
   a.className = 'brand-logo';
   containerDiv.appendChild(a);
 
+  var mobileA = document.createElement('a');
+  mobileA.innerHTML = '<i class="material-icons">menu</i>';
+  mobileA.href = "#";
+  mobileA.className = 'sidenav-trigger';
+  mobileA.dataset.target = 'mobile-demo';
+  containerDiv.appendChild(mobileA);
+
   var ul = document.createElement('ul');
   ul.className = 'right hide-on-med-and-down';
 
@@ -78,7 +85,15 @@ function createNavBar(page) {
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
+  document.getElementById('nav-bar').innerHTML += ' <ul class="sidenav" id="mobile-demo"><li><a href="sass.html">Sass</a></li><li><a href="badges.html">Components</a></li><li><a href="collapsible.html">Javascript</a></li><li><a href="mobile.html">Mobile</a></li> </ul>';
 }
+
+//   <ul class="sidenav" id="mobile-demo">
+//     <li><a href="sass.html">Sass</a></li>
+//     <li><a href="badges.html">Components</a></li>
+//     <li><a href="collapsible.html">Javascript</a></li>
+//     <li><a href="mobile.html">Mobile</a></li>
+//   </ul>
 
 //TODO(smissak): add marker for each starting position of each stage to the image
 /** 
@@ -111,7 +126,7 @@ function createStaticMapCaption(mapData, captionID) {
   var numDifficultyVotes = mapData.numDifficultyVotes;
   var totalDifficulty = mapData.totalDifficulty;
   var avgDifficulty = 0;
-  if (numDifficultyVotes > 0 || totalDifficulty > 0) {
+  if (numDifficultyVotes > 0 && totalDifficulty > 0) {
     avgDifficulty = math.round(numDifficultyVotes/totalDifficulty);
   }
 
@@ -198,6 +213,13 @@ function loadFeaturedMap() {
 */
 function onLoadFunctions(page) {
   createNavBar(page);
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, {});
+    console.log(instances);
+  });
+
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {

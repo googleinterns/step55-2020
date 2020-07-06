@@ -44,7 +44,7 @@
       <!-- Div for the hints -->
       <div id='hints'>
         <div id='stage1Hints'>
-          <input type='text' id='started-postion' placeholder='Starter Postion (click on map to get corrdinates)'>
+          <input type='text' id='starter-postion' placeholder='Starter Postion (click on map to get corrdinates)'>
           <input type='text' placeholder='Starter Hint' id='starter-hint' required>
           <input type='text' id='hint1-postion' placeholder='Hint 1 Postion (click on map to get corrdinates)'>
           <input type='text' placeholder='Hint 1' id='hint1'>
@@ -53,7 +53,7 @@
       <input type='button' value='+ add hint' id='addHint' onclick='addNewHint()'> 
 
       <br/>
-      <input type='button' value='Finish'>
+      <input type='button' value='Finish' onclick='getDataFromForm()'>
     </form>
     <input id="pac-input" class="controls" type="text" placeholder="Search Box"/>
     <div id='map' class='black-text'></div> 

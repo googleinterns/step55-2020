@@ -109,7 +109,7 @@ function addNewStage() {
 
   const newStageHints = document.createElement('div');
   newStageHints.id = getStageNumber(newStage) + 'Hints';
-  newStageHints.innerHTML = "<input type='text' id='started-postion' placeholder='Starter Postion (click on map to get corrdinates)'>" +
+  newStageHints.innerHTML = "<input type='text' id='starter-postion' placeholder='Starter Postion (click on map to get corrdinates)'>" +
                             "<input type='text' placeholder='Starter Hint' id='starter-hint' required>" +
                             "<input type='text' id='hint1-postion' placeholder='Hint 1 Postion (click on map to get corrdinates)'>" + 
                             "<input type='text' placeholder='Hint 1' id='hint1'>";
@@ -168,5 +168,102 @@ function getActiveStageElement() {
 * @return {string} the first className of the element which should be in the form of "stage" + [the stage number]
 */
 function getStageNumber(stageElement) {
-    return stageElement.classList[0];
+  return stageElement.classList[0];
 }
+
+/**
+* Gets the data from the form on the createGame.html page and sends it to the server
+*/
+function getDataFromForm() {
+  var count = 1;
+  const numStages = document.getElementById('stages').getElementsByTagName('input').length;
+  var stageKeys = [];
+  var stageSpawnLocations = []; // ex: [{'latitude': 1, 'longitude':2}, {'latitude': 3, 'longitude': 4}]
+  var stageStarterHints = [];
+  var hintLocations = []; // 2d array [[{},{}], [{}]]
+  var hintTexts = [];
+  for (; count <= numStages; count++) {
+    var stage = document.getElementById('stage' + count + 'Hints');
+    var starterPos = stage.querySelector('#starter-postion').value;
+    console.log('staterPOS' + starterPos)
+    starterPos = starterPos.replace(")", "").replace("(", "").replace(" ", "").split(",");
+    console.log('staterPOS AFTER' + starterPos)
+
+    var dict = {};
+    dict['latitude'] = starterPos[0];
+    dict['longitude'] = starterPos[1];
+    stageSpawnLocations.push(dict);
+    stageStarterHints.push(stage.querySelector('#starter-hint').value);
+    console.log(stageSpawnLocations)
+
+    var numHintsForThisStage = stage.getElementsByTagName('input').length;
+    var stageHintsLocation = []
+    var stageHintsText = []
+    for (var hint = 1; hint < numHintsForThisStage/2; hint++) {
+      console.log(hint);
+      console.log(numHintsForThisStage);
+      var hintPos = stage.querySelector('#hint' + hint + '-postion').value;
+      hintPos.replace(")", "").replace("(", "").split(",");
+      dict = {};
+      dict['latitude'] = hintPos[0];
+      dict['longitude'] = hintPos[1];
+      stageHintsLocation.push(dict);
+      stageHintsText.push(stage.querySelector('#hint' + hint).value);
+    }
+    hintLocations.push(stageHintsLocation);
+    hintTexts.push(stageHintsText);
+  }
+
+  var params = new URLSearchParams();
+  params.append('gameName', document.getElementById('title').value);
+  params.append('gameDescription', document.getElementById('description').value);
+  params.append('stageKeys', JSON.stringify(stageKeys));
+  params.append('stageSpawnLocations', JSON.stringify(stageSpawnLocations));
+  params.append('stageStarterHints', JSON.stringify(stageStarterHints));
+  params.append('hintLocations', JSON.stringify(hintLocations));
+  params.append('hintTexts', JSON.stringify(hintTexts));
+  params.append('userID', 'username');
+  params.append('numStages', numStages);
+  console.log(JSON.stringify(stageKeys))
+  console.log(JSON.stringify(stageSpawnLocations))
+  console.log(JSON.stringify(stageStarterHints))
+  console.log(JSON.stringify(hintLocations))
+  console.log(JSON.stringify(hintTexts))
+  var request = new Request('/create-game-data', {method: 'POST', body: params});
+  fetch(request);
+}
+
+
+
+//      <div id="hints">
+//         <div id="stage1Hints" class="hidden">
+//           <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
+//           <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
+//           <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
+//           <input type="text" placeholder="Hint 1" id="hint1">
+//         </div> 
+//         <div id="stage2Hints" class="hidden">
+//           <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
+//           <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
+//           <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
+//           <input type="text" placeholder="Hint 1" id="hint1">
+//          </div>
+//          <div id="stage3Hints" class="hidden">
+//             <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
+//             <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
+//             <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
+//             <input type="text" placeholder="Hint 1" id="hint1">
+//             <input id="hint2-position" placeholder="Hint 2 Postion (click on map to get corrdinates)" type="text">
+//             <input id="hint2" placeholder="Hint 2" type="text">
+//             <input id="hint3-position" placeholder="Hint 3 Postion (click on map to get corrdinates)" type="text">
+//             <input id="hint3" placeholder="Hint 3" type="text">
+//           </div>
+//           <div id="stage4Hints">
+//             <input type="text" id="starter-postion" placeholder="Starter Postion (click on map to get corrdinates)">
+//             <input type="text" placeholder="Starter Hint" id="starter-hint" required="">
+//             <input type="text" id="hint1-postion" placeholder="Hint 1 Postion (click on map to get corrdinates)">
+//             <input type="text" placeholder="Hint 1" id="hint1">
+//             <input id="hint2-position" placeholder="Hint 2 Postion (click on map to get corrdinates)" type="text">
+//             <input id="hint2" placeholder="Hint 2" type="text">
+//           </div>
+//        </div>
