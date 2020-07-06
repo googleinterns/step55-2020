@@ -75,9 +75,9 @@ public class MockDatastoreManager {
         return stage;
     }
 
-    public void storeProgress(Progress progress) {}
-    public void updateProgress(Progress progress) {}
-    public Progress retrieveProgress(String progressID) {
+    public void storeSinglePlayerProgress(SinglePlayerProgress progress) {}
+    public void updateSinglePlayerProgress(SinglePlayerProgress progress) {}
+    public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID) {
         return null;
     }
 

@@ -4,10 +4,11 @@
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/IDataManager.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/IDGenerator.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/User.java
+/home/ldchen/step55-2020/src/main/java/com/google/sps/data/SingleplayerProgress.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Pair.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadStageServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Stage.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Coordinates.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/Progress.java
+/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
