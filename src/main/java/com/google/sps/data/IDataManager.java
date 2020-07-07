@@ -30,4 +30,6 @@ public interface IDataManager {
     public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID);
 
     public ArrayList<Game> retrieveAllGames();
+
+    public boolean doesUsernameExist(String username);
 }

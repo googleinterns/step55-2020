@@ -93,6 +93,15 @@ public class MockDatastoreManager {
         return res;
     }
 
+    /**
+    * Has a user already chosen this username?
+    * @param username the queried username.
+    * @return a boolean representing whether this username has been taken. True if yes, false if no.
+    */
+    public boolean doesUsernameExist(String username) {
+        return false;
+    }
+
     private Stage getStage(String stageID, int idx) {
         if(idx == 1) {
             Stage.Builder stageBuilder = new Stage.Builder(stageID, 1);
