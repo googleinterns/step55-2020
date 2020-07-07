@@ -96,11 +96,10 @@ function createNavBar(page) {
 //TODO(smissak): add marker for each starting position of each stage to the image
 /** 
 * Creates a static maps image
-* @param {float} latitude is the latitude where the center of the image should be
-* @param {float} longitude is the longitiude where the center of the image should be
+* @param {array} stageLocations contains objects with longitude and latitude
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
 */
-function createStaticMap(stageLocations, size) { // TODO(smissak): rather than pass in the lat and lng, pass in an array of the lat and lngs to add a marker for the TODO
+function createStaticMap(stageLocations, size) { 
   var staticImage = document.createElement('img');
   var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
@@ -194,7 +193,6 @@ function loadMaps() {
     featuredMapDiv.append(featuredMapCaption);
     var allMaps = document.getElementById('all-maps');
     for (var i = 1; i < data.length; i++) {
-        console.log(data[i].stageLocations)
         var mapDiv = document.createElement('div');
         mapDiv.classList.add('col');
         mapDiv.classList.add('hoverable');
