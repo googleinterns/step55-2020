@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
-
   <script src='https://www.gstatic.com/charts/loader.js'></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk&libraries=places"></script>
 
   <script src='js/createGame.js'></script>
   <script src='js/script.js'></script>
@@ -44,18 +44,20 @@
       <!-- Div for the hints -->
       <div id='hints'>
         <div id='stage1Hints'>
-          <input type='text' id='started-postion' placeholder='Starter Postion (click on map to get corrdinates)'>
+          <input type='text' id='key' placeholder='Stage Key'>
+          <input type='text' id='starter-position' placeholder='Starter Position (click on map to get corrdinates)'>
           <input type='text' placeholder='Starter Hint' id='starter-hint' required>
-          <input type='text' id='hint1-postion' placeholder='Hint 1 Postion (click on map to get corrdinates)'>
+          <input type='text' id='hint1-position' placeholder='Hint 1 Position (click on map to get corrdinates)'>
           <input type='text' placeholder='Hint 1' id='hint1'>
         </div> 
       </div>
       <input type='button' value='+ add hint' id='addHint' onclick='addNewHint()'> 
 
       <br/>
-      <input type='button' value='Finish'>
+      <input type='button' value='Finish' onclick='getDataFromGameCreationForm()'>
     </form>
-    <div id='map'></div> 
+    <input id="pac-input" class="controls black-text" type="text" placeholder="Search Box"/>
+    <div id='map' class='black-text'></div> 
   </div>
 </body>
 </html>

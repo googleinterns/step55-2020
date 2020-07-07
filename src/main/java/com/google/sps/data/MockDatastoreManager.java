@@ -15,10 +15,10 @@
 package com.google.sps.data;
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 public class MockDatastoreManager {
-    public void storeUser(User user) {}
-    public void updateUser(User user) {}
+    public void createOrReplaceUser(User user) {}
     /**
     * Returns a mock user.
     * @param userID a string containing a userID. The userID of the mock user will be set to this.
@@ -35,9 +35,7 @@ public class MockDatastoreManager {
         return userBuilder.build();
     }
 
-    public void storeGame(Game game) {}
-    public void updateGame(Game game) {}
-
+    public void createOrReplaceGame(Game game) {}
     /**
     * Returns the demo game.
     * @param gameID a string containing a gameID. This is ignored because this is a mock.
@@ -45,18 +43,22 @@ public class MockDatastoreManager {
     */
     public Game retrieveGame(String gameID) {
         Game.Builder gameBuilder = new Game.Builder(gameID, "Demo");
-        gameBuilder.setGameCreator("usernameid12345");
+        gameBuilder.setGameCreator(IDGenerator.gen());
         gameBuilder.setGameDescription("Demo game for testing");
         ArrayList<String> stages = new ArrayList<String>();
         stages.add("stage1id");
         stages.add("stage2id");
         gameBuilder.setStages(stages);
+        gameBuilder.setNumTimesPlayed(12);
+        gameBuilder.setNumTimesFinished(10);
+        gameBuilder.setNumStarVotes(5);
+        gameBuilder.setTotalStars(19);
+        gameBuilder.setNumDifficultyVotes(6);
+        gameBuilder.setTotalDifficulty(4);
         return gameBuilder.build();
     }
 
-    public void storeStage(Stage stage) {}
-    public void updateStage(Stage stage) {}
-
+    public void createOrReplaceStage(Stage stage) {}
     /**
     * Returns a stage of the demo game.
     * @param stageID a string containing the stageID. This method will
@@ -75,10 +77,20 @@ public class MockDatastoreManager {
         return stage;
     }
 
-    public void storeSinglePlayerProgress(SinglePlayerProgress progress) {}
-    public void updateSinglePlayerProgress(SinglePlayerProgress progress) {}
+    public void createOrReplaceSinglePlayerProgress(SinglePlayerProgress progress) {}
     public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID) {
         return null;
+    }
+
+    /**
+    * Returns the demo game first, followed by several other games with basic info and no stages.
+    * @return an ArrayList of Game objects.
+    */
+    public ArrayList<Game> retrieveAllGames() {
+        ArrayList<Game> res = new ArrayList<>();
+        res.add(retrieveGame(IDGenerator.gen()));
+        for(int i = 0; i < 20; i++) res.add(getRandomGame());
+        return res;
     }
 
     private Stage getStage(String stageID, int idx) {
@@ -127,6 +139,42 @@ public class MockDatastoreManager {
             res.setLocation(new Coordinates(40.441847, -79.941526));
             res.setText("This is the final hint, [n]ow please enter the key.");
         }
+        return res.build();
+    }
+
+    /**
+    * Returns a random integer in the interval [left,right].
+    * @param left the left endpoint of the interval (inclusive).
+    * @param right the right endpoint of the interval (inclusive).
+    * @return a random integer in [left,right].
+    */
+    private int getRandomIntegerBetween(int left, int right) {
+        int res = left + (int)(Math.random()*(right-left+1));
+        if(res > right) res = right; // happens if Math.random() somehow gives exactly 1.0
+        return res;
+    }
+
+    private String getRandomWord() {
+        String[] words = {"absorption", "knowledge", "wear", "egg",
+                          "befall", "staking", "light", "muddled",
+                          "dynamic", "attempt", "accurate", "meal",
+                          "trap", "progress", "walk", "muscle"};
+        return words[getRandomIntegerBetween(0, words.length-1)];
+    }
+
+    /**
+    * Creates a game with a random id, title, difficulty, and stars.
+    * All other fields are left as default.
+    * @return a random Game.
+    */
+    private Game getRandomGame() {
+        Game.Builder res = new Game.Builder(IDGenerator.gen(), getRandomWord() + " " + getRandomWord());
+        int numStarVotes = getRandomIntegerBetween(0, 10);
+        res.setNumStarVotes(numStarVotes);
+        res.setTotalStars(getRandomIntegerBetween(numStarVotes, 5*numStarVotes));
+        int numDifficultyVotes = getRandomIntegerBetween(0, 10);
+        res.setNumDifficultyVotes(numDifficultyVotes);
+        res.setTotalDifficulty(getRandomIntegerBetween(numDifficultyVotes, 3*numDifficultyVotes));
         return res.build();
     }
 }

@@ -14,20 +14,20 @@
 
 package com.google.sps.data;
 
+import java.util.*;
+
 public interface IDataManager {
-    public void storeUser(User user);
-    public void updateUser(User user);
+    public void createOrReplaceUser(User user);
     public User retrieveUser(String userID);
 
-    public void storeGame(Game game);
-    public void updateGame(Game game);
+    public void createOrReplaceGame(Game game);
     public Game retrieveGame(String gameID);
 
-    public void storeStage(Stage stage);
-    public void updateStage(Stage stage);
+    public void createOrReplaceStage(Stage stage);
     public Stage retrieveStage(String stageID);
 
-    public void storeSinglePlayerProgress(SinglePlayerProgress progress);
-    public void updateSinglePlayerProgress(SinglePlayerProgress progress);
+    public void createOrReplaceSinglePlayerProgress(SinglePlayerProgress progress);
     public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID);
+
+    public ArrayList<Game> retrieveAllGames();
 }
