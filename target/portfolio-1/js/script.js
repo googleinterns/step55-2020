@@ -103,8 +103,7 @@ function createStaticMap(stageLocations, size) {
   var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
   staticMapURL += '&size='+size+'x'+size+'&maptype=roadmap';
-  for (var i = 0; i < stageLocations.length; i++)
-  {
+  for (var i = 0; i < stageLocations.length; i++) {
     staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
   }
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';

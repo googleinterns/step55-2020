@@ -94,7 +94,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     var keySpan = document.createElement('span');
     keySpan.setAttribute('id', 'keybox');
     var enterKeyText = document.createElement('h3');
-    enterKeyText.innerHTML = 'Please Enter The Key To Complete The Stage:';
+    enterKeyText.innerHTML = 'Please enter key to continue:';
     enterKeyText.className = 'center'
     keySpan.appendChild(enterKeyText);
 

@@ -1,12 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.google.sps.data.PairTest
 -------------------------------------------------------------------------------
-<<<<<<< HEAD
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.095 sec
-=======
-<<<<<<< HEAD
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.113 sec
-=======
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.126 sec
->>>>>>> 9d9d504b10b8524f15a7108963e091adf44b7a2b
->>>>>>> 6806042f5661f2f4a7483880c76740bcfa753214
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.111 sec

@@ -35,7 +35,7 @@ public interface IDataManager {
 
   /**
     * Creates or Replaces the static data of a single game in datastore as an entity
-    * @param game an Game variable representing a single instance of a game.
+    * @param game an Game variable representing a single instance of a game
   */
   public void createOrReplaceGame(Game game);
 
@@ -67,15 +67,15 @@ public interface IDataManager {
 
   /**
     * Retrieves a single progress entity from the datastore.
-    * @param userID the unique code used to identify this specific user.
-    * @param gameID the unique code used to identify this specific game.
-    * @return a SinglePlayerProgress object with the properties specified in the Builder.
+    * @param userID the unique code used to identify this specific user
+    * @param gameID the unique code used to identify this specific game
+    * @return a SinglePlayerProgress object with the properties specified in the Builder
   */
   public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID);
   
   /**
-    * Retrieves all Games entity from the datastore.
-    * @return an ArrayList object with all Game entities with the properties specified in the Builder.
+    * Retrieves all Games entity from the datastore
+    * @return an ArrayList object with all Game entities with the properties specified in the Builder
   */
   public ArrayList<Game> retrieveAllGames();
 
