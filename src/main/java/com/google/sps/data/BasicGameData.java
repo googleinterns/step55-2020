@@ -66,7 +66,7 @@ public class BasicGameData {
             int numStages = 1 + (int)(Math.random() * 5);
             Coordinates gameCenter = Coordinates.getRandomCoordinates();
             for(int i = 0; i < numStages; i++) {
-                this.stageLocations.add(gameCenter.getRandomWithin(0.001));
+                this.stageLocations.add(gameCenter.getRandomWithin(5));
             }
         }
     }
