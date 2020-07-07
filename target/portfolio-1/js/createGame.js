@@ -219,6 +219,7 @@ function getDataFromGameCreationForm() {
     }
     hintLocations.push(stageHintsLocation);
     hintTexts.push(stageHintsText);
+    window.location.replace('index.html');
   }
 
   var params = new URLSearchParams();

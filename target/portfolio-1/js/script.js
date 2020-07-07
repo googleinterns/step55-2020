@@ -85,7 +85,6 @@ function createNavBar(page) {
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
-  //   TODO(smissak): add side nav bar for mobile view
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                   '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
                                                   '<li><a href="index.html">Home</a></li>' + 
@@ -113,7 +112,7 @@ function createStaticMap(stageLocations, size) {
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('playGame.html');
+    window.location.replace('playGame.html?gameID=');
   });
   return staticImage;
 }
@@ -230,6 +229,8 @@ function onLoadFunctions(page) {
     initMapToPlayGame();
   } else if (page == 'createGame') {
     initMapToCreateGame();
+  } else if (page == 'afterGame') {
+    loadGameData();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){

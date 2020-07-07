@@ -85,7 +85,6 @@ function createNavBar(page) {
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
-  //   TODO(smissak): add side nav bar for mobile view
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                   '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
                                                   '<li><a href="index.html">Home</a></li>' + 
@@ -104,8 +103,7 @@ function createStaticMap(stageLocations, size) {
   var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
   staticMapURL += '&size='+size+'x'+size+'&maptype=roadmap';
-  for (var i = 0; i < stageLocations.length; i++)
-  {
+  for (var i = 0; i < stageLocations.length; i++) {
     staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
   }
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
@@ -113,7 +111,7 @@ function createStaticMap(stageLocations, size) {
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('playGame.html');
+    window.location.replace('playGame.html?gameID=');
   });
   return staticImage;
 }
@@ -230,6 +228,8 @@ function onLoadFunctions(page) {
     initMapToPlayGame();
   } else if (page == 'createGame') {
     initMapToCreateGame();
+  } else if (page == 'afterGame') {
+    loadGameData();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){
