@@ -65,18 +65,20 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     gameName.className = 'center'
     gameInfo.appendChild(gameName);
 
-    var gameStage = document.createElement('h3');
-    gameStage.innerHTML = 'You are on stage:' + stage.stageNumber + '/' + data.stages.length;
-    gameStage.className = 'center'
+    var gameStage = document.createElement('div');
+    gameStage.id = 'stage-counter';
+    gameStage.innerHTML = 'You are on stage: ' + stage.stageNumber + '/' + data.stages.length;
+    gameStage.className = 'center';
     gameInfo.appendChild(gameStage);
 
-    var theWordHints = document.createElement('h4');
-    theWordHints.innerHTML = 'Hints:';
-    gameInfo.appendChild(theWordHints);
+    gameInfo.appendChild(document.createElement('hr'));
 
-    var starterHint = document.createElement('h4');
+    var hintsContainer = document.createElement('div');
+    hintsContainer.id = 'hints-container';
+
+    var starterHint = document.createElement('div');
     starterHint.innerHTML = 'Starter: ' + stage.startingHint;
-    gameInfo.appendChild(starterHint);
+    hintsContainer.appendChild(starterHint);
 
     // This div is a container for where the hints will be placed on the site
     var hintsDiv = document.createElement('div');
@@ -88,19 +90,19 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
       hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
     );
 
-    hintsDiv.appendChild(hintsOl);
-    gameInfo.appendChild(hintsDiv);
+    hintsContainer.appendChild(hintsOl);
+    gameInfo.appendChild(hintsContainer);
 
     var keySpan = document.createElement('span');
-    keySpan.setAttribute('id', 'keybox');
-    var enterKeyText = document.createElement('h3');
+    keySpan.id = 'keybox';
+    var enterKeyText = document.createElement('div');
+    enterKeyText.id = 'enter-key-text'
     enterKeyText.innerHTML = 'Please enter key to continue:';
     enterKeyText.className = 'center'
     keySpan.appendChild(enterKeyText);
 
     var inputKeyBox = document.createElement('input');
     inputKeyBox.type = 'text';
-    inputKeyBox.className = 'center';
     inputKeyBox.classList = 'input-text-color';
     inputKeyBox.id = 'key-input';
 
