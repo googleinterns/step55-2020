@@ -1,3 +1,18 @@
+<<<<<<< HEAD
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Stage.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/IDGenerator.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/SinglePlayerProgress.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/MockDatastoreManager.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Pair.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Game.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/LoadStageServlet.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Hint.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Coordinates.java
+/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/User.java
+=======
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Game.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadAuthenticationServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/MockDatastoreManager.java
@@ -16,3 +31,4 @@
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Authentication.java
+>>>>>>> 6806042f5661f2f4a7483880c76740bcfa753214
