@@ -77,7 +77,6 @@
   background-color: #021b32ff;
 }
 
-
 #featured-map {
   margin: auto;
   width: 400px;
@@ -128,8 +127,10 @@ ol#hints {
 #all-maps {
   margin: auto;
   box-shadow: none;
+  max-width: 80%;
+  display: flex;
+  flex-wrap: wrap;
 }
-
 
 .cursor-pointer {
   cursor: pointer;

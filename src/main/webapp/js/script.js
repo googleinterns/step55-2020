@@ -193,7 +193,6 @@ function loadMaps() {
     featuredMapDiv.append(featuredMapCaption);
     var allMaps = document.getElementById('all-maps');
     for (var i = 1; i < data.length; i++) {
-        console.log(data[i].stageLocations)
         var mapDiv = document.createElement('div');
         mapDiv.classList.add('col');
         mapDiv.classList.add('hoverable');
