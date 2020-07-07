@@ -73,7 +73,7 @@
 .dark-mode #map-info {
   margin: auto;
   height: 80px;
-  width: 260px;
+  width: 300px;
   background-color: #021b32ff;
 }
 
@@ -120,11 +120,27 @@ ol#hints {
   list-style-position: inside
 }
 
+
+.black-text {
+  color: black;
+}
+
+#all-maps {
+  margin: auto;
+  box-shadow: none;
+}
+
+
 .cursor-pointer {
   cursor: pointer;
   margin-bottom: -5px;
 }
 
+.width300 {
+  width: 300px;
+}
+
+/* Add CSS that starts with pac is for the search bar on the createGame.html page map */
 .pac-card {
   margin: 10px 10px 0 0;
   border-radius: 2px 0 0 2px;
@@ -165,13 +181,4 @@ ol#hints {
 
 #pac-input:focus {
   border-color: #4d90fe;
-}
-
-.black-text {
-  color: black;
-}
-
-#all-maps {
-  margin: auto;
-  box-shadow: none;
 }
