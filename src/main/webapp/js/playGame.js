@@ -65,18 +65,20 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     gameName.className = 'center'
     gameInfo.appendChild(gameName);
 
-    var gameStage = document.createElement('h3');
+    var gameStage = document.createElement('div');
+    gameStage.id = 'stage-counter';
     gameStage.innerHTML = 'You are on stage: ' + stage.stageNumber + '/' + data.stages.length;
-    gameStage.className = 'center'
+    gameStage.className = 'center';
     gameInfo.appendChild(gameStage);
 
-    var theWordHints = document.createElement('div');
-    theWordHints.innerHTML = 'Hints:';
-    gameInfo.appendChild(theWordHints);
+    gameInfo.appendChild(document.createElement('hr'));
+
+    var hintsContainer = document.createElement('div');
+    hintsContainer.id = 'hints-container';
 
     var starterHint = document.createElement('div');
     starterHint.innerHTML = 'Starter: ' + stage.startingHint;
-    gameInfo.appendChild(starterHint);
+    hintsContainer.appendChild(starterHint);
 
     // This div is a container for where the hints will be placed on the site
     var hintsDiv = document.createElement('div');
@@ -88,12 +90,12 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
       hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
     );
 
-    hintsDiv.appendChild(hintsOl);
-    gameInfo.appendChild(hintsDiv);
+    hintsContainer.appendChild(hintsOl);
+    gameInfo.appendChild(hintsContainer);
 
     var keySpan = document.createElement('span');
     keySpan.id = 'keybox';
-    var enterKeyText = document.createElement('h3');
+    var enterKeyText = document.createElement('div');
     enterKeyText.id = 'enter-key-text'
     enterKeyText.innerHTML = 'Please enter key to continue:';
     enterKeyText.className = 'center'
