@@ -37,6 +37,13 @@
   box-shadow: none;
 }
 
+.light-mode textarea {
+  height: 20vh;
+  width: 50%;
+  background-color: #efefefff;
+  color: black;
+}
+
 /* CSS for if the user is playing in dark mode */
 .dark-mode nav {
   background-color: #000000ff;
@@ -75,6 +82,13 @@
   height: 80px;
   width: 290px;
   background-color: #021b32ff;
+}
+
+.dark-mode textarea {
+  height: 20vh;
+  width: 50%;
+  background-color: #666666ff;
+  color: white;
 }
 
 #featured-map {
@@ -154,8 +168,9 @@ ol#hints {
 }
 
 .larger-text {
-  font-size: 5em;
+  font-size: 2em;
 }
+
 
 /* Add CSS that starts with pac is for the search bar on the createGame.html page map */
 .pac-card {

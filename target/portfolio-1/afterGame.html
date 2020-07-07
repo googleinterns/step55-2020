@@ -27,25 +27,31 @@
 </head>
 <body class='light-mode' onload='onLoadFunctions("afterGame")'>
   <div id='nav-bar'></div>
-  <div class='container'>
-    <div id='game-title' class='center'></div>
-    <h1 class='center'>GAME WON!</h1>
-    <form id='difficulty' class='center larger-text'>
-        <input type='radio' value='Easy' name='difficulty' id='Easy'> 
-        <label for="Easy" class='green-text'>Easy</label>
-        <input type='radio' value='Medium' name='difficulty' id='Medium'> 
-        <label for="Medium" class='orange-text'>Medium</label>
-        <input type='radio' value='Hard' name='difficulty' id='Hard'> 
-        <label for="Hard" class='red-text'>Hard</label>
+  <div class='container center'>
+    <div id='game-title'></div>
+    <h1>GAME WON!</h1>
+    <form id='difficulty'>
+        <input type='radio' value='Easy' name='difficulty' id='Easy'/> 
+        <label for='Easy' class='green-text larger-text'>Easy  </label>
+        <input type='radio' value='Medium' name='difficulty' id='Medium'/> 
+        <label for='Medium' class='orange-text larger-text'>Medium  </label>
+        <input type='radio' value='Hard' name='difficulty' id='Hard'/> 
+        <label for='Hard' class='red-text larger-text'>Hard  </label>
     </form>
-    <div class='stars center'>
-      <h3>Please rate the map</h3>
-      <i class="large material-icons">star_border</i>
-      <i class="large material-icons">star_border</i>
-      <i class="large material-icons">star_border</i>
-      <i class="large material-icons">star_border</i>
-      <i class="large material-icons">star_border</i>
+    <h3>Please give the map a star rating!:</h3>
+
+    <div id='0' class='center stars'>
+      <i class='large material-icons' onclick='stars(1)'>star_border</i>
+      <i class='large material-icons' onclick='stars(2)'>star_border</i>
+      <i class='large material-icons' onclick='stars(3)'>star_border</i>
+      <i class='large material-icons' onclick='stars(4)'>star_border</i>
+      <i class='large material-icons' onclick='stars(5)'>star_border</i>
     </div>
+    <textarea id='comment' placeholder='Enter your thoughts here on the map!' class='large-text-input'></textarea>
+    <br/>
+    <br/>
+    <input type='submit' value='Play Again' onclick='sendDataToServer("Play Again")'>
+    <input type='submit' value='Back To Home' onclick='sendDataToServer("Back To Home")'>
   </div>
 </body>
 </html>

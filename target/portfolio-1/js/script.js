@@ -230,7 +230,7 @@ function onLoadFunctions(page) {
   } else if (page == 'createGame') {
     initMapToCreateGame();
   } else if (page == 'afterGame') {
-    loadGameData();
+    loadGameName();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){
