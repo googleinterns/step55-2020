@@ -151,6 +151,10 @@ ol#hints {
   margin-bottom: -5px;
 }
 
+.stars {
+  cursor: pointer;
+}
+
 .width300 {
   width: 300px;
 }
