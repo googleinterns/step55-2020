@@ -120,6 +120,17 @@ ol#hints {
   list-style-position: inside
 }
 
+
+.black-text {
+  color: black;
+}
+
+#all-maps {
+  margin: auto;
+  box-shadow: none;
+}
+
+
 .cursor-pointer {
   cursor: pointer;
   margin-bottom: -5px;
@@ -166,13 +177,4 @@ ol#hints {
 
 #pac-input:focus {
   border-color: #4d90fe;
-}
-
-.black-text {
-  color: black;
-}
-
-#all-maps {
-  margin: auto;
-  box-shadow: none;
 }
