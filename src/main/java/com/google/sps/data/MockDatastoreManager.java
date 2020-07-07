@@ -150,7 +150,6 @@ public class MockDatastoreManager {
     */
     private int getRandomIntegerBetween(int left, int right) {
         int res = left + (int)(Math.random()*(right-left+1));
-        if(res > right) res = right; // happens if Math.random() somehow gives exactly 1.0
         return res;
     }
 
