@@ -1,6 +1,7 @@
 com/google/sps/servlets/CreateGameServlet$3.class
 com/google/sps/data/User$Builder.class
 com/google/sps/data/Hint$1.class
+com/google/sps/data/Authentication.class
 com/google/sps/data/Stage$Builder.class
 com/google/sps/data/Game$1.class
 com/google/sps/servlets/CreateGameServlet$1.class
@@ -25,6 +26,7 @@ com/google/sps/data/IDGenerator.class
 com/google/sps/data/SinglePlayerProgress.class
 com/google/sps/servlets/LoadGameServlet.class
 com/google/sps/servlets/LoadUserServlet.class
+com/google/sps/servlets/LoadAuthenticationServlet.class
 com/google/sps/data/Coordinates.class
 com/google/sps/data/Game$Builder.class
 com/google/sps/data/Stage.class

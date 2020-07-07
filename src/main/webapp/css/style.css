@@ -7,6 +7,10 @@
   background-color: white;
 }
 
+.light-mode .card {
+  background-color: white;
+}
+
 .light-mode .activeStage {
   background-color: #74d3aeff;
 }
@@ -18,8 +22,19 @@
 
 .light-mode #featured-map-info {
   margin: auto;
+  width: 400px;
+  background-color: #efefefff;
+}
+
+.light-mode #map-info {
+  margin: auto;
+  height: 80px;
   width: 300px;
   background-color: #efefefff;
+}
+
+.light-mode .materialbox {
+  box-shadow: none;
 }
 
 /* CSS for if the user is playing in dark mode */
@@ -30,6 +45,10 @@
 .dark-mode {
   background-color: #434343ff;
   color: white;
+}
+
+.dark-mode .card {
+  background-color: #434343ff;
 }
 
 .dark-mode .activeStage {
@@ -47,9 +66,26 @@
 
 .dark-mode #featured-map-info {
   margin: auto;
-  margin-top: 0;
+  width: 400px;
+  background-color: #021b32ff;
+}
+
+.dark-mode #map-info {
+  margin: auto;
+  height: 80px;
   width: 300px;
   background-color: #021b32ff;
+}
+
+#featured-map {
+  margin: auto;
+  width: 400px;
+}
+
+#individual-map {
+  padding: 5px;
+  margin: 5px;
+  width: 320px;
 }
 
 input {
@@ -60,8 +96,7 @@ input {
   display:none;
 }
 
-/* Sets the map to about half of the screen height
- */
+/* Sets the map to about half of the screen height */
 #map {
   border: thin solid black;
   height: 25vw;
@@ -80,13 +115,21 @@ input {
   margin: auto;
 }
 
-#featured-map {
-  margin: auto;
-  width: 300px;
-}
-
 ol#hints {
   list-style-position: inside
+}
+
+
+.black-text {
+  color: black;
+}
+
+#all-maps {
+  margin: auto;
+  box-shadow: none;
+  max-width: 80%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .cursor-pointer {
@@ -94,6 +137,11 @@ ol#hints {
   margin-bottom: -5px;
 }
 
+.width300 {
+  width: 300px;
+}
+
+/* Add CSS that starts with pac is for the search bar on the createGame.html page map */
 .pac-card {
   margin: 10px 10px 0 0;
   border-radius: 2px 0 0 2px;
@@ -134,14 +182,4 @@ ol#hints {
 
 #pac-input:focus {
   border-color: #4d90fe;
-}
-
-#description {
-  font-family: Roboto;
-  font-size: 15px;
-  font-weight: 300;
-}
-
-.black-text {
-  color: black;
 }

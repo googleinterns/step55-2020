@@ -85,7 +85,6 @@ function createNavBar(page) {
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
-  //   TODO(smissak): add side nav bar for mobile view
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                   '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
                                                   '<li><a href="index.html">Home</a></li>' + 
@@ -96,21 +95,23 @@ function createNavBar(page) {
 //TODO(smissak): add marker for each starting position of each stage to the image
 /** 
 * Creates a static maps image
-* @param {float} latitude is the latitude where the center of the image should be
-* @param {float} longitude is the longitiude where the center of the image should be
+* @param {array} stageLocations contains objects with longitude and latitude
+* @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
 */
-function createStaticMap(latitude, longitude) { // TODO(smissak): rather than pass in the lat and lng, pass in an array of the lat and lngs to add a marker for the TODO
+function createStaticMap(stageLocations, size) { 
   var staticImage = document.createElement('img');
   var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
-  staticMapURL += latitude + ',' + longitude;
-  staticMapURL += '&zoom=13&size=300x300&maptype=roadmap';
-  staticMapURL += '&markers=color:red%7C' + latitude + ',' + longitude;
+  staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
+  staticMapURL += '&size='+size+'x'+size+'&maptype=roadmap';
+  for (var i = 0; i < stageLocations.length; i++) {
+    staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
+  }
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
   staticImage.src = staticMapURL;
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('playGame.html');
+    window.location.replace('playGame.html?gameID=');
   });
   return staticImage;
 }
@@ -176,16 +177,38 @@ function getStarRating(mapData) {
 }
 
 /** 
-* Adds a featured map where the ID 'featured-map' is
+* Adds a featured map where the ID 'featured-map' is and the rest of the maps where the ID 'all-maps' is
 */
-function loadFeaturedMap() {
+function loadMaps() {
   fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
-    var featuredMap = createStaticMap(data.stageLocations[0].latitude, data.stageLocations[0].longitude);
-    var featuredMapCaption = createStaticMapCaption(data, 'featured-map-info');
+    var featuredMap = createStaticMap(data[0].stageLocations, '400');
+    console.log(data[0].stageLocations[0].latitude)
+    console.log(data[0].stageLocations[0].longitude)
+    var featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     var featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
+    var allMaps = document.getElementById('all-maps');
+    for (var i = 1; i < data.length; i++) {
+        var mapDiv = document.createElement('div');
+        mapDiv.classList.add('col');
+        mapDiv.classList.add('hoverable');
+        mapDiv.id = 'individual-map';
+
+        var mapImage = createStaticMap(data[i].stageLocations, '300');
+        var mapCaption = createStaticMapCaption(data[i], 'map-info');
+        mapImage.classList.add('materialbox');
+        mapImage.classList.add('responsive-img');
+        mapImage.classList.add('width300');
+
+        mapCaption.classList.add('materialbox');
+        mapCaption.classList.add('width300');
+
+        mapDiv.append(mapImage)
+        mapDiv.append(mapCaption)
+        allMaps.append(mapDiv);
+    }
   });
 }
 
@@ -205,8 +228,13 @@ function onLoadFunctions(page) {
     initMapToPlayGame();
   } else if (page == 'createGame') {
     initMapToCreateGame();
+  } else if (page == 'afterGame') {
+    loadGameData();
   } else if (page == 'index') {
-    loadFeaturedMap();
+    loadMaps();
+ 	$(document).ready(function(){
+ 		$('.materialbox').materialbox();
+ 	});
   }
   
   if (typeof(Storage) !== "undefined") {

@@ -88,7 +88,7 @@ public class MockDatastoreManager {
     */
     public ArrayList<Game> retrieveAllGames() {
         ArrayList<Game> res = new ArrayList<>();
-        res.add(retrieveGame(IDGenerator.gen()));
+        res.add(retrieveGame("demogameid"));
         for(int i = 0; i < 20; i++) res.add(getRandomGame());
         return res;
     }
@@ -150,7 +150,6 @@ public class MockDatastoreManager {
     */
     private int getRandomIntegerBetween(int left, int right) {
         int res = left + (int)(Math.random()*(right-left+1));
-        if(res > right) res = right; // happens if Math.random() somehow gives exactly 1.0
         return res;
     }
 

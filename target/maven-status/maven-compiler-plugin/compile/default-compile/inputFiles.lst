@@ -3,9 +3,11 @@
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Hint.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Stage.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/IDataManager.java
+/home/smissak/step55-2020/src/main/java/com/google/sps/data/Authentication.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Pair.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadMainPageServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Coordinates.java
+/home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadAuthenticationServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/User.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/BasicGameData.java
