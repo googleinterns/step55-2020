@@ -29,7 +29,7 @@
 .light-mode #map-info {
   margin: auto;
   height: 80px;
-  width: 300px;
+  width: 290px;
   background-color: #efefefff;
 }
 
@@ -73,7 +73,7 @@
 .dark-mode #map-info {
   margin: auto;
   height: 80px;
-  width: 300px;
+  width: 290px;
   background-color: #021b32ff;
 }
 
@@ -83,9 +83,9 @@
 }
 
 #individual-map {
-  padding: 5px;
+  padding: 6px;
   margin: 5px;
-  width: 320px;
+  width: 300px;
 }
 
 input {
@@ -139,6 +139,22 @@ ol#hints {
 
 .width300 {
   width: 300px;
+}
+
+.green-text {
+  color: green;
+}
+
+.orange-text {
+  color: orange;
+}
+
+.red-text {
+  color: red;
+}
+
+.larger-text {
+  font-size: 5em;
 }
 
 /* Add CSS that starts with pac is for the search bar on the createGame.html page map */

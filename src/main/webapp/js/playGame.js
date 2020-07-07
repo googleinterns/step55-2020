@@ -3,7 +3,14 @@
 */
 async function initMapToPlayGame() {
   const params = new URLSearchParams();
-  params.append('gameID', 'demogameid')
+  const urlParams = new URLSearchParams(window.location.search)
+  var gameID = urlParams.get('gameID');
+  if(!urlParams.has('gameID')) {
+    window.alert('Failure to initialize game');
+    window.location.replace('index.html');
+    return;
+  }
+  params.append('gameID', gameID)
   var request = new Request('/load-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then(async (data) => {
     if (data == null) {
@@ -138,7 +145,9 @@ async function checkKey(data, stage, panorama, map) {
     return;
   }
   if (data.stages.length == stage.stageNumber) {
-    window.location.replace('afterGame.html');
+    const urlParams = new URLSearchParams(window.location.search)
+    var gameID = urlParams.get('gameID');
+    window.location.replace('afterGame.html?gameID=' + gameID);
     return;
   }
 

@@ -97,8 +97,9 @@ function createNavBar(page) {
 * Creates a static maps image
 * @param {array} stageLocations contains objects with longitude and latitude
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
+* @param {String} gameID is gameID from the server of the game that was clicked on
 */
-function createStaticMap(stageLocations, size) { 
+function createStaticMap(stageLocations, size, gameID) { 
   var staticImage = document.createElement('img');
   var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
@@ -111,7 +112,7 @@ function createStaticMap(stageLocations, size) {
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('playGame.html?gameID=');
+    window.location.replace('playGame.html?gameID=' + gameID);
   });
   return staticImage;
 }
@@ -125,13 +126,13 @@ function createStaticMapCaption(mapData, captionID) {
   var avgDifficulty = mapData.difficulty;
 
   var difficulty = 'Easy';
-  var difficultyColor = 'green';
+  var difficultyColor = 'green-text';
   if (avgDifficulty == 2) {
     difficulty = 'Medium';
-    difficultyColor = 'orange';
+    difficultyColor = 'orange-text';
   } else if (avgDifficulty == 3) {
     difficulty = 'Hard';
-    difficultyColor = 'red';
+    difficultyColor = 'red-text';
   }
 
   var fiveStars = getStarRating(mapData);
@@ -139,13 +140,13 @@ function createStaticMapCaption(mapData, captionID) {
   var staticMapInfo = document.createElement('div');
   staticMapInfo.id = captionID;
   staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
-  staticMapInfo.innerHTML += mapData.gameName + ' <i style="color:' + difficultyColor + '">[' + difficulty + "]</i>";
+  staticMapInfo.innerHTML += mapData.gameName + ' <i class="' + difficultyColor + '">[' + difficulty + "]</i>";
   staticMapInfo.innerHTML += '<br> By ' + mapData.creatorUsername;
   staticMapInfo.style = 'text-align:left; padding: 6px';
   staticMapInfo.classList.add('cursor-pointer');
 
   staticMapInfo.addEventListener('click', function() {
-    window.location.replace('playGame.html');
+    window.location.replace('playGame.html?gameID=' + mapData.gameID);
   });
   return staticMapInfo;
 }
@@ -181,7 +182,7 @@ function getStarRating(mapData) {
 */
 function loadMaps() {
   fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
-    var featuredMap = createStaticMap(data[0].stageLocations, '400');
+    var featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
     console.log(data[0].stageLocations[0].latitude)
     console.log(data[0].stageLocations[0].longitude)
     var featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
@@ -196,7 +197,7 @@ function loadMaps() {
         mapDiv.classList.add('hoverable');
         mapDiv.id = 'individual-map';
 
-        var mapImage = createStaticMap(data[i].stageLocations, '300');
+        var mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
         var mapCaption = createStaticMapCaption(data[i], 'map-info');
         mapImage.classList.add('materialbox');
         mapImage.classList.add('responsive-img');
