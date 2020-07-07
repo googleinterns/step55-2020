@@ -42,17 +42,18 @@ import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+//import com.google.appengine.api.datastore.StructuredQuery.PropertyFilter;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 
-/** Servlet responsible for implementing the functions in the interface. **/
+/** Servlet responsible for creating new tasks. **/
 public class DatastoreManager implements IDataManager {
 
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   Gson gson = new Gson();
 
   /**
-  * Creates or Replaces an entity of a single User data in datastore
-  * @param user a User variable representing a single instance of a user.
+    * Creates or Replaces an entity of a single User data in datastore
+    * @param user a User variable representing a single instance of a user.
   */
   public void createOrReplaceUser(User user) {
     Entity userEntity = new Entity("User", user.getUserID());
