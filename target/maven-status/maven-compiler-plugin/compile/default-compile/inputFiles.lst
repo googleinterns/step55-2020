@@ -14,5 +14,6 @@
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/BasicGameData.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
+/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/CreateUsernameServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Authentication.java
