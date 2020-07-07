@@ -103,12 +103,16 @@ input {
   width: 100%;
 }
 
+#game {
+    display: flex;
+}
+
 /* Sets the map the user plays on to the height of the screen */
 #playMap {
   float:left;
   border: thin solid black;
   height: 95vh;
-  width: 70%;
+  width: 80%;
 }
 
 .mapToPlay {
@@ -182,4 +186,31 @@ ol#hints {
 
 #pac-input:focus {
   border-color: #4d90fe;
+}
+
+#game-info {
+    margin-left: 20px;
+}
+
+#keybox {
+    position: absolute;
+    bottom: 50px;
+    text-align: center;
+}
+
+#inputBoxAndButton {
+    display: inline-block;
+}
+
+#key-input {
+    background: gray;
+    border-radius: 5px;
+    width: 70%;
+}
+
+#key-input-button {
+    height: 40px;
+    border: 0px;
+    margin-left: 10px;
+    border-radius: 7px;
 }
