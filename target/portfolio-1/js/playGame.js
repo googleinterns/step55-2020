@@ -66,15 +66,15 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     gameInfo.appendChild(gameName);
 
     var gameStage = document.createElement('h3');
-    gameStage.innerHTML = 'You are on stage:' + stage.stageNumber + '/' + data.stages.length;
+    gameStage.innerHTML = 'You are on stage: ' + stage.stageNumber + '/' + data.stages.length;
     gameStage.className = 'center'
     gameInfo.appendChild(gameStage);
 
-    var theWordHints = document.createElement('h4');
+    var theWordHints = document.createElement('div');
     theWordHints.innerHTML = 'Hints:';
     gameInfo.appendChild(theWordHints);
 
-    var starterHint = document.createElement('h4');
+    var starterHint = document.createElement('div');
     starterHint.innerHTML = 'Starter: ' + stage.startingHint;
     gameInfo.appendChild(starterHint);
 
