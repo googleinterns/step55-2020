@@ -37,11 +37,16 @@
   box-shadow: none;
 }
 
+<<<<<<< HEAD
 .light-mode textarea {
   height: 20vh;
   width: 50%;
   background-color: #efefefff;
   color: black;
+=======
+.light-mode #key-input-button {
+  background: #74d3aeff;
+>>>>>>> 3d3b1a52f22db4db2f861b50852c16aab5008cdd
 }
 
 /* CSS for if the user is playing in dark mode */
@@ -84,11 +89,16 @@
   background-color: #021b32ff;
 }
 
+<<<<<<< HEAD
 .dark-mode textarea {
   height: 20vh;
   width: 50%;
   background-color: #666666ff;
   color: white;
+=======
+.dark-mode #key-input-button {
+  background: #32908F;
+>>>>>>> 3d3b1a52f22db4db2f861b50852c16aab5008cdd
 }
 
 #featured-map {
@@ -119,10 +129,12 @@ input {
 
 /* Sets the map the user plays on to the height of the screen */
 #playMap {
-  float:left;
+  position: absolute;
   border: thin solid black;
-  height: 95vh;
-  width: 70%;
+  top: 64px;
+  bottom: 0px;
+  left: 0px;
+  right: 500px;
 }
 
 .mapToPlay {
@@ -213,4 +225,53 @@ ol#hints {
 
 #pac-input:focus {
   border-color: #4d90fe;
+}
+
+#game-info {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  top: 64px;
+  width: 500px;
+  padding: 20px;
+}
+
+#keybox {
+  position: absolute;
+  bottom: 50px;
+  left: 0px;
+  right: 0px;
+  text-align: center;
+}
+
+#inputBoxAndButton {
+  display: inline-block;
+}
+
+#enter-key-text {
+  font-size: 25px;
+}
+
+#key-input {
+  width: 70%;
+}
+
+#key-input-button {
+  height: 40px;
+  border: 0px;
+  margin-left: 15px;
+  border-radius: 7px;
+}
+
+#hints-container {
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+ol#hints {
+  padding-left: 20px;
+}
+
+#stage-counter {
+  font-size: 25px;
 }
