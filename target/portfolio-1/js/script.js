@@ -38,6 +38,13 @@ function createNavBar(page) {
   a.className = 'brand-logo';
   containerDiv.appendChild(a);
 
+  var mobileA = document.createElement('a');
+  mobileA.innerHTML = '<i class="material-icons">menu</i>';
+  mobileA.href = "#";
+  mobileA.className = 'sidenav-trigger';
+  mobileA.dataset.target = 'mobile-demo';
+  containerDiv.appendChild(mobileA);
+
   var ul = document.createElement('ul');
   ul.className = 'right hide-on-med-and-down';
 
@@ -78,39 +85,45 @@ function createNavBar(page) {
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
+  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
+                                                  '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
+                                                  '<li><a href="index.html">Home</a></li>' + 
+                                                  '<li><a href="createGame.html">Create Game</a></li>' + 
+                                                  '<li><a href="#">Login</a></li> </ul>';
 }
 
-//TODO(smissak): add this function to the javascript API docs
 //TODO(smissak): add marker for each starting position of each stage to the image
 /** 
-* Creates a static maps image where below the image is information on the game
-* @param {float} latitude is the latitude where the center of the image should be
-* @param {float} longitiude is the longitiude where the center of the image should be
-* @param {string} mapData the JSON data with the map's information
-* @param {string} captionID the id of the game info that is under the static image
+* Creates a static maps image
+* @param {array} stageLocations contains objects with longitude and latitude
+* @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
 */
-function createStaticMap(latitude, longitiude) { // TODO(smissak): rather than pass in the lat and lng, pass in an array of the lat and lngs to add a marker for the TODO
+function createStaticMap(stageLocations, size) { 
   var staticImage = document.createElement('img');
   var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
-  staticMapURL += latitude + ',' + longitiude;
-  staticMapURL += '&zoom=13&size=300x300&maptype=roadmap';
-  staticMapURL += '&markers=color:red%7C' + latitude + ',' + longitiude;
+  staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
+  staticMapURL += '&size='+size+'x'+size+'&maptype=roadmap';
+  for (var i = 0; i < stageLocations.length; i++)
+  {
+    staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
+  }
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
   staticImage.src = staticMapURL;
   staticImage.classList.add('cursor-pointer');
+
   staticImage.addEventListener('click', function() {
-    window.location.replace('playGame.html');
+    window.location.replace('playGame.html?gameID=');
   });
   return staticImage;
 }
 
+/** 
+* Creates below the image the information of the game
+* @param {string} mapData the JSON data with the map's information
+* @param {string} captionID the id of the game info that is under the static image
+*/
 function createStaticMapCaption(mapData, captionID) {
-  var numDifficultyVotes = mapData.numDifficultyVotes;
-  var totalDifficulty = mapData.totalDifficulty;
-  var avgDifficulty = 0;
-  if (numDifficultyVotes > 0 || totalDifficulty > 0) {
-    avgDifficulty = math.round(numDifficultyVotes/totalDifficulty);
-  }
+  var avgDifficulty = mapData.difficulty;
 
   var difficulty = 'Easy';
   var difficultyColor = 'green';
@@ -128,29 +141,29 @@ function createStaticMapCaption(mapData, captionID) {
   staticMapInfo.id = captionID;
   staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
   staticMapInfo.innerHTML += mapData.gameName + ' <i style="color:' + difficultyColor + '">[' + difficulty + "]</i>";
-  staticMapInfo.innerHTML += '<br> By ' + mapData.gameCreator;
+  staticMapInfo.innerHTML += '<br> By ' + mapData.creatorUsername;
   staticMapInfo.style = 'text-align:left; padding: 6px';
   staticMapInfo.classList.add('cursor-pointer');
+
   staticMapInfo.addEventListener('click', function() {
     window.location.replace('playGame.html');
   });
   return staticMapInfo;
 }
 
+
+/** 
+* Creates below the image the star ratings of the map
+* @param {string} mapData the JSON data with the map's information
+*/
 function getStarRating(mapData) {
-  var numStarVotes = mapData.numStarVotes;
-  var totalStars = mapData.totalStars;
-  var avgStars = 0.0;
-  if (numStarVotes > 0 || totalStars > 0) {
-    avgStars = numStarVotes/totalStars;
-  }
+  var avgStarsTemp = mapData.stars;
   
   var fullStar = '<i class="material-icons md-18">star</i>';
   var halfStar = '<i class="material-icons md-18">star_half</i>';
   var emptyStar = '<i class="material-icons md-18">star_border</i>';
 
   var fiveStars = '';
-  var avgStarsTemp = avgStars;
   for (var i = 0; i < 5; i++) {
     if(avgStarsTemp >= 1.0) {
        fiveStars += fullStar;
@@ -164,17 +177,39 @@ function getStarRating(mapData) {
   return fiveStars
 }
 
-function loadFeaturedMap() {
-  const params = new URLSearchParams();
-  params.append('gameID', 'demogameid')
-  var request = new Request('/load-game-data', {method: 'POST', body: params});
-  fetch(request).then(response => response.json()).then(async (data) => {
-    var stage = await getStage(data.stages[0]);
-    var featuredMap = createStaticMap(stage.startingLocation.latitude, stage.startingLocation.longitude);
-    var featuredMapCaption = createStaticMapCaption(data, 'featured-map-info');
+/** 
+* Adds a featured map where the ID 'featured-map' is and the rest of the maps where the ID 'all-maps' is
+*/
+function loadMaps() {
+  fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
+    var featuredMap = createStaticMap(data[0].stageLocations, '400');
+    console.log(data[0].stageLocations[0].latitude)
+    console.log(data[0].stageLocations[0].longitude)
+    var featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     var featuredMapDiv = document.getElementById('featured-map');
+    featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
+    var allMaps = document.getElementById('all-maps');
+    for (var i = 1; i < data.length; i++) {
+        var mapDiv = document.createElement('div');
+        mapDiv.classList.add('col');
+        mapDiv.classList.add('hoverable');
+        mapDiv.id = 'individual-map';
+
+        var mapImage = createStaticMap(data[i].stageLocations, '300');
+        var mapCaption = createStaticMapCaption(data[i], 'map-info');
+        mapImage.classList.add('materialbox');
+        mapImage.classList.add('responsive-img');
+        mapImage.classList.add('width300');
+
+        mapCaption.classList.add('materialbox');
+        mapCaption.classList.add('width300');
+
+        mapDiv.append(mapImage)
+        mapDiv.append(mapCaption)
+        allMaps.append(mapDiv);
+    }
   });
 }
 
@@ -185,12 +220,22 @@ function loadFeaturedMap() {
 */
 function onLoadFunctions(page) {
   createNavBar(page);
+
+  // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
+  var elems = document.querySelectorAll('.sidenav');
+  var instances = M.Sidenav.init(elems, {});
+  
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
     initMapToCreateGame();
+  } else if (page == 'afterGame') {
+    loadGameData();
   } else if (page == 'index') {
-    loadFeaturedMap();
+    loadMaps();
+ 	$(document).ready(function(){
+ 		$('.materialbox').materialbox();
+ 	});
   }
   
   if (typeof(Storage) !== "undefined") {

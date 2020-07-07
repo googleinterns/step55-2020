@@ -46,7 +46,7 @@ async function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
-    createGameInfoOnSideOfMap(data, initStage, panorama);
+    createGameInfoOnSideOfMap(data, initStage, panorama, map);
   });
 }
 
@@ -54,26 +54,27 @@ async function initMapToPlayGame() {
 * Creates the game game info that is on the side of the map on playGame.html
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
-* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+* @param {object} panorama the panorama of the map created in initMapPlayGame()
+* @param {object} map is map created in initMapPlayGame()
 */
-function createGameInfoOnSideOfMap(data, stage, map) {
+function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     var gameInfo = document.getElementById('game-info');
     
-    var gameName = document.createElement('h1');
+    var gameName = document.createElement('h2');
     gameName.innerHTML = data.gameName;
     gameName.className = 'center'
     gameInfo.appendChild(gameName);
 
-    var gameStage = document.createElement('h2');
+    var gameStage = document.createElement('h3');
     gameStage.innerHTML = 'You are on stage:' + stage.stageNumber + '/' + data.stages.length;
     gameStage.className = 'center'
     gameInfo.appendChild(gameStage);
 
-    var theWordHints = document.createElement('h3');
+    var theWordHints = document.createElement('h4');
     theWordHints.innerHTML = 'Hints:';
     gameInfo.appendChild(theWordHints);
 
-    var starterHint = document.createElement('h3');
+    var starterHint = document.createElement('h4');
     starterHint.innerHTML = 'Starter: ' + stage.startingHint;
     gameInfo.appendChild(starterHint);
 
@@ -90,34 +91,39 @@ function createGameInfoOnSideOfMap(data, stage, map) {
     hintsDiv.appendChild(hintsOl);
     gameInfo.appendChild(hintsDiv);
 
-    var enterKeyText = document.createElement('h2');
-    enterKeyText.innerHTML = 'Please Enter The Key To Complete The Stage:';
+    var keySpan = document.createElement('span');
+    keySpan.setAttribute('id', 'keybox');
+    var enterKeyText = document.createElement('h3');
+    enterKeyText.innerHTML = 'Please enter key to continue:';
     enterKeyText.className = 'center'
-    gameInfo.appendChild(enterKeyText);
+    keySpan.appendChild(enterKeyText);
 
     var inputKeyBox = document.createElement('input');
     inputKeyBox.type = 'text';
     inputKeyBox.className = 'center';
     inputKeyBox.classList = 'input-text-color';
     inputKeyBox.id = 'key-input';
-    inputKeyBox.style = 'width: 30%';
 
     // This checks if the user clicked enter in the key box
     inputKeyBox.addEventListener('keydown', function(e) {
       if (e.which == 13) {
-        checkKey(data, stage, map);
+        checkKey(data, stage, panorama, map);
       }
     });
-    gameInfo.appendChild(inputKeyBox);
+    var inputBoxAndSubmitButton = document.createElement('div');
+    inputBoxAndSubmitButton.setAttribute('id', 'inputBoxAndButton');
+    inputBoxAndSubmitButton.appendChild(inputKeyBox);
 
     var buttonToCheckKey = document.createElement('input');
     buttonToCheckKey.type = 'button';
-    buttonToCheckKey.className = 'center';
+    buttonToCheckKey.id = "key-input-button";
     buttonToCheckKey.value = 'Submit';
     buttonToCheckKey.addEventListener('click', function() {
-      checkKey(data, stage, map);
+      checkKey(data, stage, panorama, map);
     });
-    gameInfo.appendChild(buttonToCheckKey);
+    inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
+    keySpan.appendChild(inputBoxAndSubmitButton);
+    gameInfo.appendChild(keySpan);
 }
 
 //TODO(smissak): TEST this so if there is more than one page and the input key is correct,
@@ -126,9 +132,10 @@ function createGameInfoOnSideOfMap(data, stage, map) {
 * Checks if the key is the correct key for the current stage
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
-* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+* @param {object} panorama the panorama of the map created in initMapPlayGame()
+* @param {object} map is map created in initMapPlayGame()
 */
-function checkKey(data, stage, map) {
+async function checkKey(data, stage, panorama, map) {
   var keyInput = document.getElementById('key-input');
   var inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
@@ -142,11 +149,24 @@ function checkKey(data, stage, map) {
 
   // This reloads the map and the game info on the side of the map with the next stage data
   var nextStageNumber = stage.stageNumber + 1;
-  var nextStage = getStage(data.stages[nextStageNumber]);
+  console.log(nextStageNumber);
+  var nextStage = await getStage(data.stages[nextStageNumber]);
+  console.log(nextStage);
   var startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
-  map.setPosition(startingLocation);
+  panorama.setPosition(startingLocation);
   document.getElementById('game-info').innerHTML = '';
-  createGameInfoOnSideOfMap(data, stage, map);
+  createGameInfoOnSideOfMap(data, nextStage, panorama, map);
+
+  var stageHints = nextStage.hints;
+  if (stageHints.length == null) {
+    window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
+    window.location.replace('index.html');
+    return;
+  }
+
+  stageHints.forEach(hint => 
+    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
+  );
 }
 
 /** 
@@ -177,7 +197,7 @@ async function getStage(stageID) {
 
 /** 
 * Adds a marker to the map containing the hint's data
-* @param {StreetViewPanorama} map the panorama of the map created in initMapPlayGame()
+* @param {object} map the panorama of the map created in initMapPlayGame()
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)

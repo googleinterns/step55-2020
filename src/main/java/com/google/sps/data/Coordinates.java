@@ -14,6 +14,8 @@
 
 package com.google.sps.data;
 
+import java.lang.Math;
+
 /**
 * Represents a location on Earth as a longitude and a latitude.
 */
@@ -69,5 +71,35 @@ public class Coordinates {
     */
     public double getLongitude() {
         return this.longitude;
+    }
+
+    /**
+    * Checks whether the latitude and longitude are valid numbers.
+    * @return a boolean representing whether the coordinates are valid.
+    */
+    public boolean isValid() {
+        return -90 <= this.latitude && this.latitude <= 90 && -180 <= this.longitude && this.longitude <= 180;
+    }
+
+    /**
+    * Get a random valid coordinates.
+    * @return a random Coordinates object.
+    */
+    public static Coordinates getRandomCoordinates() {
+        return new Coordinates(-90+Math.random()*180, -180+Math.random()*360);
+    }
+
+    /**
+    * Get random coordinates whose latitude and longitude values are at most maxDelta away from this.
+    * If these coordinates are (x,y), then this will return a point whose x is between x-maxDelta and x+maxDelta,
+    * and whose y is between y-maxDelta and y+maxDelta.
+    * @param maxDelta the upper bound on the difference between the coordinates.
+    */
+    public Coordinates getRandomWithin(double maxDelta) {
+        Coordinates res = new Coordinates(this.latitude-maxDelta+Math.random()*(2*maxDelta), this.longitude-maxDelta+Math.random()*(2*maxDelta));
+        while(!res.isValid()) {
+            res = new Coordinates(this.latitude-maxDelta+Math.random()*(2*maxDelta), this.longitude-maxDelta+Math.random()*(2*maxDelta));
+        }
+        return res;
     }
 }

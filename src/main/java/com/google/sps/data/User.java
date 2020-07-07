@@ -173,7 +173,7 @@ public class User {
     * Retrieves the profile picture of this user.
     * @return a String containing the profile picture of this user.
     */
-    public String getprofilePictureUrl() {
+    public String getProfilePictureUrl() {
         return this.profilePictureUrl;
     }
 

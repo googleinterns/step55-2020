@@ -7,6 +7,10 @@
   background-color: white;
 }
 
+.light-mode .card {
+  background-color: white;
+}
+
 .light-mode .activeStage {
   background-color: #74d3aeff;
 }
@@ -18,9 +22,19 @@
 
 .light-mode #featured-map-info {
   margin: auto;
-  margin-top: 0;
+  width: 400px;
+  background-color: #efefefff;
+}
+
+.light-mode #map-info {
+  margin: auto;
+  height: 80px;
   width: 300px;
   background-color: #efefefff;
+}
+
+.light-mode .materialbox {
+  box-shadow: none;
 }
 
 /* CSS for if the user is playing in dark mode */
@@ -33,6 +47,10 @@
   color: white;
 }
 
+.dark-mode .card {
+  background-color: #434343ff;
+}
+
 .dark-mode .activeStage {
   background-color: #32908F;
 }
@@ -42,11 +60,32 @@
   text-align: center;
 }
 
+.dark-mode input {
+  color: white;
+}
+
 .dark-mode #featured-map-info {
   margin: auto;
-  margin-top: 0;
+  width: 400px;
+  background-color: #021b32ff;
+}
+
+.dark-mode #map-info {
+  margin: auto;
+  height: 80px;
   width: 300px;
   background-color: #021b32ff;
+}
+
+#featured-map {
+  margin: auto;
+  width: 400px;
+}
+
+#individual-map {
+  padding: 5px;
+  margin: 5px;
+  width: 320px;
 }
 
 input {
@@ -57,12 +96,15 @@ input {
   display:none;
 }
 
-/* Sets the map to about half of the screen height
- */
+/* Sets the map to about half of the screen height */
 #map {
   border: thin solid black;
   height: 25vw;
   width: 100%;
+}
+
+#game {
+    display: flex;
 }
 
 /* Sets the map the user plays on to the height of the screen */
@@ -70,22 +112,105 @@ input {
   float:left;
   border: thin solid black;
   height: 95vh;
-  width: 70%;
+  width: 80%;
 }
 
 .mapToPlay {
   margin: auto;
 }
 
-#featured-map {
-  margin: auto;
-  margin-bottom: 0;
-}
-
 ol#hints {
   list-style-position: inside
 }
 
+
+.black-text {
+  color: black;
+}
+
+#all-maps {
+  margin: auto;
+  box-shadow: none;
+  max-width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .cursor-pointer {
   cursor: pointer;
+  margin-bottom: -5px;
+}
+
+.width300 {
+  width: 300px;
+}
+
+/* Add CSS that starts with pac is for the search bar on the createGame.html page map */
+.pac-card {
+  margin: 10px 10px 0 0;
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  font-family: Roboto;
+}
+
+#pac-container {
+  padding-bottom: 12px;
+  margin-right: 12px;
+}
+
+.pac-controls {
+  display: inline-block;
+  padding: 5px 11px;
+}
+
+.pac-controls label {
+  font-family: Roboto;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+#pac-input {
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 400px;
+}
+
+#pac-input:focus {
+  border-color: #4d90fe;
+}
+
+#game-info {
+    margin-left: 20px;
+}
+
+#keybox {
+    position: absolute;
+    bottom: 50px;
+    text-align: center;
+}
+
+#inputBoxAndButton {
+    display: inline-block;
+}
+
+#key-input {
+    background: gray;
+    border-radius: 5px;
+    width: 70%;
+}
+
+#key-input-button {
+    height: 40px;
+    border: 0px;
+    margin-left: 10px;
+    border-radius: 7px;
 }
