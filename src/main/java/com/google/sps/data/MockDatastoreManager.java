@@ -88,7 +88,7 @@ public class MockDatastoreManager {
     */
     public ArrayList<Game> retrieveAllGames() {
         ArrayList<Game> res = new ArrayList<>();
-        res.add(retrieveGame(IDGenerator.gen()));
+        res.add(retrieveGame("demogameid"));
         for(int i = 0; i < 20; i++) res.add(getRandomGame());
         return res;
     }
