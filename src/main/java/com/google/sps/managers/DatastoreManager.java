@@ -14,7 +14,6 @@
 
 package com.google.sps.managers;
 
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -29,13 +28,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import com.google.sps.data.User;
-import com.google.sps.data.Stage;
-import com.google.sps.data.Game;
-import com.google.sps.data.Coordinates;
-import com.google.sps.data.Pair;
-import com.google.sps.data.Hint;
-import com.google.sps.data.SinglePlayerProgress;
+import com.google.sps.data.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
@@ -52,7 +45,7 @@ public class DatastoreManager implements IDataManager {
 
   /**
   * Creates or Replaces an entity of a single User data in datastore
-  * @param user a User variable representing a single instance of a user.
+  * @param user a User variable representing a single instance of a User.
   */
   public void createOrReplaceUser(User user) {
     Entity userEntity = new Entity("User", user.getUserID());
@@ -69,7 +62,7 @@ public class DatastoreManager implements IDataManager {
   /**
     * Retrieves a single user entity from the datastore.
     * @param userID the unique code used to identify this specific user.
-    * @return a user object with the properties specified in the Builder.
+    * @return a User object with the properties specified in the Builder.
   */
   public User retrieveUser(String userID) {
     Key userEntityKey = KeyFactory.createKey("User", userID);

@@ -13,10 +13,7 @@
 // limitations under the License.
 
 package com.google.sps.managers;
-import com.google.sps.data.User;
-import com.google.sps.data.Stage;
-import com.google.sps.data.Game;
-import com.google.sps.data.SinglePlayerProgress;
+import com.google.sps.data.*;
 import java.util.ArrayList;
 
 public interface IDataManager {
