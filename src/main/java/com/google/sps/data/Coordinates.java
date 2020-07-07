@@ -96,9 +96,9 @@ public class Coordinates {
     * @param maxDelta the upper bound on the difference between the coordinates.
     */
     public Coordinates getRandomWithin(double maxDelta) {
-        Coordinates res = new Coordinates(-maxDelta+this.latitude*(2*maxDelta), -maxDelta+this.longitude*(2*maxDelta));
+        Coordinates res = new Coordinates(this.latitude-maxDelta+Math.random()*(2*maxDelta), this.longitude-maxDelta+Math.random()*(2*maxDelta));
         while(!res.isValid()) {
-            res = new Coordinates(-maxDelta+this.latitude*(2*maxDelta), -maxDelta+this.longitude*(2*maxDelta));
+            res = new Coordinates(this.latitude-maxDelta+Math.random()*(2*maxDelta), this.longitude-maxDelta+Math.random()*(2*maxDelta));
         }
         return res;
     }
