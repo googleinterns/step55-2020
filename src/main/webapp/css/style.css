@@ -37,16 +37,15 @@
   box-shadow: none;
 }
 
-<<<<<<< HEAD
 .light-mode textarea {
   height: 20vh;
   width: 50%;
   background-color: #efefefff;
   color: black;
-=======
+}
+
 .light-mode #key-input-button {
   background: #74d3aeff;
->>>>>>> 3d3b1a52f22db4db2f861b50852c16aab5008cdd
 }
 
 /* CSS for if the user is playing in dark mode */
@@ -89,16 +88,16 @@
   background-color: #021b32ff;
 }
 
-<<<<<<< HEAD
+
 .dark-mode textarea {
   height: 20vh;
   width: 50%;
   background-color: #666666ff;
   color: white;
-=======
+}
+
 .dark-mode #key-input-button {
   background: #32908F;
->>>>>>> 3d3b1a52f22db4db2f861b50852c16aab5008cdd
 }
 
 #featured-map {
