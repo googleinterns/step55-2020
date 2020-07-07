@@ -198,6 +198,10 @@ ol#hints {
     text-align: center;
 }
 
+#enter-key-text {
+    display: inline-block;
+}
+
 #inputBoxAndButton {
     display: inline-block;
 }
