@@ -91,17 +91,18 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     hintsDiv.appendChild(hintsOl);
     gameInfo.appendChild(hintsDiv);
 
+    var keySpan = document.createElement('span');
+    keySpan.setAttribute('id', 'keybox');
     var enterKeyText = document.createElement('h3');
     enterKeyText.innerHTML = 'Please Enter The Key To Complete The Stage:';
     enterKeyText.className = 'center'
-    gameInfo.appendChild(enterKeyText);
+    keySpan.appendChild(enterKeyText);
 
     var inputKeyBox = document.createElement('input');
     inputKeyBox.type = 'text';
     inputKeyBox.className = 'center';
     inputKeyBox.classList = 'input-text-color';
     inputKeyBox.id = 'key-input';
-    inputKeyBox.style = 'width: 30%';
 
     // This checks if the user clicked enter in the key box
     inputKeyBox.addEventListener('keydown', function(e) {
@@ -109,16 +110,20 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
         checkKey(data, stage, panorama, map);
       }
     });
-    gameInfo.appendChild(inputKeyBox);
+    var inputBoxAndSubmitButton = document.createElement('div');
+    inputBoxAndSubmitButton.setAttribute('id', 'inputBoxAndButton');
+    inputBoxAndSubmitButton.appendChild(inputKeyBox);
 
     var buttonToCheckKey = document.createElement('input');
     buttonToCheckKey.type = 'button';
-    buttonToCheckKey.className = 'center';
+    buttonToCheckKey.id = "key-input-button";
     buttonToCheckKey.value = 'Submit';
     buttonToCheckKey.addEventListener('click', function() {
       checkKey(data, stage, panorama, map);
     });
-    gameInfo.appendChild(buttonToCheckKey);
+    inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
+    keySpan.appendChild(inputBoxAndSubmitButton);
+    gameInfo.appendChild(keySpan);
 }
 
 //TODO(smissak): TEST this so if there is more than one page and the input key is correct,
