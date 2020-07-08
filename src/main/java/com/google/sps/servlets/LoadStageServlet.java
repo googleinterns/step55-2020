@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-stage-data")
 public class LoadStageServlet extends HttpServlet {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
