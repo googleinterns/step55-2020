@@ -14,6 +14,7 @@ com/google/sps/data/SinglePlayerProgress$Builder.class
 com/google/sps/servlets/CreateGameServlet$5.class
 com/google/sps/data/User.class
 com/google/sps/data/Hint$Builder.class
+com/google/sps/servlets/CreateUsernameServlet.class
 com/google/sps/servlets/LoadStageServlet.class
 com/google/sps/data/BasicGameData.class
 com/google/sps/data/User$1.class
@@ -27,6 +28,7 @@ com/google/sps/data/SinglePlayerProgress.class
 com/google/sps/managers/MockDatastoreManager.class
 com/google/sps/servlets/LoadGameServlet.class
 com/google/sps/servlets/LoadUserServlet.class
+com/google/sps/servlets/CreateUserIdServlet.class
 com/google/sps/servlets/LoadAuthenticationServlet.class
 com/google/sps/data/Coordinates.class
 com/google/sps/managers/DatastoreManager$1.class
