@@ -45,15 +45,17 @@ public class HasSinglePlayerProgressServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int res = 0;
-        if(userService.isUserLoggedIn()) {
-            String userID = userService.getCurrentUser().getUserId();
-            String gameID = request.getParameter("gameID");
-            res = 1;
-            if(datastoreManager.retrieveSinglePlayerProgress(userID, gameID) == null) res = 0;
+        if (!userService.isUserLoggedIn()) {
+            response.getWriter().println(0);
+            return;
+        }
+        String userID = userService.getCurrentUser().getUserId();
+        String gameID = request.getParameter("gameID");
+        if(datastoreManager.retrieveSinglePlayerProgress(userID, gameID) == null) {
+            response.getWriter().println(0);
+            return;
         }
 
-        String json = new Gson().toJson(res);
-        response.getWriter().println(json);
+        response.getWriter().println(1);
     }
 }
