@@ -33,5 +33,8 @@ function restartGame() {
 * Does not reset the user progress in the server and continues to play the game
 */
 function continueGame() {
+  const urlParams = new URLSearchParams(window.location.search)
+  var gameID = urlParams.get('gameID');
+
   window.location.replace('playGame.html?gameID=' + gameID);
 }
