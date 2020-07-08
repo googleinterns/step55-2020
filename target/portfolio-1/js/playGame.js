@@ -2,15 +2,9 @@
 * Initalizes a map where there is an id of 'playMap'
 */
 async function initMapToPlayGame() {
-  const params = new URLSearchParams();
-  const urlParams = new URLSearchParams(window.location.search)
-  var gameID = urlParams.get('gameID');
-  if(!urlParams.has('gameID')) {
-    window.alert('Failure to initialize game');
-    window.location.replace('index.html');
-    return;
-  }
-  params.append('gameID', gameID)
+  var gameID =  getGameID();
+  var params = new URLSearchParams();
+  params.append('gameID', gameID);
   var request = new Request('/load-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then(async (data) => {
     if (data == null) {
@@ -23,8 +17,20 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-    var initStage =  await getStage(data.stages[0]);
-    var startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
+    var userProgress = getUserProgress();
+    var startingLocation;
+    var initStage;
+    var stageID;
+    if (userProgress == null) {
+      stageID = data.stages[0];
+      initStage =  await getStage(stageID);
+      startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
+    } else {
+      stageID = userProgress.stageID;
+      initStage =  await getStage(stageID);
+      startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.latitude.longitude};
+    }
+    
     var map = new google.maps.Map(
       document.getElementById('playMap'), {
       center: startingLocation, 
@@ -39,7 +45,7 @@ async function initMapToPlayGame() {
     }
 
     stageHints.forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, hint.hintID, stageID, panorama)
     );
 
     // gets the street view
@@ -55,6 +61,36 @@ async function initMapToPlayGame() {
 
     createGameInfoOnSideOfMap(data, initStage, panorama, map);
   });
+}
+
+//TODO ADD to js doc
+/**
+* Gets the user progress from the server
+* @return a the user data in json and null if there is no user data or the user is not logged in
+*/
+function getUserProgress() {
+  var gameID =  getGameID();
+  var params = new URLSearchParams();
+  params.append('gameID', gameID);
+  var request = new Request('/load-singleplayerprogress-data', {method: 'GET', body: params});
+  var result;
+  fetch(request).then(response => response.json()).then(async (data) => {
+    result = data;
+  });
+  return result;
+}
+
+function getGameID() {
+  const params = new URLSearchParams();
+  const urlParams = new URLSearchParams(window.location.search)
+  var gameID = urlParams.get('gameID');
+  if(!urlParams.has('gameID')) {
+    window.alert('Failure to initialize game');
+    window.location.replace('index.html');
+    return;
+  }
+  
+  return gameID;
 }
 
 /** 
@@ -162,9 +198,7 @@ async function checkKey(data, stage, panorama, map) {
 
   // This reloads the map and the game info on the side of the map with the next stage data
   var nextStageNumber = stage.stageNumber + 1;
-  console.log(nextStageNumber);
   var nextStage = await getStage(data.stages[nextStageNumber]);
-  console.log(nextStage);
   var startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
   panorama.setPosition(startingLocation);
   document.getElementById('game-info').innerHTML = '';
@@ -178,7 +212,7 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   stageHints.forEach(hint => 
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
+    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, hint.hintID, data.stages[nextStageNumber], panorama)
   );
 }
 
@@ -214,25 +248,45 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {int} hintID the hintID of the hint being passed in   //TODO ADD to js doc
 */
-function addHintMarker(map, latLng, hint, hintNum) {  
+function addHintMarker(map, latLng, hint, hintNum, hintID, stageID, panorama) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
     icon: 'images/marker_exclamation_point.png'
   });
 
-  marker.addListener('click', function() {
-    addHint(hint, hintNum)
+  var userProgress = getUserProgress();
+  if (userProgress != null && userProgress.hintsFound.includes(hintID)) {
+    addHint(hint, hintNum, true, stageID, panorama);
+  } else {
+    marker.addListener('click', function() {
+    addHint(hint, hintNum, false, stageID, panorama);
   });
+  }
 }
 
 /** 
 * Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress //TODO ADD to js doc
 */
-function addHint(hint, hintNum) {
+function addHint(hint, hintNum, startOfGame, stageID, panorama) {
+  if (!startOfGame) updateUserProgress(stageID, panorama);
   var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
+}
+
+
+function updateUserProgress(stageID, panorama) {
+  var gameID =  getGameID();
+  params.append('gameID', gameID);
+  params.append('location', panorama.getPosition());
+
+  params.append('hintsFound', gameID);
+  params.append('stageID', stageID);
+  var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
+  fetch(request);
 }
