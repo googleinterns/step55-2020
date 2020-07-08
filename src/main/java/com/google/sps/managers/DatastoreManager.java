@@ -173,9 +173,8 @@ public class DatastoreManager implements IDataManager {
     Entity stageEntity;
     try {
       stageEntity = datastore.get(stageEntityKey);
-    }
-    catch(Exception e) {
-      return null;
+    } catch(Exception e) {
+      return;
     }
 
     int stageNumber = ((Long)stageEntity.getProperty("stageNumber")).intValue();
