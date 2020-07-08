@@ -61,9 +61,9 @@ public class DatastoreManager implements IDataManager {
   }
   
   /**
-    * Retrieves a single user entity from the datastore.
-    * @param userID the unique code used to identify this specific user.
-    * @return a User object with the properties specified in the Builder.
+  * Retrieves a single user entity from the datastore.
+  * @param userID the unique code used to identify this specific user.
+  * @return a User object with the properties specified in the Builder.
   */
   public User retrieveUser(String userID) {
     Key userEntityKey = KeyFactory.createKey("User", userID);
@@ -90,8 +90,8 @@ public class DatastoreManager implements IDataManager {
   }
 
   /**
-    * Creates or Replaces the static data of a single game in datastore as an entity
-    * @param game an Game variable representing a single instance of a game.
+  * Creates or Replaces the static data of a single game in datastore as an entity
+  * @param game an Game variable representing a single instance of a Game.
   */
   public void createOrReplaceGame(Game game) {
     Entity gameEntity = new Entity("Game", game.getGameID());
@@ -110,9 +110,9 @@ public class DatastoreManager implements IDataManager {
   }
   
   /**
-    * Retrieves a single game entity from the datastore.
-    * @param gameID the unique code used to identify this specific game.
-    * @return a Game object with the properties specified in the Builder.
+  * Retrieves a single game entity from the datastore.
+  * @param gameID the unique code used to identify this specific game.
+  * @return a Game object with the properties specified in the Builder.
   */
   public Game retrieveGame(String gameID) {
     Key gameEntityKey = KeyFactory.createKey("Game", gameID);
@@ -142,8 +142,8 @@ public class DatastoreManager implements IDataManager {
   }
 
   /**
-    * Creates the static data of a single stage in datastore as an entity
-    * @param game an Stage variable representing a single instance of a stage.
+  * Creates the static data of a single stage in datastore as an entity
+  * @param game an Stage variable representing a single instance of a Stage.
   */
   public void createStage(Stage stage) {
     ArrayList<String> hints = new ArrayList<String>();
@@ -155,8 +155,6 @@ public class DatastoreManager implements IDataManager {
     stageEntity.setProperty("longitude", stage.getStartingLocation().getLongitude());
     for (Hint hint : stage.getHints()) {
       createOrReplaceHint(hint);
-    }
-    for (Hint hint : stage.getHints()) {
       hints.add(hint.getHintID());
     }
     stageEntity.setProperty("hints", hints);
@@ -164,9 +162,9 @@ public class DatastoreManager implements IDataManager {
   }
 
   /**
-    * Retrieves a single stage entity from the datastore.
-    * @param stageID the unique code used to identify this specific stage.
-    * @return a Stage object with the properties specified in the Builder.
+  * Retrieves a single stage entity from the datastore.
+  * @param stageID the unique code used to identify this specific stage.
+  * @return a Stage object with the properties specified in the Builder.
   */
   public Stage retrieveStage(String stageID) {
     Key stageEntityKey = KeyFactory.createKey("Stage", stageID);
@@ -197,8 +195,8 @@ public class DatastoreManager implements IDataManager {
   }
 
   /**
-    * Creates or Replaces an entity of a single progress data in datastore
-    * @param stage a Stage variable representing a single instance of a stage.
+  * Creates or Replaces an entity of a single progress data in datastore
+  * @param stage a Stage variable representing a single instance of a stage.
   */
   public void createOrReplaceSinglePlayerProgress(SinglePlayerProgress progress) {
     long timestamp = System.currentTimeMillis();
@@ -214,10 +212,10 @@ public class DatastoreManager implements IDataManager {
   }
   
   /**
-    * Retrieves a single progress entity from the datastore.
-    * @param userID the unique code used to identify this specific user.
-    * @param gameID the unique code used to identify this specific game.
-    * @return a SinglePlayerProgress object with the properties specified in the Builder.
+  * Retrieves a single progress entity from the datastore.
+  * @param userID the unique code used to identify this specific user.
+  * @param gameID the unique code used to identify this specific game.
+  * @return a SinglePlayerProgress object with the properties specified in the Builder.
   */
   public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID) {
     Filter userIdentification = new FilterPredicate("userID", FilterOperator.EQUAL, userID);
@@ -226,6 +224,9 @@ public class DatastoreManager implements IDataManager {
     Query query = new Query("singlePlayerProgress").setFilter(identification);
 
     PreparedQuery results = datastore.prepare(query);
+    if (results.countEntities() == 0) {
+      return null;
+    }
     Entity singlePlayerProgress = results.asSingleEntity();
     
     String stageID = (String) singlePlayerProgress.getProperty("stageID");
@@ -242,8 +243,8 @@ public class DatastoreManager implements IDataManager {
   
   
   /**
-    * Creates or Replaces the static data of a single hint in datastore as an entity
-    * @param hint a Hint variable representing a single instance of a hint.
+  * Creates or Replaces the static data of a single hint in datastore as an entity
+  * @param hint a Hint variable representing a single instance of a hint.
   */
   public void createOrReplaceHint(Hint hint) {
     Entity hintEntity = new Entity("Hint", hint.getHintID());
@@ -255,9 +256,9 @@ public class DatastoreManager implements IDataManager {
   }
   
   /**
-    * Retrieves a single hint entity from the datastore.
-    * @param hintID the unique code used to identify this specific hint.
-    * @return a Hint object with the properties specified in the Builder.
+  * Retrieves a single hint entity from the datastore.
+  * @param hintID the unique code used to identify this specific hint.
+  * @return a Hint object with the properties specified in the Builder.
   */
   public Hint retrieveHint(String hintID) {
     Key hintEntityKey = KeyFactory.createKey("Hint", hintID);
@@ -281,8 +282,8 @@ public class DatastoreManager implements IDataManager {
   }
 
   /**
-    * Retrieves all Games entity from the datastore.
-    * @return an ArrayList object with all Game entities with the properties specified in the Builder.
+  * Retrieves all Games entity from the datastore.
+  * @return an ArrayList object with all Game entities with the properties specified in the Builder.
   */
   public ArrayList<Game> retrieveAllGames() {
     Query query = new Query("Game");
@@ -311,9 +312,9 @@ public class DatastoreManager implements IDataManager {
   }
   
   /**
-    * Checks to see if an entity has its username property set to a given userName
-    * @param userName the userName that is being looked for
-    * @return a boolean if the userName exists or not
+  * Checks to see if an entity has its username property set to a given userName
+  * @param userName the userName that is being looked for
+  * @return a boolean if the userName exists or not
   */
   public boolean doesUsernameExist(String userName) {
     Query query = new Query("User").setFilter(new FilterPredicate("username", FilterOperator.EQUAL, userName));
