@@ -19,7 +19,7 @@ import com.google.sps.utils.*;
 import java.util.ArrayList;
 import java.lang.Math;
 
-public class MockDatastoreManager {
+public class MockDatastoreManager implements IDataManager {
     public void createOrReplaceUser(User user) {}
     /**
     * Returns a mock user.
@@ -177,5 +177,9 @@ public class MockDatastoreManager {
         res.setNumDifficultyVotes(numDifficultyVotes);
         res.setTotalDifficulty(getRandomIntegerBetween(numDifficultyVotes, 3*numDifficultyVotes));
         return res.build();
+    }
+
+    public boolean doesUsernameExist(String username) {
+        return false;
     }
 }
