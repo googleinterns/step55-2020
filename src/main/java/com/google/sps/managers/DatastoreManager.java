@@ -128,14 +128,14 @@ public class DatastoreManager implements IDataManager {
     String gameDescription = (String) gameEntity.getProperty("gameDescription");
     String gameCreator = (String) gameEntity.getProperty("gameCreator");
     ArrayList<String> stages = (ArrayList<String>)gameEntity.getProperty("stages");
-    int numTimesPlayed = (int)gameEntity.getProperty("numTimesPlayed");
-    int numTimesFinished = (int)gameEntity.getProperty("numTimesFinished");
-    int numStarVotes = (int)gameEntity.getProperty("numStarVotes");
-    int totalStars = (int)gameEntity.getProperty("totalStars");
-    int numDifficultyVotes = (int)gameEntity.getProperty("numDifficultyVotes");
-    int totalDifficulty = (int)gameEntity.getProperty("totalDifficulty");
+    int numTimesPlayed = ((Long)gameEntity.getProperty("numTimesPlayed")).intValue();
+    int numTimesFinished = ((Long)gameEntity.getProperty("numTimesFinished")).intValue();
+    int numStarVotes = ((Long)gameEntity.getProperty("numStarVotes")).intValue();
+    int totalStars = ((Long)gameEntity.getProperty("totalStars")).intValue();
+    int numDifficultyVotes = ((Long)gameEntity.getProperty("numDifficultyVotes")).intValue();
+    int totalDifficulty = ((Long)gameEntity.getProperty("totalDifficulty")).intValue();
   
-    Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator);
+    Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator).setStages(stages);
     game.setGameDescription(gameDescription).setNumTimesPlayed(numTimesPlayed).setNumTimesFinished(numTimesFinished);
     game.setNumStarVotes(numStarVotes).setTotalStars(totalStars).setNumDifficultyVotes(numDifficultyVotes).setTotalDifficulty(totalDifficulty);       
     return game.build();
@@ -145,7 +145,7 @@ public class DatastoreManager implements IDataManager {
     * Creates the static data of a single stage in datastore as an entity
     * @param game an Stage variable representing a single instance of a stage.
   */
-  public void createStage(Stage stage) {
+  public void createOrReplaceStage(Stage stage) {
     ArrayList<String> hints = new ArrayList<String>();
     Entity stageEntity = new Entity("Stage", stage.getStageID());
     stageEntity.setProperty("stageNumber", stage.getStageNumber());
@@ -173,12 +173,11 @@ public class DatastoreManager implements IDataManager {
     Entity stageEntity;
     try {
       stageEntity = datastore.get(stageEntityKey);
-    }
-    catch(Exception e) {
-      return null;
+    } catch(Exception e) {
+      return;
     }
 
-    int stageNumber = (int) stageEntity.getProperty("stageNumber");
+    int stageNumber = ((Long)stageEntity.getProperty("stageNumber")).intValue();
     String key = (String) stageEntity.getProperty("key");
     String startingHint = (String) stageEntity.getProperty("startingHint");
     double latitude = (double) stageEntity.getProperty("latitude");
@@ -268,7 +267,7 @@ public class DatastoreManager implements IDataManager {
     catch(Exception e) {
       return null;
     }
-    int hintNumber = (int) hintEntity.getProperty("hintNumber");
+    int hintNumber = ((Long)hintEntity.getProperty("hintNumber")).intValue();
     String text = (String) hintEntity.getProperty("key");
     double latitude = (double) hintEntity.getProperty("latitude");
     double longitude = (double) hintEntity.getProperty("longitude");
@@ -295,14 +294,14 @@ public class DatastoreManager implements IDataManager {
       String gameDescription = (String) gameEntity.getProperty("gameDescription");
       String gameCreator = (String) gameEntity.getProperty("gameCreator");
       ArrayList<String> stages = (ArrayList<String>)gameEntity.getProperty("stages");
-      int numTimesPlayed = (int)gameEntity.getProperty("numTimesPlayed");
-      int numTimesFinished = (int)gameEntity.getProperty("numTimesFinished");
-      int numStarVotes = (int)gameEntity.getProperty("numStarVotes");
-      int totalStars = (int)gameEntity.getProperty("totalStars");
-      int numDifficultyVotes = (int)gameEntity.getProperty("numDifficultyVotes");
-      int totalDifficulty = (int)gameEntity.getProperty("totalDifficulty");
+      int numTimesPlayed = ((Long)gameEntity.getProperty("numTimesPlayed")).intValue();
+      int numTimesFinished = ((Long)gameEntity.getProperty("numTimesFinished")).intValue();
+      int numStarVotes = ((Long)gameEntity.getProperty("numStarVotes")).intValue();
+      int totalStars = ((Long)gameEntity.getProperty("totalStars")).intValue();
+      int numDifficultyVotes = ((Long)gameEntity.getProperty("numDifficultyVotes")).intValue();
+      int totalDifficulty = ((Long)gameEntity.getProperty("totalDifficulty")).intValue();
     
-      Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator);
+      Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator).setStages(stages);
       game.setGameDescription(gameDescription).setNumTimesPlayed(numTimesPlayed).setNumTimesFinished(numTimesFinished);
       game.setNumStarVotes(numStarVotes).setTotalStars(totalStars).setNumDifficultyVotes(numDifficultyVotes).setTotalDifficulty(totalDifficulty);       
       gamesList.add(game.build());
