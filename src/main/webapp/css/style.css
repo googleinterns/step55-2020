@@ -29,12 +29,19 @@
 .light-mode #map-info {
   margin: auto;
   height: 80px;
-  width: 300px;
+  width: 290px;
   background-color: #efefefff;
 }
 
 .light-mode .materialbox {
   box-shadow: none;
+}
+
+.light-mode textarea {
+  height: 20vh;
+  width: 50%;
+  background-color: #efefefff;
+  color: black;
 }
 
 .light-mode #key-input-button {
@@ -77,8 +84,16 @@
 .dark-mode #map-info {
   margin: auto;
   height: 80px;
-  width: 300px;
+  width: 290px;
   background-color: #021b32ff;
+}
+
+
+.dark-mode textarea {
+  height: 20vh;
+  width: 50%;
+  background-color: #666666ff;
+  color: white;
 }
 
 .dark-mode #key-input-button {
@@ -91,9 +106,9 @@
 }
 
 #individual-map {
-  padding: 5px;
+  padding: 6px;
   margin: 5px;
-  width: 320px;
+  width: 300px;
 }
 
 input {
@@ -147,9 +162,31 @@ ol#hints {
   margin-bottom: -5px;
 }
 
+.stars {
+  cursor: pointer;
+}
+
 .width300 {
   width: 300px;
 }
+
+.green-text {
+  color: green;
+}
+
+.orange-text {
+  color: orange;
+}
+
+.red-text {
+  color: red;
+}
+
+.larger-text {
+  font-size: 2em;
+  margin: 6px;
+}
+
 
 /* Add CSS that starts with pac is for the search bar on the createGame.html page map */
 .pac-card {
