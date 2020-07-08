@@ -45,9 +45,9 @@ public class CreateUsernameServlet extends HttpServlet {
   @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String userName = request.getParameter("username");
-      boolean bool = datastoreManager.doesUsernameExist(userName);
+      boolean doesUsernameExist = datastoreManager.doesUsernameExist(userName);
 
-      if (bool) {
+      if (!doesUsernameExist) {
         String userId = userService.getCurrentUser().getUserId();
         User.Builder user = new User.Builder(userId).setUsername(userName);
         User oldUser = datastoreManager.retrieveUser(userId);
