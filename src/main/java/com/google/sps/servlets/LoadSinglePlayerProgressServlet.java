@@ -38,22 +38,37 @@ import javax.servlet.http.HttpServletResponse;
 /**
 * Servlet that checks if there is progress saved for the current user, for the current game.
 */
-@WebServlet("/has-singleplayerprogress-data")
-public class HasSinglePlayerProgressServlet extends HttpServlet {
+@WebServlet("/load-singleplayerprogress-data")
+public class LoadSinglePlayerProgressServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int res = 0;
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        SinglePlayerProgress res = null;
         if(userService.isUserLoggedIn()) {
             String userID = userService.getCurrentUser().getUserId();
             String gameID = request.getParameter("gameID");
-            res = 1;
-            if(datastoreManager.retrieveSinglePlayerProgress(userID, gameID) == null) res = 0;
+            res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
         }
-
+        
         String json = new Gson().toJson(res);
         response.getWriter().println(json);
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if(!userService.isUserLoggedIn()) {
+            return;
+        }
+        String userID = userService.getCurrentUser().getUserId();
+        String gameID = request.getParameter("gameID");
+        SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
+        Game game = datastoreManager.retrieveGame(gameID);
+        Stage firstStage = datastoreManager.retrieveStage(game.getStages().get(0));
+        progressBuilder.setLocation(firstStage.getStartingLocation());
+        progressBuilder.setHintsFound(new ArrayList<>());
+        progressBuilder.setStageID(firstStage.getStageID());
+        datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
     }
 }
