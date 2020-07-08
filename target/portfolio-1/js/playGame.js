@@ -65,74 +65,78 @@ async function initMapToPlayGame() {
 * @param {object} map is map created in initMapPlayGame()
 */
 function createGameInfoOnSideOfMap(data, stage, panorama, map) {
-    var gameInfo = document.getElementById('game-info');
+  var gameInfo = document.getElementById('game-info');
     
-    var gameName = document.createElement('h2');
-    gameName.innerHTML = data.gameName;
-    gameName.className = 'center'
-    gameInfo.appendChild(gameName);
+  var gameName = document.createElement('h2');
+  gameName.innerHTML = data.gameName;
+  gameName.className = 'center'
+  gameInfo.appendChild(gameName);
 
-    var gameStage = document.createElement('div');
-    gameStage.id = 'stage-counter';
-    gameStage.innerHTML = 'You are on stage: ' + stage.stageNumber + '/' + data.stages.length;
-    gameStage.className = 'center';
-    gameInfo.appendChild(gameStage);
+  var gameStage = document.createElement('div');
+  gameStage.id = 'stage-counter';
+  gameStage.innerHTML = 'You are on stage: ' + stage.stageNumber + '/' + data.stages.length;
+  gameStage.className = 'center';
+  gameInfo.appendChild(gameStage);
 
-    gameInfo.appendChild(document.createElement('hr'));
+  gameInfo.appendChild(document.createElement('hr'));
 
-    var hintsContainer = document.createElement('div');
-    hintsContainer.id = 'hints-container';
+  var hintsContainer = document.createElement('div');
+  hintsContainer.id = 'hints-container';
 
-    var starterHint = document.createElement('div');
-    starterHint.innerHTML = 'Starter: ' + stage.startingHint;
-    hintsContainer.appendChild(starterHint);
+  var starterHint = document.createElement('div');
+  starterHint.innerHTML = 'Starter: ' + stage.startingHint;
+  hintsContainer.appendChild(starterHint);
 
-    // This div is a container for where the hints will be placed on the site
-    var hintsDiv = document.createElement('div');
-    // This is the ordered list (or <ol> in HTML) for where the hints will be listed
-    var hintsOl = document.createElement('ol');
-    hintsOl.id = 'hints';
+  // This div is a container for where the hints will be placed on the site
+  var hintsDiv = document.createElement('div');
+  // This is the ordered list (or <ol> in HTML) for where the hints will be listed
+  var hintsOl = document.createElement('ol');
+  hintsOl.id = 'hints';
 
-    stage.hints.forEach(hint => 
-      hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
-    );
+  stage.hints.forEach(hint => 
+    hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
+  );
 
-    hintsContainer.appendChild(hintsOl);
-    gameInfo.appendChild(hintsContainer);
+  hintsContainer.appendChild(hintsOl);
+  gameInfo.appendChild(hintsContainer);
 
-    var keySpan = document.createElement('span');
-    keySpan.setAttribute('id', 'keybox');
-    var enterKeyText = document.createElement('div');
-    enterKeyText.id = 'enter-key-text'
-    enterKeyText.innerHTML = 'Please enter key to continue:';
-    enterKeyText.className = 'center'
-    keySpan.appendChild(enterKeyText);
+  var keySpan = document.createElement('span');
+  keySpan.id = 'keybox';
+  var enterKeyText = document.createElement('div');
+  enterKeyText.id = 'enter-key-text'
+  enterKeyText.innerHTML = 'Please enter key to continue:';
+  enterKeyText.className = 'center'
+  keySpan.appendChild(enterKeyText);
 
-    var inputKeyBox = document.createElement('input');
-    inputKeyBox.type = 'text';
-    inputKeyBox.classList = 'input-text-color';
-    inputKeyBox.id = 'key-input';
+  var placeHolderForWrongInput =  document.createElement('div');
+  placeHolderForWrongInput.id = 'wrong-input';
+  keySpan.appendChild(placeHolderForWrongInput);
+
+  var inputKeyBox = document.createElement('input');
+  inputKeyBox.type = 'text';
+  inputKeyBox.classList = 'input-text-color';
+  inputKeyBox.id = 'key-input';
 
     // This checks if the user clicked enter in the key box
-    inputKeyBox.addEventListener('keydown', function(e) {
-      if (e.which == 13) {
-        checkKey(data, stage, panorama, map);
-      }
-    });
-    var inputBoxAndSubmitButton = document.createElement('div');
-    inputBoxAndSubmitButton.setAttribute('id', 'inputBoxAndButton');
-    inputBoxAndSubmitButton.appendChild(inputKeyBox);
-
-    var buttonToCheckKey = document.createElement('input');
-    buttonToCheckKey.type = 'button';
-    buttonToCheckKey.id = "key-input-button";
-    buttonToCheckKey.value = 'Submit';
-    buttonToCheckKey.addEventListener('click', function() {
+  inputKeyBox.addEventListener('keydown', function(e) {
+    if (e.which == 13) {
       checkKey(data, stage, panorama, map);
-    });
-    inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
-    keySpan.appendChild(inputBoxAndSubmitButton);
-    gameInfo.appendChild(keySpan);
+    }
+  });
+  var inputBoxAndSubmitButton = document.createElement('div');
+  inputBoxAndSubmitButton.setAttribute('id', 'inputBoxAndButton');
+  inputBoxAndSubmitButton.appendChild(inputKeyBox);
+
+  var buttonToCheckKey = document.createElement('input');
+  buttonToCheckKey.type = 'button';
+  buttonToCheckKey.id = "key-input-button";
+  buttonToCheckKey.value = 'Submit';
+  buttonToCheckKey.addEventListener('click', function() {
+    checkKey(data, stage, panorama, map);
+  });
+  inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
+  keySpan.appendChild(inputBoxAndSubmitButton);
+  gameInfo.appendChild(keySpan);
 }
 
 //TODO(smissak): TEST this so if there is more than one page and the input key is correct,
@@ -148,7 +152,7 @@ async function checkKey(data, stage, panorama, map) {
   var keyInput = document.getElementById('key-input');
   var inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
-    window.alert('Wrong key, please try again!');
+    document.getElementById('wrong-input').innerHTML = '<p class="red-text">Wrong Input! Try again!</p>';
     return;
   }
   if (data.stages.length == stage.stageNumber) {

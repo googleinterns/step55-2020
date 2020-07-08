@@ -1,7 +1,8 @@
-<<<<<<< HEAD
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/MockDatastoreManager.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadStageServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Hint.java
+/home/smissak/step55-2020/src/main/java/com/google/sps/managers/DatastoreManager.java
+/home/smissak/step55-2020/src/main/java/com/google/sps/managers/IDataManager.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Stage.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/IDataManager.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Authentication.java
@@ -17,39 +18,3 @@
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Game.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/SinglePlayerProgress.java
-=======
-<<<<<<< HEAD
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Stage.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/IDGenerator.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/SinglePlayerProgress.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/MockDatastoreManager.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Pair.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Game.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/LoadStageServlet.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Hint.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Coordinates.java
-/home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/User.java
-=======
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/Game.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadAuthenticationServlet.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/MockDatastoreManager.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/Hint.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/IDataManager.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/IDGenerator.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/User.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadMainPageServlet.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/Pair.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadStageServlet.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/Stage.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/SinglePlayerProgress.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/Coordinates.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/BasicGameData.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
-/home/ldchen/step55-2020/src/main/java/com/google/sps/data/Authentication.java
->>>>>>> 6806042f5661f2f4a7483880c76740bcfa753214
->>>>>>> c8d2312151b7d02e2ec34c454972aaab1b984738
