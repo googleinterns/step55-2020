@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/create-game-data")
 public class CreateGameServlet extends HttpServlet {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
     Gson gson = new Gson();
     String gameID;
     String userID;
