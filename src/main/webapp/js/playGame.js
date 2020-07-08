@@ -139,8 +139,6 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   gameInfo.appendChild(keySpan);
 }
 
-//TODO(smissak): TEST this so if there is more than one page and the input key is correct,
-// it adds the new stage rather than redirecting to the after game page
 /** 
 * Checks if the key is the correct key for the current stage
 * @param {string} data is the JSON from the server ‘/load-game-data’ 

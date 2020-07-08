@@ -108,6 +108,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   enterKeyText.className = 'center'
   keySpan.appendChild(enterKeyText);
 
+<<<<<<< HEAD
   var placeHolderForWrongInput =  document.createElement('div');
   placeHolderForWrongInput.id = 'wrong-input';
   keySpan.appendChild(placeHolderForWrongInput);
@@ -116,6 +117,23 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   inputKeyBox.type = 'text';
   inputKeyBox.classList = 'input-text-color';
   inputKeyBox.id = 'key-input';
+=======
+    hintsContainer.appendChild(hintsOl);
+    gameInfo.appendChild(hintsContainer);
+
+    var keySpan = document.createElement('span');
+    keySpan.id = 'keybox';
+    var enterKeyText = document.createElement('div');
+    enterKeyText.id = 'enter-key-text'
+    enterKeyText.innerHTML = 'Please enter key to continue:';
+    enterKeyText.className = 'center'
+    keySpan.appendChild(enterKeyText);
+
+    var inputKeyBox = document.createElement('input');
+    inputKeyBox.type = 'text';
+    inputKeyBox.classList = 'input-text-color';
+    inputKeyBox.id = 'key-input';
+>>>>>>> 2684dbeff207c9dfd7f5964923a3997b8c56cf57
 
     // This checks if the user clicked enter in the key box
   inputKeyBox.addEventListener('keydown', function(e) {
