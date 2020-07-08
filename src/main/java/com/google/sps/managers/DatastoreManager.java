@@ -174,12 +174,7 @@ public class DatastoreManager implements IDataManager {
     } catch(Exception e) {
       return null;
     }
-
-<<<<<<< HEAD
-    int stageNumber = ((Long) stageEntity.getProperty("stageNumber")).intValue();
-=======
     int stageNumber = ((Long)stageEntity.getProperty("stageNumber")).intValue();
->>>>>>> 82c1caa2a67012ffa141df0b5352fdeac5152186
     String key = (String) stageEntity.getProperty("key");
     String startingHint = (String) stageEntity.getProperty("startingHint");
     double latitude = (double) stageEntity.getProperty("latitude");
@@ -272,11 +267,8 @@ public class DatastoreManager implements IDataManager {
     catch(Exception e) {
       return null;
     }
-<<<<<<< HEAD
+
     int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
-=======
-    int hintNumber = ((Long)hintEntity.getProperty("hintNumber")).intValue();
->>>>>>> 82c1caa2a67012ffa141df0b5352fdeac5152186
     String text = (String) hintEntity.getProperty("key");
     double latitude = (double) hintEntity.getProperty("latitude");
     double longitude = (double) hintEntity.getProperty("longitude");
