@@ -38,7 +38,6 @@ function stars(numOfStars) {
     numOfStars -= 1.0;
   }
 
-   count;
   var starsDiv = document.getElementsByClassName('stars')[0];
   starsDiv.id = count;
   starsDiv.innerHTML = fiveStars;
@@ -53,15 +52,15 @@ function sendDataToServer(nextAction) {
   if (starsCount == 0) {
     starsCount = null;
   }
-  var difficultyButtonss = document.getElementsByName('difficulty'); 
+  var difficultyButtons = document.getElementsByName('difficulty'); 
   var difficulty = null;
-  for(i = 0; i < difficultyButtonss.length; i++) { 
-    if(difficultyButtonss[i].checked) { 
-      if (difficultyButtonss[i].value == 'Easy') {
+  for(i = 0; i < difficultyButtons.length; i++) { 
+    if(difficultyButtons[i].checked) { 
+      if (difficultyButtons[i].value == 'Easy') {
         difficulty = 1;
-      } else if (difficultyButtonss[i].value == 'Medium') {
+      } else if (difficultyButtons[i].value == 'Medium') {
         difficulty = 2;
-      } else if (difficultyButtonss[i].value == 'Hard') {
+      } else if (difficultyButtons[i].value == 'Hard') {
         difficulty = 3;
       }
     } 
