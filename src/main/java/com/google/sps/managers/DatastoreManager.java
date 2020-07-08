@@ -135,7 +135,7 @@ public class DatastoreManager implements IDataManager {
     int numDifficultyVotes = ((Long)gameEntity.getProperty("numDifficultyVotes")).intValue();
     int totalDifficulty = ((Long)gameEntity.getProperty("totalDifficulty")).intValue();
   
-    Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator);
+    Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator).setStages(stages);
     game.setGameDescription(gameDescription).setNumTimesPlayed(numTimesPlayed).setNumTimesFinished(numTimesFinished);
     game.setNumStarVotes(numStarVotes).setTotalStars(totalStars).setNumDifficultyVotes(numDifficultyVotes).setTotalDifficulty(totalDifficulty);       
     return game.build();
@@ -145,7 +145,7 @@ public class DatastoreManager implements IDataManager {
   * Creates the static data of a single stage in datastore as an entity
   * @param game an Stage variable representing a single instance of a Stage.
   */
-  public void createStage(Stage stage) {
+  public void createOrReplaceStage(Stage stage) {
     ArrayList<String> hints = new ArrayList<String>();
     Entity stageEntity = new Entity("Stage", stage.getStageID());
     stageEntity.setProperty("stageNumber", stage.getStageNumber());
@@ -171,12 +171,15 @@ public class DatastoreManager implements IDataManager {
     Entity stageEntity;
     try {
       stageEntity = datastore.get(stageEntityKey);
-    }
-    catch(Exception e) {
+    } catch(Exception e) {
       return null;
     }
 
+<<<<<<< HEAD
     int stageNumber = ((Long) stageEntity.getProperty("stageNumber")).intValue();
+=======
+    int stageNumber = ((Long)stageEntity.getProperty("stageNumber")).intValue();
+>>>>>>> 82c1caa2a67012ffa141df0b5352fdeac5152186
     String key = (String) stageEntity.getProperty("key");
     String startingHint = (String) stageEntity.getProperty("startingHint");
     double latitude = (double) stageEntity.getProperty("latitude");
@@ -269,7 +272,11 @@ public class DatastoreManager implements IDataManager {
     catch(Exception e) {
       return null;
     }
+<<<<<<< HEAD
     int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
+=======
+    int hintNumber = ((Long)hintEntity.getProperty("hintNumber")).intValue();
+>>>>>>> 82c1caa2a67012ffa141df0b5352fdeac5152186
     String text = (String) hintEntity.getProperty("key");
     double latitude = (double) hintEntity.getProperty("latitude");
     double longitude = (double) hintEntity.getProperty("longitude");
@@ -303,7 +310,7 @@ public class DatastoreManager implements IDataManager {
       int numDifficultyVotes = ((Long)gameEntity.getProperty("numDifficultyVotes")).intValue();
       int totalDifficulty = ((Long)gameEntity.getProperty("totalDifficulty")).intValue();
     
-      Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator);
+      Game.Builder game = new Game.Builder(gameID, gameName).setGameCreator(gameCreator).setStages(stages);
       game.setGameDescription(gameDescription).setNumTimesPlayed(numTimesPlayed).setNumTimesFinished(numTimesFinished);
       game.setNumStarVotes(numStarVotes).setTotalStars(totalStars).setNumDifficultyVotes(numDifficultyVotes).setTotalDifficulty(totalDifficulty);       
       gamesList.add(game.build());

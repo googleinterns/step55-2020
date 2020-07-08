@@ -49,7 +49,7 @@ public interface IDataManager {
   * Creates the static data of a single stage in datastore as an entity
   * @param game an Stage variable representing a single instance of a stage.
   */
-  public void createStage(Stage stage);
+  public void createOrReplaceStage(Stage stage);
 
   /**
   * Retrieves a single stage entity from the datastore.

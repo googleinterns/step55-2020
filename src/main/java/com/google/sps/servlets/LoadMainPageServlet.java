@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-mainpage-data")
 public class LoadMainPageServlet extends HttpServlet {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
