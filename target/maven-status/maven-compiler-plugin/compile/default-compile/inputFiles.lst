@@ -4,6 +4,7 @@
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Hint.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/managers/MockDatastoreManager.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/User.java
+/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/HasSinglePlayerProgressServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadMainPageServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Pair.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadStageServlet.java
@@ -14,6 +15,8 @@
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadGameServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/managers/IDataManager.java
+/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/LoadSinglePlayerProgressServlet.java
+/home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/UpdateSinglePlayerProgressServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/utils/IDGenerator.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/servlets/CreateGameServlet.java
 /home/ldchen/step55-2020/src/main/java/com/google/sps/data/Authentication.java

@@ -18,6 +18,8 @@ import com.google.sps.managers.*;
 import com.google.sps.utils.*;
 
 import java.util.ArrayList;
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -42,6 +44,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UpdateSinglePlayerProgressServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     DatastoreManager datastoreManager = new DatastoreManager();
+    Gson gson = new Gson();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -49,43 +52,38 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
             return;
         }
         String userID = userService.getCurrentUser().getUserId();
-        String gameID = request.getParameter("gameID");
+        String gameID = getGameID(request);
+        Coordinates location = getLocation(request);
+        ArrayList<String> hintsFound = getHintsFound(request);
+        String stageID = getStageID(request);
 
         SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
-        SinglePlayerProgress oldProgress = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
-        progressBuilder.setLocation(oldProgress.getLocation());
-        progressBuilder.setHintsFound(oldProgress.getHintsFound());
-        progressBuilder.setStageID(oldProgress.getStageID());
+        progressBuilder.setLocation(location);
+        progressBuilder.setHintsFound(hintsFound);
+        progressBuilder.setStageID(stageID);
 
-        int type = Integer.parseInt(request.getParameter("type"));
-        if(type == 0) { // the user's location has changed
-            double latitude = Double.parseDouble(request.getParameter("latitude"));
-            double longitude = Double.parseDouble(request.getParameter("longitude"));
-            progressBuilder.setLocation(new Coordinates(latitude, longitude));
-        } else if(type == 1) { // the user has found a hint
-            String hintID = request.getParameter("hintID");
-            ArrayList<String> oldHints = oldProgress.getHintsFound();
-            oldHints.add(hintID);
-            progressBuilder.setHintsFound(oldHints);
-        } else { // the user has completed a stage
-            Game game = datastoreManager.retrieveGame(gameID);
-            
-            String currentStage = oldProgress.getStageID();
-            ArrayList<String> stages = game.getStages();
-            // get index of current stage
-            for(int i = 0; i < stages.size(); i++) {
-                if(stages.get(i).equals(currentStage)) {
-                    // set the new stage id to be the next index
-                    if(i == stages.size()-1) {
-                        // already at last stage
-                        progressBuilder.setStageID("N/A");
-                    } else {
-                        progressBuilder.setStageID(stages.get(i+1));
-                    }
-                    break;
-                }
-            }
-        }
         datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
+    }
+
+    private String getGameID(HttpServletRequest request) {
+        return request.getParameter("gameID");
+    }
+
+    private Coordinates getLocation(HttpServletRequest request) {
+        String json = request.getParameter("location");
+        Type coordinatesType = new TypeToken<Coordinates>(){}.getType();
+        Coordinates res = gson.fromJson(json, coordinatesType);
+        return res;
+    }
+
+    private ArrayList<String> getHintsFound(HttpServletRequest request) {
+        String json = request.getParameter("hintsFound");
+        Type stringListType = new TypeToken<ArrayList<String>>(){}.getType();
+        ArrayList<String> res = gson.fromJson(json, stringListType);
+        return res;
+    }
+
+    private String getStageID(HttpServletRequest request) {
+        return request.getParameter("stageID");
     }
 }
