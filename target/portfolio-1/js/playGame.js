@@ -17,7 +17,7 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-    var userProgress = getUserProgress();
+    var userProgress = await getUserProgress();
     var startingLocation;
     var initStage;
     var stageID;
@@ -27,12 +27,9 @@ async function initMapToPlayGame() {
       initStage =  await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     } else {
-      console.log('from progress');
       stageID = userProgress.stageID;
       initStage =  await getStage(stageID);
-      startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.latitude.longitude};
-      console.log(startingLocation);
-
+      startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
     }
     
     var map = new google.maps.Map(
@@ -61,7 +58,6 @@ async function initMapToPlayGame() {
     panorama.setPosition(startingLocation);
     // puts the user in streetView
     panorama.setVisible(true);
-    console.log(data);
     createGameInfoOnSideOfMap(data, initStage, panorama, map);
   });
 }
@@ -71,10 +67,10 @@ async function initMapToPlayGame() {
 * Gets the user progress from the server
 * @return a the user data in json and null if there is no user data or the user is not logged in
 */
-function getUserProgress() {
+async function getUserProgress() {
   var gameID =  getGameID();
   var result;
-  fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
+  await fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
     result = data;
   });
   return result;
@@ -105,7 +101,6 @@ function getGameID() {
 * @param {object} map is map created in initMapPlayGame()
 */
 function createGameInfoOnSideOfMap(data, stage, panorama, map) {
-    console.log(data);
   var gameInfo = document.getElementById('game-info');
     
   var gameName = document.createElement('h2');
@@ -220,6 +215,8 @@ async function checkKey(data, stage, panorama, map) {
   stageHints.forEach(hint => 
     addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber])
   );
+
+  updateUserProgress('N/A', map);
 }
 
 /** 
@@ -244,9 +241,7 @@ async function getStage(stageID) {
   var request = new Request('/load-stage-data', {method: 'POST', body: params});
   await fetch(request).then(response => response.json()).then((data) => {
     currStage = data;
-    console.log(data);
   });
-  console.log(currStage);
   return currStage;
 }
 
@@ -258,21 +253,22 @@ async function getStage(stageID) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 * @param {string} stageID the stageID in which the hint is at   //TODO ADD to js doc
 */
-function addHintMarker(map, latLng, hint, hintNum, stageID) {  
+async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
     icon: 'images/marker_exclamation_point.png'
   });
 
-  var userProgress = getUserProgress();
-  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
-    addHint(hint, hintNum, true, stageID, map);
-  } else {
+  var userProgress = await getUserProgress();
+  console.log(userProgress);
+//   if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+//     addHint(hint, hintNum, true, stageID, map);
+//   } else {
     marker.addListener('click', function() {
       addHint(hint, hintNum, false, stageID, map);
     });
-  }
+//   }
 }
 
 /** 
@@ -306,7 +302,6 @@ function updateUserProgress(stageID, map) {
       hintsFound.push(parseInt(hints[i].id));
     }
   }
-  console.log(hintsFound)
   params.append('hintsFound',  JSON.stringify(hintsFound));
   var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
   fetch(request);
