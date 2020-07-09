@@ -1,3 +1,4 @@
+com/google/sps/servlets/UpdateSinglePlayerProgressServlet$2.class
 com/google/sps/servlets/CreateGameServlet$3.class
 com/google/sps/data/User$Builder.class
 com/google/sps/managers/DatastoreManager.class
@@ -18,9 +19,13 @@ com/google/sps/servlets/CreateUsernameServlet.class
 com/google/sps/servlets/LoadStageServlet.class
 com/google/sps/data/BasicGameData.class
 com/google/sps/data/User$1.class
+com/google/sps/servlets/UpdateSinglePlayerProgressServlet.class
 com/google/sps/data/SinglePlayerProgress$1.class
 com/google/sps/servlets/CreateGameServlet.class
+com/google/sps/servlets/LoadSinglePlayerProgressServlet.class
+com/google/sps/servlets/HasSinglePlayerProgressServlet.class
 com/google/sps/servlets/CreateGameServlet$2.class
+com/google/sps/servlets/UpdateSinglePlayerProgressServlet$1.class
 com/google/sps/servlets/CreateGameServlet$4.class
 com/google/sps/data/Pair.class
 com/google/sps/data/Stage$1.class

@@ -232,7 +232,12 @@ public class DatastoreManager implements IDataManager {
     double longitude = (double) singlePlayerProgress.getProperty("longitude");
     Coordinates Location;
     Location = new Coordinates(latitude, longitude);
+<<<<<<< HEAD
     ArrayList<String> hintsFound = (ArrayList<String>) singlePlayerProgress.getProperty("hintsFound");
+=======
+    ArrayList<Integer> hintsFound = (ArrayList<Integer>) singlePlayerProgress.getProperty("hintsFound");
+
+>>>>>>> 2fe849ded860733a9910029ccc18a343977c4464
     SinglePlayerProgress.Builder progress = new SinglePlayerProgress.Builder(userID, gameID);
     progress.setLocation(Location).setHintsFound(hintsFound).setStageID(stageID);
     return progress.build();
@@ -266,9 +271,14 @@ public class DatastoreManager implements IDataManager {
     catch(Exception e) {
       return null;
     }
+<<<<<<< HEAD
 
     int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
     String text = (String) hintEntity.getProperty("key");
+=======
+    int hintNumber = ((Long)hintEntity.getProperty("hintNumber")).intValue();
+    String text = (String) hintEntity.getProperty("text");
+>>>>>>> 2fe849ded860733a9910029ccc18a343977c4464
     double latitude = (double) hintEntity.getProperty("latitude");
     double longitude = (double) hintEntity.getProperty("longitude");
     Coordinates startingLocation;
