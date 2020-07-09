@@ -55,12 +55,13 @@ public class CreateUsernameServlet extends HttpServlet {
         user.setFirstName(oldUser.getFirstName()).setLastName(oldUser.getLastName()).setProfilePictureUrl(oldUser.getProfilePictureUrl());
         user.setGamesCreated(oldUser.getGamesCreated()).setGamesCompletedWithTime(oldUser.getGamesCompletedWithTime());
         datastoreManager.createOrReplaceUser(user.build());
+
+        String json = new Gson().toJson(userName);
+        response.getWriter().println(json);
       }
       else {
         String json = new Gson().toJson(null);
         response.getWriter().println(json);
       }
-      String json = new Gson().toJson(userName);
-      response.getWriter().println(json);
     }
 }
