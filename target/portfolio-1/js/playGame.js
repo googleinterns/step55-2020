@@ -21,14 +21,18 @@ async function initMapToPlayGame() {
     var startingLocation;
     var initStage;
     var stageID;
+    console.log(userProgress);
     if (userProgress == null) {
       stageID = data.stages[0];
       initStage =  await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     } else {
+      console.log('from progress');
       stageID = userProgress.stageID;
       initStage =  await getStage(stageID);
       startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.latitude.longitude};
+      console.log(startingLocation);
+
     }
     
     var map = new google.maps.Map(
@@ -76,6 +80,10 @@ function getUserProgress() {
   return result;
 }
 
+/**
+* Gets the gameID from the URL
+* @return gameID from the URL or returns null and relocates you to index.html page
+*/
 function getGameID() {
   const params = new URLSearchParams();
   const urlParams = new URLSearchParams(window.location.search)
@@ -194,15 +202,12 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   // This reloads the map and the game info on the side of the map with the next stage data
+  // Don't need to add one for nextStageNumber because arrays are 0 indexed and stageNumbers are 1 indexed
   var nextStageNumber = stage.stageNumber;
-  console.log(nextStageNumber);
-  console.log(data.stages[nextStageNumber]);
   var nextStage = await getStage(data.stages[nextStageNumber]);
-  console.log(nextStage);
   var startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
   panorama.setPosition(startingLocation);
   document.getElementById('game-info').innerHTML = '';
-  console.log(data);
   createGameInfoOnSideOfMap(data, nextStage, panorama, map);
 
   var stageHints = nextStage.hints;
@@ -287,7 +292,9 @@ function updateUserProgress(stageID, map) {
   var gameID =  getGameID();
   var params = new URLSearchParams();
   params.append('gameID', gameID);
-  params.append('location', map.getStreetView().getPosition());
+  var latLng = (map.getStreetView().getPosition());
+  var location = {"latitude": latLng.lat(), "longitude": latLng.lng()};
+  params.append('location', JSON.stringify(location));
   
   params.append('stageID', stageID);
   var hintsDiv = document.getElementById('hints');
@@ -302,5 +309,5 @@ function updateUserProgress(stageID, map) {
   console.log(hintsFound)
   params.append('hintsFound',  JSON.stringify(hintsFound));
   var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
-//   fetch(request);
+  fetch(request);
 }

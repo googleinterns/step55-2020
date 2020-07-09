@@ -71,6 +71,7 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
 
     private Coordinates getLocation(HttpServletRequest request) {
         String json = request.getParameter("location");
+        System.out.println(json);
         Type coordinatesType = new TypeToken<Coordinates>(){}.getType();
         Coordinates res = gson.fromJson(json, coordinatesType);
         return res;

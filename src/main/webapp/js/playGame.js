@@ -21,14 +21,18 @@ async function initMapToPlayGame() {
     var startingLocation;
     var initStage;
     var stageID;
+    console.log(userProgress);
     if (userProgress == null) {
       stageID = data.stages[0];
       initStage =  await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     } else {
+      console.log('from progress');
       stageID = userProgress.stageID;
       initStage =  await getStage(stageID);
       startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.latitude.longitude};
+      console.log(startingLocation);
+
     }
     
     var map = new google.maps.Map(
@@ -76,6 +80,10 @@ function getUserProgress() {
   return result;
 }
 
+/**
+* Gets the gameID from the URL
+* @return gameID from the URL or returns null and relocates you to index.html page
+*/
 function getGameID() {
   const params = new URLSearchParams();
   const urlParams = new URLSearchParams(window.location.search)
@@ -284,7 +292,9 @@ function updateUserProgress(stageID, map) {
   var gameID =  getGameID();
   var params = new URLSearchParams();
   params.append('gameID', gameID);
-  params.append('location', map.getStreetView().getPosition());
+  var latLng = (map.getStreetView().getPosition());
+  var location = {"latitude": latLng.lat(), "longitude": latLng.lng()};
+  params.append('location', JSON.stringify(location));
   
   params.append('stageID', stageID);
   var hintsDiv = document.getElementById('hints');
@@ -299,5 +309,5 @@ function updateUserProgress(stageID, map) {
   console.log(hintsFound)
   params.append('hintsFound',  JSON.stringify(hintsFound));
   var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
-//   fetch(request);
+  fetch(request);
 }

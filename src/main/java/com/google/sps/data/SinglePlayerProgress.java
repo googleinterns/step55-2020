@@ -57,6 +57,7 @@ public class SinglePlayerProgress {
         */
         public Builder setLocation(Coordinates location) {
             this.location = location;
+            // System.out.println("builder setLocatio" + location);
             return this;
         }
 
@@ -98,6 +99,7 @@ public class SinglePlayerProgress {
         this.userID = builder.userID;
         this.gameID = builder.gameID;
         this.location = builder.location;
+        // System.out.println("builder setLocation" + this.location);
         this.hintsFound = builder.hintsFound;
         this.stageID = builder.stageID;
     }
