@@ -268,7 +268,7 @@ public class DatastoreManager implements IDataManager {
       return null;
     }
     int hintNumber = ((Long)hintEntity.getProperty("hintNumber")).intValue();
-    String text = (String) hintEntity.getProperty("key");
+    String text = (String) hintEntity.getProperty("text");
     double latitude = (double) hintEntity.getProperty("latitude");
     double longitude = (double) hintEntity.getProperty("longitude");
     Coordinates startingLocation;
