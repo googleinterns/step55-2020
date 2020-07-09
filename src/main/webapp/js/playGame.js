@@ -43,9 +43,9 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-
+    console.log(stageHints)
     stageHints.forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, hint.hintID, stageID, panorama)
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID)
     );
 
     // gets the street view
@@ -70,11 +70,8 @@ async function initMapToPlayGame() {
 */
 function getUserProgress() {
   var gameID =  getGameID();
-  var params = new URLSearchParams();
-  params.append('gameID', gameID);
-  var request = new Request('/load-singleplayerprogress-data', {method: 'GET', body: params});
   var result;
-  fetch(request).then(response => response.json()).then(async (data) => {
+  fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
     result = data;
   });
   return result;
@@ -212,7 +209,7 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   stageHints.forEach(hint => 
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, hint.hintID, data.stages[nextStageNumber], panorama)
+    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber])
   );
 }
 
@@ -248,9 +245,9 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
-* @param {int} hintID the hintID of the hint being passed in   //TODO ADD to js doc
+* @param {string} stageID the stageID in which the hint is at   //TODO ADD to js doc
 */
-function addHintMarker(map, latLng, hint, hintNum, hintID, stageID, panorama) {  
+function addHintMarker(map, latLng, hint, hintNum, stageID) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
@@ -258,12 +255,12 @@ function addHintMarker(map, latLng, hint, hintNum, hintID, stageID, panorama) {
   });
 
   var userProgress = getUserProgress();
-  if (userProgress != null && userProgress.hintsFound.includes(hintID)) {
-    addHint(hint, hintNum, true, stageID, panorama);
+  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+    addHint(hint, hintNum, true, stageID, map);
   } else {
     marker.addListener('click', function() {
-    addHint(hint, hintNum, false, stageID, panorama);
-  });
+      addHint(hint, hintNum, false, stageID, map);
+    });
   }
 }
 
@@ -273,20 +270,31 @@ function addHintMarker(map, latLng, hint, hintNum, hintID, stageID, panorama) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 * @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress //TODO ADD to js doc
 */
-function addHint(hint, hintNum, startOfGame, stageID, panorama) {
-  if (!startOfGame) updateUserProgress(stageID, panorama);
+function addHint(hint, hintNum, startOfGame, stageID, map) {
   var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
+  if (!startOfGame) updateUserProgress(stageID, map);
 }
 
 
-function updateUserProgress(stageID, panorama) {
+function updateUserProgress(stageID, map) {
   var gameID =  getGameID();
+  var params = new URLSearchParams();
   params.append('gameID', gameID);
-  params.append('location', panorama.getPosition());
-
-  params.append('hintsFound', []);
+  params.append('location', map.getStreetView().getPosition());
+  
   params.append('stageID', stageID);
+  var hintsDiv = document.getElementById('hints');
+  var hints = hintsDiv.getElementsByTagName('li');
+  
+  var hintsFound = [];
+  for (var i = 0; i < hints.length; i++) {
+    if (hints[i].innerText != '') {
+      hintsFound.push(parseInt(hints[i].id));
+    }
+  }
+  console.log(hintsFound)
+  params.append('hintsFound',  JSON.stringify(hintsFound));
   var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
   fetch(request);
 }
