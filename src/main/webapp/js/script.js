@@ -14,8 +14,7 @@ function changeToOrFromDarkMode() {
   } 
 }
 
-// Depreciated
-
+// Soon to be depreciated
 /** 
 * Creates the navigation bar and specifies which page is active
 * @param {string} page is which HTML the navbar should be placed on
@@ -92,7 +91,6 @@ function createNavBar(page) {
                                                   '<li><a href="#">Login</a></li> </ul>';
 }
 
-//TODO(smissak): add marker for each starting position of each stage to the image
 /** 
 * Creates a static maps image
 * @param {array} stageLocations contains objects with longitude and latitude
@@ -112,7 +110,7 @@ function createStaticMap(stageLocations, size, gameID) {
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('playGame.html?gameID=' + gameID);
+    window.location.replace('resumeOrStartOver.html?gameID=' + gameID);
   });
   return staticImage;
 }
@@ -231,6 +229,8 @@ function onLoadFunctions(page) {
     initMapToCreateGame();
   } else if (page == 'afterGame') {
     loadGameName();
+  } else if (page == 'resumeOrStartOver') {
+    checkIfUserHasSavedProgress();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){

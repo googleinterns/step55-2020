@@ -2,15 +2,9 @@
 * Initalizes a map where there is an id of 'playMap'
 */
 async function initMapToPlayGame() {
-  const params = new URLSearchParams();
-  const urlParams = new URLSearchParams(window.location.search)
-  var gameID = urlParams.get('gameID');
-  if(!urlParams.has('gameID')) {
-    window.alert('Failure to initialize game');
-    window.location.replace('index.html');
-    return;
-  }
-  params.append('gameID', gameID)
+  var gameID =  getGameID();
+  var params = new URLSearchParams();
+  params.append('gameID', gameID);
   var request = new Request('/load-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then(async (data) => {
     if (data == null) {
@@ -23,8 +17,21 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-    var initStage =  await getStage(data.stages[0]);
-    var startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
+    var userProgress = await getUserProgress();
+    var startingLocation;
+    var initStage;
+    var stageID;
+    console.log(userProgress);
+    if (userProgress == null) {
+      stageID = data.stages[0];
+      initStage = await getStage(stageID);
+      startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
+    } else {
+      stageID = userProgress.stageID;
+      initStage = await getStage(stageID);
+      startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
+    }
+    
     var map = new google.maps.Map(
       document.getElementById('playMap'), {
       center: startingLocation, 
@@ -37,9 +44,8 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-
     stageHints.forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID)
     );
 
     // gets the street view
@@ -52,9 +58,37 @@ async function initMapToPlayGame() {
     panorama.setPosition(startingLocation);
     // puts the user in streetView
     panorama.setVisible(true);
-
     createGameInfoOnSideOfMap(data, initStage, panorama, map);
   });
+}
+
+//TODO ADD to js doc
+/**
+* Gets the user progress from the server
+* @return a the user data in json and null if there is no user data or the user is not logged in
+*/
+async function getUserProgress() {
+  var gameID =  getGameID();
+  var result;
+  await fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
+    result = data;
+  });
+  return result;
+}
+
+/**
+* Gets the gameID from the URL
+* @return gameID from the URL or returns null and relocates you to index.html page
+*/
+function getGameID() {
+  const urlParams = new URLSearchParams(window.location.search)
+  var gameID = urlParams.get('gameID');
+  if(!urlParams.has('gameID')) {
+    window.alert('Failure to initialize game');
+    window.location.replace('index.html');
+    return;
+  }
+  return gameID;
 }
 
 /** 
@@ -161,10 +195,9 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   // This reloads the map and the game info on the side of the map with the next stage data
-  var nextStageNumber = stage.stageNumber + 1;
-  console.log(nextStageNumber);
+  // Don't need to add one for nextStageNumber because arrays are 0 indexed and stageNumbers are 1 indexed
+  var nextStageNumber = stage.stageNumber;
   var nextStage = await getStage(data.stages[nextStageNumber]);
-  console.log(nextStage);
   var startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
   panorama.setPosition(startingLocation);
   document.getElementById('game-info').innerHTML = '';
@@ -178,8 +211,10 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   stageHints.forEach(hint => 
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
+    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber])
   );
+
+  updateUserProgress('N/A', map);
 }
 
 /** 
@@ -214,25 +249,58 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {string} stageID the stageID in which the hint is at   //TODO ADD to js doc
 */
-function addHintMarker(map, latLng, hint, hintNum) {  
+async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
     icon: 'images/marker_exclamation_point.png'
   });
 
-  marker.addListener('click', function() {
-    addHint(hint, hintNum)
-  });
+  var userProgress = await getUserProgress();
+  console.log(userProgress);
+  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+    addHint(hint, hintNum, true, stageID, map);
+  } else {
+    marker.addListener('click', function() {
+      addHint(hint, hintNum, false, stageID, map);
+    });
+  }
 }
 
 /** 
 * Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress //TODO ADD to js doc
 */
-function addHint(hint, hintNum) {
+function addHint(hint, hintNum, startOfGame, stageID, map) {
   var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
+  if (!startOfGame) updateUserProgress(stageID, map);
+}
+
+
+function updateUserProgress(stageID, map) {
+  var gameID =  getGameID();
+  var params = new URLSearchParams();
+  params.append('gameID', gameID);
+  var latLng = (map.getStreetView().getPosition());
+  var location = {"latitude": latLng.lat(), "longitude": latLng.lng()};
+  params.append('location', JSON.stringify(location));
+  
+  params.append('stageID', stageID);
+  var hintsDiv = document.getElementById('hints');
+  var hints = hintsDiv.getElementsByTagName('li');
+  
+  var hintsFound = [];
+  for (var i = 0; i < hints.length; i++) {
+    if (hints[i].innerText != '') {
+      hintsFound.push(parseInt(hints[i].id));
+    }
+  }
+  params.append('hintsFound',  JSON.stringify(hintsFound));
+  var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
+  fetch(request);
 }
