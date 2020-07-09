@@ -78,11 +78,16 @@ public class DatastoreManager implements IDataManager {
     String firstName = (String) userEntity.getProperty("firstname");
     String lastName = (String) userEntity.getProperty("lastname");
     ArrayList<String> gamesCreated = (ArrayList<String>) userEntity.getProperty("gamesCreated");
+    if (gamesCreated == null) {
+      gamesCreated = new ArrayList<>();
+    }
     String profilePictureUrl = (String) userEntity.getProperty("profilePictureUrl");
     String gamesCompletedWithTimeJson = (String) userEntity.getProperty("gamesCompletedWithTime");
     Type pairListType = new TypeToken<ArrayList<Pair<String, Long>>>(){}.getType();
     ArrayList<Pair<String, Long>> gamesCompletedWithTime = gson.fromJson(gamesCompletedWithTimeJson, pairListType);
-  
+    if (gamesCompletedWithTime == null) {
+      gamesCompletedWithTime = new ArrayList<>();
+    }
     User.Builder user = new User.Builder(userID).setUsername(userName).setFirstName(firstName).setLastName(lastName);
     user.setProfilePictureUrl(profilePictureUrl).setGamesCreated(gamesCreated);
     user.setGamesCompletedWithTime(gamesCompletedWithTime);
@@ -128,6 +133,9 @@ public class DatastoreManager implements IDataManager {
     String gameDescription = (String) gameEntity.getProperty("gameDescription");
     String gameCreator = (String) gameEntity.getProperty("gameCreator");
     ArrayList<String> stages = (ArrayList<String>)gameEntity.getProperty("stages");
+    if (stages == null) {
+      stages = new ArrayList<>();
+    }
     int numTimesPlayed = ((Long)gameEntity.getProperty("numTimesPlayed")).intValue();
     int numTimesFinished = ((Long)gameEntity.getProperty("numTimesFinished")).intValue();
     int numStarVotes = ((Long)gameEntity.getProperty("numStarVotes")).intValue();
@@ -182,6 +190,9 @@ public class DatastoreManager implements IDataManager {
     Coordinates startingLocation;
     startingLocation = new Coordinates(latitude, longitude);
     ArrayList<String> hintIDs = (ArrayList<String>)stageEntity.getProperty("hints");
+    if (hintIDs == null) {
+      hintIDs = new ArrayList<>();
+    }
     ArrayList<Hint> hints = new ArrayList<Hint>();
     for (String hintid : hintIDs) {
       hints.add(retrieveHint(hintid));
@@ -232,12 +243,10 @@ public class DatastoreManager implements IDataManager {
     double longitude = (double) singlePlayerProgress.getProperty("longitude");
     Coordinates Location;
     Location = new Coordinates(latitude, longitude);
-<<<<<<< HEAD
-    ArrayList<String> hintsFound = (ArrayList<String>) singlePlayerProgress.getProperty("hintsFound");
-=======
     ArrayList<Integer> hintsFound = (ArrayList<Integer>) singlePlayerProgress.getProperty("hintsFound");
-
->>>>>>> 2fe849ded860733a9910029ccc18a343977c4464
+    if (hintsFound == null) {
+      hintsFound = new ArrayList<>();
+    }
     SinglePlayerProgress.Builder progress = new SinglePlayerProgress.Builder(userID, gameID);
     progress.setLocation(Location).setHintsFound(hintsFound).setStageID(stageID);
     return progress.build();
@@ -271,14 +280,9 @@ public class DatastoreManager implements IDataManager {
     catch(Exception e) {
       return null;
     }
-<<<<<<< HEAD
 
     int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
     String text = (String) hintEntity.getProperty("key");
-=======
-    int hintNumber = ((Long)hintEntity.getProperty("hintNumber")).intValue();
-    String text = (String) hintEntity.getProperty("text");
->>>>>>> 2fe849ded860733a9910029ccc18a343977c4464
     double latitude = (double) hintEntity.getProperty("latitude");
     double longitude = (double) hintEntity.getProperty("longitude");
     Coordinates startingLocation;
@@ -304,6 +308,9 @@ public class DatastoreManager implements IDataManager {
       String gameDescription = (String) gameEntity.getProperty("gameDescription");
       String gameCreator = (String) gameEntity.getProperty("gameCreator");
       ArrayList<String> stages = (ArrayList<String>)gameEntity.getProperty("stages");
+      if (stages == null) {
+        stages = new ArrayList<>();
+      }
       int numTimesPlayed = ((Long)gameEntity.getProperty("numTimesPlayed")).intValue();
       int numTimesFinished = ((Long)gameEntity.getProperty("numTimesFinished")).intValue();
       int numStarVotes = ((Long)gameEntity.getProperty("numStarVotes")).intValue();
