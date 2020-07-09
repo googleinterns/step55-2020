@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public interface IDataManager {
   /**
   * Creates or Replaces an entity of a single User data in datastore
-  * @param user a User variable representing a single instance of a user.
+  * @param user a User variable representing a single instance of a User.
   */
   public void createOrReplaceUser(User user);
 
@@ -34,7 +34,7 @@ public interface IDataManager {
 
   /**
   * Creates or Replaces the static data of a single game in datastore as an entity
-  * @param game an Game variable representing a single instance of a game
+  * @param game an Game variable representing a single instance of a Game
   */
   public void createOrReplaceGame(Game game);
 
@@ -47,7 +47,7 @@ public interface IDataManager {
   
   /**
   * Creates the static data of a single stage in datastore as an entity
-  * @param game an Stage variable representing a single instance of a stage.
+  * @param stage a Stage variable representing a single instance of a Stage.
   */
   public void createOrReplaceStage(Stage stage);
 
@@ -60,7 +60,7 @@ public interface IDataManager {
 
   /**
   * Updates an entity of a single stage data in datastore
-  * @param stage a Stage variable representing a single instance of a stage.
+  * @param progress a SinglePlayerProgress variable representing a single instance of a SinglePlayerProgress.
   */
   public void createOrReplaceSinglePlayerProgress(SinglePlayerProgress progress);
 

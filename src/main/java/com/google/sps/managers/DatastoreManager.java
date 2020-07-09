@@ -205,12 +205,12 @@ public class DatastoreManager implements IDataManager {
 
   /**
   * Creates or Replaces an entity of a single progress data in datastore
-  * @param stage a Stage variable representing a single instance of a stage.
+  * @param stage a Stage variable representing a single instance of a Stage.
   */
   public void createOrReplaceSinglePlayerProgress(SinglePlayerProgress progress) {
     long timestamp = System.currentTimeMillis();
 
-    Entity singlePlayerProgressEntity = new Entity("singlePlayerProgress", progress.getUserID());
+    Entity singlePlayerProgressEntity = new Entity("singlePlayerProgress", progress.getUserID() + progress.getGameID());
     singlePlayerProgressEntity.setProperty("userID", progress.getUserID());
     singlePlayerProgressEntity.setProperty("stageID", progress.getStageID());
     singlePlayerProgressEntity.setProperty("gameID", progress.getGameID());
@@ -227,16 +227,13 @@ public class DatastoreManager implements IDataManager {
   * @return a SinglePlayerProgress object with the properties specified in the Builder.
   */
   public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID) {
-    Filter userIdentification = new FilterPredicate("userID", FilterOperator.EQUAL, userID);
-    Filter gameIdentification = new FilterPredicate("gameID", FilterOperator.EQUAL, gameID);
-    CompositeFilter identification = CompositeFilterOperator.and(userIdentification, gameIdentification);
-    Query query = new Query("singlePlayerProgress").setFilter(identification);
-
-    PreparedQuery results = datastore.prepare(query);
-    if (results.countEntities() == 0) {
+    Key singlePlayerProgressEntityKey = KeyFactory.createKey("singlePlayerProgress", userID + gameID);
+    Entity singlePlayerProgress;
+    try {
+      singlePlayerProgress = datastore.get(singlePlayerProgressEntityKey);
+    } catch(Exception e) {
       return null;
     }
-    Entity singlePlayerProgress = results.asSingleEntity();
     
     String stageID = (String) singlePlayerProgress.getProperty("stageID");
     double latitude = (double) singlePlayerProgress.getProperty("latitude");
@@ -282,7 +279,7 @@ public class DatastoreManager implements IDataManager {
     }
 
     int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
-    String text = (String) hintEntity.getProperty("key");
+    String text = (String) hintEntity.getProperty("text");
     double latitude = (double) hintEntity.getProperty("latitude");
     double longitude = (double) hintEntity.getProperty("longitude");
     Coordinates startingLocation;
@@ -335,10 +332,7 @@ public class DatastoreManager implements IDataManager {
     Query query = new Query("User").setFilter(new FilterPredicate("username", FilterOperator.EQUAL, userName));
     PreparedQuery pq = datastore.prepare(query);
   
-    if (pq.countEntities() == 0) {
-      return false;
-    }
-    return true;
+    return pq.countEntities() > 0;
   }
 }
 
