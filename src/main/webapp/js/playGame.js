@@ -260,13 +260,13 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
 
   var userProgress = await getUserProgress();
   console.log(userProgress);
-//   if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
-//     addHint(hint, hintNum, true, stageID, map);
-//   } else {
+  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+    addHint(hint, hintNum, true, stageID, map);
+  } else {
     marker.addListener('click', function() {
       addHint(hint, hintNum, false, stageID, map);
     });
-//   }
+  }
 }
 
 /** 
