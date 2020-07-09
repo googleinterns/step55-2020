@@ -43,7 +43,6 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-    console.log(stageHints)
     stageHints.forEach(hint => 
       addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID)
     );
@@ -58,7 +57,7 @@ async function initMapToPlayGame() {
     panorama.setPosition(startingLocation);
     // puts the user in streetView
     panorama.setVisible(true);
-
+    console.log(data);
     createGameInfoOnSideOfMap(data, initStage, panorama, map);
   });
 }
@@ -98,6 +97,7 @@ function getGameID() {
 * @param {object} map is map created in initMapPlayGame()
 */
 function createGameInfoOnSideOfMap(data, stage, panorama, map) {
+    console.log(data);
   var gameInfo = document.getElementById('game-info');
     
   var gameName = document.createElement('h2');
@@ -194,7 +194,8 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   // This reloads the map and the game info on the side of the map with the next stage data
-  var nextStageNumber = stage.stageNumber + 1;
+  // Don't need to add one for nextStageNumber because arrays are 0 indexed and stageNumbers are 1 indexed
+  var nextStageNumber = stage.stageNumber;
   var nextStage = await getStage(data.stages[nextStageNumber]);
   var startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
   panorama.setPosition(startingLocation);
@@ -235,7 +236,9 @@ async function getStage(stageID) {
   var request = new Request('/load-stage-data', {method: 'POST', body: params});
   await fetch(request).then(response => response.json()).then((data) => {
     currStage = data;
+    console.log(data);
   });
+  console.log(currStage);
   return currStage;
 }
 
@@ -296,5 +299,5 @@ function updateUserProgress(stageID, map) {
   console.log(hintsFound)
   params.append('hintsFound',  JSON.stringify(hintsFound));
   var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
-  fetch(request);
+//   fetch(request);
 }
