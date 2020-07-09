@@ -23,7 +23,7 @@ public class SinglePlayerProgress {
     private final String userID;
     private final String gameID;
     private final Coordinates location;
-    private final ArrayList<String> hintsFound;
+    private final ArrayList<Integer> hintsFound;
     private final String stageID;
 
     /**
@@ -36,7 +36,7 @@ public class SinglePlayerProgress {
 
         // Optional parameters - initialized to default values
         private Coordinates location;
-        private ArrayList<String> hintsFound = new ArrayList<>();
+        private ArrayList<Integer> hintsFound = new ArrayList<>();
         private ArrayList<String> players = new ArrayList<>();
         private String stageID = "N/A";
 
@@ -62,10 +62,10 @@ public class SinglePlayerProgress {
 
         /**
         * Sets the list of hints found on the current stage so far.
-        * @param hintsFound an ArrayList of String with the hintIDs of the hints found so far.
+        * @param hintsFound an ArrayList of Integer with the numbers of the hints found so far.
         * @return a Builder with the modified list of found hints.
         */
-        public Builder setHintsFound(ArrayList<String> hintsFound) {
+        public Builder setHintsFound(ArrayList<Integer> hintsFound) {
             this.hintsFound = hintsFound;
             return this;
         }
@@ -128,9 +128,9 @@ public class SinglePlayerProgress {
 
     /**
     * Retrieves the list of hints found on the current stage so far.
-    * @return an ArrayList of String with the hintIDs of the hints found so far.
+    * @return an ArrayList of Integer with the numbers of the hints found so far.
     */
-    public ArrayList<String> getHintsFound() {
+    public ArrayList<Integer> getHintsFound() {
         return this.hintsFound;
     }
 

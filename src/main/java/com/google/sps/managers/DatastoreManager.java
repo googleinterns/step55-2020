@@ -232,7 +232,7 @@ public class DatastoreManager implements IDataManager {
     double longitude = (double) singlePlayerProgress.getProperty("longitude");
     Coordinates Location;
     Location = new Coordinates(latitude, longitude);
-    ArrayList<String> hintsFound = (ArrayList<String>) singlePlayerProgress.getProperty("hintsFound");
+    ArrayList<Integer> hintsFound = (ArrayList<Integer>) singlePlayerProgress.getProperty("hintsFound");
 
     SinglePlayerProgress.Builder progress = new SinglePlayerProgress.Builder(userID, gameID);
     progress.setLocation(Location).setHintsFound(hintsFound).setStageID(stageID);
