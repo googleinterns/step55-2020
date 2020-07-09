@@ -54,7 +54,7 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
         String userID = userService.getCurrentUser().getUserId();
         String gameID = getGameID(request);
         Coordinates location = getLocation(request);
-        ArrayList<String> hintsFound = getHintsFound(request);
+        ArrayList<Integer> hintsFound = getHintsFound(request);
         String stageID = getStageID(request);
 
         SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
@@ -76,10 +76,10 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
         return res;
     }
 
-    private ArrayList<String> getHintsFound(HttpServletRequest request) {
+    private ArrayList<Integer> getHintsFound(HttpServletRequest request) {
         String json = request.getParameter("hintsFound");
-        Type stringListType = new TypeToken<ArrayList<String>>(){}.getType();
-        ArrayList<String> res = gson.fromJson(json, stringListType);
+        Type integerListType = new TypeToken<ArrayList<Integer>>(){}.getType();
+        ArrayList<Integer> res = gson.fromJson(json, integerListType);
         return res;
     }
 
