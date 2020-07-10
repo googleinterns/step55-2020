@@ -96,6 +96,7 @@ function createNavBar(page) {
 * @param {array} stageLocations contains objects with longitude and latitude
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
 * @param {String} gameID is gameID from the server of the game that was clicked on
+* @return {Element} an img element is returned with the stage starting locations marked on the image
 */
 function createStaticMap(stageLocations, size, gameID) { 
   var staticImage = document.createElement('img');
@@ -133,12 +134,12 @@ function createStaticMapCaption(mapData, captionID) {
     difficultyColor = 'red-text';
   }
 
-  var fiveStars = getStarRating(mapData);
+  var fiveStars = getStarRating(mapData.stars);
 
   var staticMapInfo = document.createElement('div');
   staticMapInfo.id = captionID;
   staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
-  staticMapInfo.innerHTML += mapData.gameName + ' <i class="' + difficultyColor + '">[' + difficulty + "]</i>";
+  staticMapInfo.innerHTML += '<div id="title-div">' + mapData.gameName + ' </div><i class="' + difficultyColor + '">[' + difficulty + "]</i>";
   staticMapInfo.innerHTML += '<br> By ' + mapData.creatorUsername;
   staticMapInfo.style = 'text-align:left; padding: 6px';
   staticMapInfo.classList.add('cursor-pointer');
@@ -146,16 +147,16 @@ function createStaticMapCaption(mapData, captionID) {
   staticMapInfo.addEventListener('click', function() {
     window.location.replace('gameInfo.html?gameID=' + mapData.gameID);
   });
+
   return staticMapInfo;
 }
 
-
 /** 
 * Creates below the image the star ratings of the map
-* @param {string} mapData the JSON data with the map's information
+* @param {int} stars number of stars to be shown
 */
-function getStarRating(mapData) {
-  var avgStarsTemp = mapData.stars;
+function getStarRating(stars) {
+  var avgStarsTemp = stars;
   
   var fullStar = '<i class="material-icons md-18">star</i>';
   var halfStar = '<i class="material-icons md-18">star_half</i>';

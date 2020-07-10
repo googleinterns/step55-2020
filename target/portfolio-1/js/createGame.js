@@ -270,8 +270,7 @@ function getDataFromGameCreationForm() {
   params.append('hintLocations', JSON.stringify(hintLocations));
   params.append('hintTexts', JSON.stringify(hintTexts));
   var request = new Request('/create-game-data', {method: 'POST', body: params});
-  fetch(request).then((data) => {
-    console.log(data);
-    // window.location.replace('gameInfo.html?gameID=' + data);
+  fetch(request).then(response => response.json()).then((data) => {
+    window.location.replace('gameInfo.html?gameID=' + data);
   });
 }
