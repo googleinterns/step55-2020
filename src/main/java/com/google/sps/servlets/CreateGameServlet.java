@@ -85,7 +85,7 @@ public class CreateGameServlet extends HttpServlet {
         gameBuilder.setTotalDifficulty(0);
         Game game = gameBuilder.build();
         datastoreManager.createOrReplaceGame(game);
-
+        System.out.println(gameID);
         response.getWriter().println(gameID);
     }
 

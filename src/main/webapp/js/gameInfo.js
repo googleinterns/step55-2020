@@ -43,12 +43,12 @@ function printMapCreator(data) {
 
 function printPlayGameButton(data) {
   var playGameButton = document.getElementById('play-game');
-  playGameButton.innerHTML = data.gameName;
+//   playGameButton.innerHTML = data.gameName;
 }
 
 function printRateMapButton(data) {
   var rateMapButton = document.getElementById('play-game');
-  rateMapButton.innerHTML = data.gameName;
+//   rateMapButton.innerHTML = data.gameName;
 }
 
 function printMapDifficulty(data) {
