@@ -20,7 +20,7 @@ function changeToOrFromDarkMode() {
 * @param {string} page is which HTML the navbar should be placed on
 * @example createNavBar("index")
 */
-function createNavBar(page) {
+async function createNavBar(page) {
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -74,21 +74,47 @@ function createNavBar(page) {
   var liLogin = document.createElement('li');
   a = document.createElement('a');
   a.innerHTML = ('Login');
-  a.href = "#";
-  liLogin.appendChild(a);
+  var url;
 
+  var loggedIn = false;
+  var liLogout = document.createElement('li');
+  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
+    if (data.loggedIn) {
+      loggedIn = true;
+      url = "profilePage.html";
+      a.innerHTML = ('My profile');
+
+      logoutUrl = document.createElement('a');
+      var url1;
+      logoutUrl.innerHTML = ('Log out');
+      url1 = data.logoutUrl;
+      logoutUrl.href = url1;
+      liLogout.appendChild(logoutUrl);
+    } else {
+      url = data.loginUrl;
+    }
+  });
+  a.href = url;
+  
+  liLogin.appendChild(a);
+  
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
   ul.appendChild(liCreateGame);
   ul.appendChild(liLogin);
-  containerDiv.appendChild(ul);
 
+  if (loggedIn) {
+    ul.appendChild(liLogout);
+  }
+  
+  containerDiv.appendChild(ul);
   document.getElementById('nav-bar').appendChild(navbar);
+  
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-                                                  '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
-                                                  '<li><a href="index.html">Home</a></li>' + 
-                                                  '<li><a href="createGame.html">Create Game</a></li>' + 
-                                                  '<li><a href="#">Login</a></li> </ul>';
+                                                '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
+                                                '<li><a href="index.html">Home</a></li>' + 
+                                                '<li><a href="createGame.html">Create Game</a></li>' + 
+                                                '<li><a href= '+url+'>Login</a></li> </ul>';
 }
 
 /** 
@@ -234,6 +260,8 @@ function onLoadFunctions(page) {
     checkIfUserHasSavedProgress();
   } else if (page == 'gameInfo') {
     loadGameData();
+  } else if (page == 'profilePage') {
+    //initMapToCreateGame();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){
