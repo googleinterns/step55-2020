@@ -24,11 +24,11 @@ async function initMapToPlayGame() {
     console.log(userProgress);
     if (userProgress == null) {
       stageID = data.stages[0];
-      initStage =  await getStage(stageID);
+      initStage = await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     } else {
       stageID = userProgress.stageID;
-      initStage =  await getStage(stageID);
+      initStage = await getStage(stageID);
       startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
     }
     
@@ -81,7 +81,6 @@ async function getUserProgress() {
 * @return gameID from the URL or returns null and relocates you to index.html page
 */
 function getGameID() {
-  const params = new URLSearchParams();
   const urlParams = new URLSearchParams(window.location.search)
   var gameID = urlParams.get('gameID');
   if(!urlParams.has('gameID')) {
@@ -89,7 +88,6 @@ function getGameID() {
     window.location.replace('index.html');
     return;
   }
-  
   return gameID;
 }
 
@@ -262,13 +260,13 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
 
   var userProgress = await getUserProgress();
   console.log(userProgress);
-//   if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
-//     addHint(hint, hintNum, true, stageID, map);
-//   } else {
+  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+    addHint(hint, hintNum, true, stageID, map);
+  } else {
     marker.addListener('click', function() {
       addHint(hint, hintNum, false, stageID, map);
     });
-//   }
+  }
 }
 
 /** 
