@@ -24,11 +24,11 @@ async function initMapToPlayGame() {
     console.log(userProgress);
     if (userProgress == null) {
       stageID = data.stages[0];
-      initStage =  await getStage(stageID);
+      initStage = await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     } else {
       stageID = userProgress.stageID;
-      initStage =  await getStage(stageID);
+      initStage = await getStage(stageID);
       startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
     }
     
@@ -62,7 +62,6 @@ async function initMapToPlayGame() {
   });
 }
 
-//TODO ADD to js doc
 /**
 * Gets the user progress from the server
 * @return a the user data in json and null if there is no user data or the user is not logged in
@@ -81,7 +80,6 @@ async function getUserProgress() {
 * @return gameID from the URL or returns null and relocates you to index.html page
 */
 function getGameID() {
-  const params = new URLSearchParams();
   const urlParams = new URLSearchParams(window.location.search)
   var gameID = urlParams.get('gameID');
   if(!urlParams.has('gameID')) {
@@ -89,7 +87,6 @@ function getGameID() {
     window.location.replace('index.html');
     return;
   }
-  
   return gameID;
 }
 
@@ -251,7 +248,7 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
-* @param {string} stageID the stageID in which the hint is at   //TODO ADD to js doc
+* @param {string} stageID the stageID in which the hint is at 
 */
 async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
   var marker = new google.maps.Marker({
@@ -262,20 +259,22 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
 
   var userProgress = await getUserProgress();
   console.log(userProgress);
-//   if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
-//     addHint(hint, hintNum, true, stageID, map);
-//   } else {
+  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+    addHint(hint, hintNum, true, stageID, map);
+  } else {
     marker.addListener('click', function() {
       addHint(hint, hintNum, false, stageID, map);
     });
-//   }
+  }
 }
 
 /** 
 * Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
-* @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress //TODO ADD to js doc
+* @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress 
+* @param {string} stageID the stageID in which the hint is at
+* @param {object} map the panorama of the map created in initMapPlayGame()
 */
 function addHint(hint, hintNum, startOfGame, stageID, map) {
   var hintsWithNum = document.getElementById(hintNum);
@@ -283,7 +282,11 @@ function addHint(hint, hintNum, startOfGame, stageID, map) {
   if (!startOfGame) updateUserProgress(stageID, map);
 }
 
-
+/** 
+* Gets the info about the user and sends it to the server to update the progress for the game
+* @param {string} stageID the stageID in which the hint is at
+* @param {object} map the panorama of the map created in initMapPlayGame()
+*/
 function updateUserProgress(stageID, map) {
   var gameID =  getGameID();
   var params = new URLSearchParams();
