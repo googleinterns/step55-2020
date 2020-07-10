@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package com.google.sps.data;
+import com.google.sps.managers.*;
 
 import java.util.ArrayList;
 import java.lang.Math;
@@ -21,7 +22,7 @@ import java.lang.Math;
 * Represents only the info that is needed about a game from the main page.
 */
 public class BasicGameData {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    private transient DatastoreManager datastoreManager = new DatastoreManager();
     //TODO(ldchen): delete all of the mocking once datastore is working.
     private int getRandomIntegerBetween(int left, int right) {
         int res = left + (int)(Math.random()*(right-left+1));
@@ -57,17 +58,9 @@ public class BasicGameData {
         if(game.getNumStarVotes() != 0) {
             this.stars = (double)game.getTotalStars() / (double)game.getNumStarVotes();
         }
-        if(this.gameID.equals("demogameid")) {
-            ArrayList<String> stageIDs = game.getStages();
-            for(String stageID: stageIDs) {
-                this.stageLocations.add(datastoreManager.retrieveStage(stageID).getStartingLocation());
-            }
-        } else {
-            int numStages = 1 + (int)(Math.random() * 5);
-            Coordinates gameCenter = Coordinates.getRandomCoordinates();
-            for(int i = 0; i < numStages; i++) {
-                this.stageLocations.add(gameCenter.getRandomWithin(5));
-            }
+        ArrayList<String> stageIDs = game.getStages();
+        for(String stageID: stageIDs) {
+            this.stageLocations.add(datastoreManager.retrieveStage(stageID).getStartingLocation());
         }
     }
 }

@@ -14,14 +14,13 @@ function changeToOrFromDarkMode() {
   } 
 }
 
-// Depreciated
-
+// Soon to be depreciated
 /** 
 * Creates the navigation bar and specifies which page is active
 * @param {string} page is which HTML the navbar should be placed on
 * @example createNavBar("index")
 */
-function createNavBar(page) {
+async function createNavBar(page) {
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -75,36 +74,61 @@ function createNavBar(page) {
   var liLogin = document.createElement('li');
   a = document.createElement('a');
   a.innerHTML = ('Login');
-  a.href = "#";
-  liLogin.appendChild(a);
+  var url;
 
+  var loggedIn = false;
+  var liLogout = document.createElement('li');
+  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
+    if (data.loggedIn) {
+      loggedIn = true;
+      url = "profilePage.html";
+      a.innerHTML = ('My profile');
+
+      logoutUrl = document.createElement('a');
+      var url1;
+      logoutUrl.innerHTML = ('Log out');
+      url1 = data.logoutUrl;
+      logoutUrl.href = url1;
+      liLogout.appendChild(logoutUrl);
+    } else {
+      url = data.loginUrl;
+    }
+  });
+  a.href = url;
+  
+  liLogin.appendChild(a);
+  
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
   ul.appendChild(liCreateGame);
   ul.appendChild(liLogin);
-  containerDiv.appendChild(ul);
 
+  if (loggedIn) {
+    ul.appendChild(liLogout);
+  }
+  
+  containerDiv.appendChild(ul);
   document.getElementById('nav-bar').appendChild(navbar);
+  
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-                                                  '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
-                                                  '<li><a href="index.html">Home</a></li>' + 
-                                                  '<li><a href="createGame.html">Create Game</a></li>' + 
-                                                  '<li><a href="#">Login</a></li> </ul>';
+                                                '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
+                                                '<li><a href="index.html">Home</a></li>' + 
+                                                '<li><a href="createGame.html">Create Game</a></li>' + 
+                                                '<li><a href= '+url+'>Login</a></li> </ul>';
 }
 
-//TODO(smissak): add marker for each starting position of each stage to the image
 /** 
 * Creates a static maps image
 * @param {array} stageLocations contains objects with longitude and latitude
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
+* @param {String} gameID is gameID from the server of the game that was clicked on
 */
-function createStaticMap(stageLocations, size) { 
+function createStaticMap(stageLocations, size, gameID) { 
   var staticImage = document.createElement('img');
   var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
   staticMapURL += '&size='+size+'x'+size+'&maptype=roadmap';
-  for (var i = 0; i < stageLocations.length; i++)
-  {
+  for (var i = 0; i < stageLocations.length; i++) {
     staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
   }
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
@@ -112,7 +136,7 @@ function createStaticMap(stageLocations, size) {
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('playGame.html?gameID=');
+    window.location.replace('resumeOrStartOver.html?gameID=' + gameID);
   });
   return staticImage;
 }
@@ -126,13 +150,13 @@ function createStaticMapCaption(mapData, captionID) {
   var avgDifficulty = mapData.difficulty;
 
   var difficulty = 'Easy';
-  var difficultyColor = 'green';
+  var difficultyColor = 'green-text';
   if (avgDifficulty == 2) {
     difficulty = 'Medium';
-    difficultyColor = 'orange';
+    difficultyColor = 'orange-text';
   } else if (avgDifficulty == 3) {
     difficulty = 'Hard';
-    difficultyColor = 'red';
+    difficultyColor = 'red-text';
   }
 
   var fiveStars = getStarRating(mapData);
@@ -140,13 +164,13 @@ function createStaticMapCaption(mapData, captionID) {
   var staticMapInfo = document.createElement('div');
   staticMapInfo.id = captionID;
   staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
-  staticMapInfo.innerHTML += mapData.gameName + ' <i style="color:' + difficultyColor + '">[' + difficulty + "]</i>";
+  staticMapInfo.innerHTML += mapData.gameName + ' <i class="' + difficultyColor + '">[' + difficulty + "]</i>";
   staticMapInfo.innerHTML += '<br> By ' + mapData.creatorUsername;
   staticMapInfo.style = 'text-align:left; padding: 6px';
   staticMapInfo.classList.add('cursor-pointer');
 
   staticMapInfo.addEventListener('click', function() {
-    window.location.replace('playGame.html');
+    window.location.replace('playGame.html?gameID=' + mapData.gameID);
   });
   return staticMapInfo;
 }
@@ -182,7 +206,7 @@ function getStarRating(mapData) {
 */
 function loadMaps() {
   fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
-    var featuredMap = createStaticMap(data[0].stageLocations, '400');
+    var featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
     console.log(data[0].stageLocations[0].latitude)
     console.log(data[0].stageLocations[0].longitude)
     var featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
@@ -197,7 +221,7 @@ function loadMaps() {
         mapDiv.classList.add('hoverable');
         mapDiv.id = 'individual-map';
 
-        var mapImage = createStaticMap(data[i].stageLocations, '300');
+        var mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
         var mapCaption = createStaticMapCaption(data[i], 'map-info');
         mapImage.classList.add('materialbox');
         mapImage.classList.add('responsive-img');
@@ -230,7 +254,11 @@ function onLoadFunctions(page) {
   } else if (page == 'createGame') {
     initMapToCreateGame();
   } else if (page == 'afterGame') {
-    loadGameData();
+    loadGameName();
+  } else if (page == 'resumeOrStartOver') {
+    checkIfUserHasSavedProgress();
+  } else if (page == 'profilePage') {
+    //initMapToCreateGame();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){

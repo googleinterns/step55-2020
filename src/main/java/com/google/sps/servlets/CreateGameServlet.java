@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 import com.google.sps.data.*;
+import com.google.sps.managers.*;
+import com.google.sps.utils.*;
 
 import java.util.ArrayList;
 import java.lang.reflect.Type;
@@ -40,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/create-game-data")
 public class CreateGameServlet extends HttpServlet {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
     Gson gson = new Gson();
     String gameID;
     String userID;

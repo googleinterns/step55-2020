@@ -2,8 +2,9 @@
 * Initalizes a map where there is an id of 'playMap'
 */
 async function initMapToPlayGame() {
-  const params = new URLSearchParams();
-  params.append('gameID', 'demogameid')
+  var gameID =  getGameID();
+  var params = new URLSearchParams();
+  params.append('gameID', gameID);
   var request = new Request('/load-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then(async (data) => {
     if (data == null) {
@@ -16,8 +17,21 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-    var initStage =  await getStage(data.stages[0]);
-    var startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
+    var userProgress = await getUserProgress();
+    var startingLocation;
+    var initStage;
+    var stageID;
+    console.log(userProgress);
+    if (userProgress == null) {
+      stageID = data.stages[0];
+      initStage = await getStage(stageID);
+      startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
+    } else {
+      stageID = userProgress.stageID;
+      initStage = await getStage(stageID);
+      startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
+    }
+    
     var map = new google.maps.Map(
       document.getElementById('playMap'), {
       center: startingLocation, 
@@ -30,9 +44,8 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-
     stageHints.forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID)
     );
 
     // gets the street view
@@ -45,9 +58,37 @@ async function initMapToPlayGame() {
     panorama.setPosition(startingLocation);
     // puts the user in streetView
     panorama.setVisible(true);
-
     createGameInfoOnSideOfMap(data, initStage, panorama, map);
   });
+}
+
+//TODO ADD to js doc
+/**
+* Gets the user progress from the server
+* @return a the user data in json and null if there is no user data or the user is not logged in
+*/
+async function getUserProgress() {
+  var gameID =  getGameID();
+  var result;
+  await fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
+    result = data;
+  });
+  return result;
+}
+
+/**
+* Gets the gameID from the URL
+* @return gameID from the URL or returns null and relocates you to index.html page
+*/
+function getGameID() {
+  const urlParams = new URLSearchParams(window.location.search)
+  var gameID = urlParams.get('gameID');
+  if(!urlParams.has('gameID')) {
+    window.alert('Failure to initialize game');
+    window.location.replace('index.html');
+    return;
+  }
+  return gameID;
 }
 
 /** 
@@ -58,76 +99,80 @@ async function initMapToPlayGame() {
 * @param {object} map is map created in initMapPlayGame()
 */
 function createGameInfoOnSideOfMap(data, stage, panorama, map) {
-    var gameInfo = document.getElementById('game-info');
+  var gameInfo = document.getElementById('game-info');
     
-    var gameName = document.createElement('h2');
-    gameName.innerHTML = data.gameName;
-    gameName.className = 'center'
-    gameInfo.appendChild(gameName);
+  var gameName = document.createElement('h2');
+  gameName.innerHTML = data.gameName;
+  gameName.className = 'center'
+  gameInfo.appendChild(gameName);
 
-    var gameStage = document.createElement('h3');
-    gameStage.innerHTML = 'You are on stage:' + stage.stageNumber + '/' + data.stages.length;
-    gameStage.className = 'center'
-    gameInfo.appendChild(gameStage);
+  var gameStage = document.createElement('div');
+  gameStage.id = 'stage-counter';
+  gameStage.innerHTML = 'You are on stage: ' + stage.stageNumber + '/' + data.stages.length;
+  gameStage.className = 'center';
+  gameInfo.appendChild(gameStage);
 
-    var theWordHints = document.createElement('h4');
-    theWordHints.innerHTML = 'Hints:';
-    gameInfo.appendChild(theWordHints);
+  gameInfo.appendChild(document.createElement('hr'));
 
-    var starterHint = document.createElement('h4');
-    starterHint.innerHTML = 'Starter: ' + stage.startingHint;
-    gameInfo.appendChild(starterHint);
+  var hintsContainer = document.createElement('div');
+  hintsContainer.id = 'hints-container';
 
-    // This div is a container for where the hints will be placed on the site
-    var hintsDiv = document.createElement('div');
-    // This is the ordered list (or <ol> in HTML) for where the hints will be listed
-    var hintsOl = document.createElement('ol');
-    hintsOl.id = 'hints';
+  var starterHint = document.createElement('div');
+  starterHint.innerHTML = 'Starter: ' + stage.startingHint;
+  hintsContainer.appendChild(starterHint);
 
-    stage.hints.forEach(hint => 
-      hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
-    );
+  // This div is a container for where the hints will be placed on the site
+  var hintsDiv = document.createElement('div');
+  // This is the ordered list (or <ol> in HTML) for where the hints will be listed
+  var hintsOl = document.createElement('ol');
+  hintsOl.id = 'hints';
 
-    hintsDiv.appendChild(hintsOl);
-    gameInfo.appendChild(hintsDiv);
+  stage.hints.forEach(hint => 
+    hintsOl.appendChild(createHintPlaceHolder(hint.hintNumber))
+  );
 
-    var keySpan = document.createElement('span');
-    keySpan.setAttribute('id', 'keybox');
-    var enterKeyText = document.createElement('h3');
-    enterKeyText.innerHTML = 'Please enter key to continue:';
-    enterKeyText.className = 'center'
-    keySpan.appendChild(enterKeyText);
+  hintsContainer.appendChild(hintsOl);
+  gameInfo.appendChild(hintsContainer);
 
-    var inputKeyBox = document.createElement('input');
-    inputKeyBox.type = 'text';
-    inputKeyBox.className = 'center';
-    inputKeyBox.classList = 'input-text-color';
-    inputKeyBox.id = 'key-input';
+  var keySpan = document.createElement('span');
+  keySpan.id = 'keybox';
+  var enterKeyText = document.createElement('div');
+  enterKeyText.id = 'enter-key-text'
+  enterKeyText.innerHTML = 'Please enter key to continue:';
+  enterKeyText.className = 'center'
+  keySpan.appendChild(enterKeyText);
+
+  var placeHolderForWrongInput =  document.createElement('div');
+  placeHolderForWrongInput.id = 'wrong-input';
+  keySpan.appendChild(placeHolderForWrongInput);
+
+  var inputKeyBox = document.createElement('input');
+  inputKeyBox.type = 'text';
+  inputKeyBox.classList = 'input-text-color';
+  inputKeyBox.id = 'key-input';
 
     // This checks if the user clicked enter in the key box
-    inputKeyBox.addEventListener('keydown', function(e) {
-      if (e.which == 13) {
-        checkKey(data, stage, panorama, map);
-      }
-    });
-    var inputBoxAndSubmitButton = document.createElement('div');
-    inputBoxAndSubmitButton.setAttribute('id', 'inputBoxAndButton');
-    inputBoxAndSubmitButton.appendChild(inputKeyBox);
-
-    var buttonToCheckKey = document.createElement('input');
-    buttonToCheckKey.type = 'button';
-    buttonToCheckKey.id = "key-input-button";
-    buttonToCheckKey.value = 'Submit';
-    buttonToCheckKey.addEventListener('click', function() {
+  inputKeyBox.addEventListener('keydown', function(e) {
+    if (e.which == 13) {
       checkKey(data, stage, panorama, map);
-    });
-    inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
-    keySpan.appendChild(inputBoxAndSubmitButton);
-    gameInfo.appendChild(keySpan);
+    }
+  });
+  var inputBoxAndSubmitButton = document.createElement('div');
+  inputBoxAndSubmitButton.setAttribute('id', 'inputBoxAndButton');
+  inputBoxAndSubmitButton.appendChild(inputKeyBox);
+
+  var buttonToCheckKey = document.createElement('input');
+  buttonToCheckKey.type = 'button';
+  buttonToCheckKey.id = "key-input-button";
+  buttonToCheckKey.value = 'Submit';
+  buttonToCheckKey.addEventListener('click', function() {
+    checkKey(data, stage, panorama, map);
+  });
+  inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
+  keySpan.appendChild(inputBoxAndSubmitButton);
+  gameInfo.appendChild(keySpan);
 }
 
-//TODO(smissak): TEST this so if there is more than one page and the input key is correct,
-// it adds the new stage rather than redirecting to the after game page
 /** 
 * Checks if the key is the correct key for the current stage
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
@@ -139,19 +184,20 @@ async function checkKey(data, stage, panorama, map) {
   var keyInput = document.getElementById('key-input');
   var inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
-    window.alert('Wrong key, please try again!');
+    document.getElementById('wrong-input').innerHTML = '<p class="red-text">Wrong Input! Try again!</p>';
     return;
   }
   if (data.stages.length == stage.stageNumber) {
-    window.location.replace('afterGame.html');
+    const urlParams = new URLSearchParams(window.location.search)
+    var gameID = urlParams.get('gameID');
+    window.location.replace('afterGame.html?gameID=' + gameID);
     return;
   }
 
   // This reloads the map and the game info on the side of the map with the next stage data
-  var nextStageNumber = stage.stageNumber + 1;
-  console.log(nextStageNumber);
+  // Don't need to add one for nextStageNumber because arrays are 0 indexed and stageNumbers are 1 indexed
+  var nextStageNumber = stage.stageNumber;
   var nextStage = await getStage(data.stages[nextStageNumber]);
-  console.log(nextStage);
   var startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
   panorama.setPosition(startingLocation);
   document.getElementById('game-info').innerHTML = '';
@@ -165,8 +211,10 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   stageHints.forEach(hint => 
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber)
+    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber])
   );
+
+  updateUserProgress('N/A', map);
 }
 
 /** 
@@ -201,25 +249,58 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {string} stageID the stageID in which the hint is at   //TODO ADD to js doc
 */
-function addHintMarker(map, latLng, hint, hintNum) {  
+async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
     icon: 'images/marker_exclamation_point.png'
   });
 
-  marker.addListener('click', function() {
-    addHint(hint, hintNum)
-  });
+  var userProgress = await getUserProgress();
+  console.log(userProgress);
+  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+    addHint(hint, hintNum, true, stageID, map);
+  } else {
+    marker.addListener('click', function() {
+      addHint(hint, hintNum, false, stageID, map);
+    });
+  }
 }
 
 /** 
 * Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress //TODO ADD to js doc
 */
-function addHint(hint, hintNum) {
+function addHint(hint, hintNum, startOfGame, stageID, map) {
   var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
+  if (!startOfGame) updateUserProgress(stageID, map);
+}
+
+
+function updateUserProgress(stageID, map) {
+  var gameID =  getGameID();
+  var params = new URLSearchParams();
+  params.append('gameID', gameID);
+  var latLng = (map.getStreetView().getPosition());
+  var location = {"latitude": latLng.lat(), "longitude": latLng.lng()};
+  params.append('location', JSON.stringify(location));
+  
+  params.append('stageID', stageID);
+  var hintsDiv = document.getElementById('hints');
+  var hints = hintsDiv.getElementsByTagName('li');
+  
+  var hintsFound = [];
+  for (var i = 0; i < hints.length; i++) {
+    if (hints[i].innerText != '') {
+      hintsFound.push(parseInt(hints[i].id));
+    }
+  }
+  params.append('hintsFound',  JSON.stringify(hintsFound));
+  var request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
+  fetch(request);
 }

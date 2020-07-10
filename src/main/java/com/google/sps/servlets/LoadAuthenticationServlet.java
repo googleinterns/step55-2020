@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 import com.google.sps.data.*;
+import com.google.sps.managers.*;
+import com.google.sps.utils.*;
 
 import java.util.ArrayList;
 import com.google.gson.Gson;
@@ -48,7 +50,7 @@ public class LoadAuthenticationServlet extends HttpServlet {
             String urlToRedirectToAfterUserLogsOut = "/index.html";
             res.setLogoutUrl(userService.createLogoutURL(urlToRedirectToAfterUserLogsOut));
         } else {
-            String urlToRedirectToAfterUserLogsIn = "/index.html";
+            String urlToRedirectToAfterUserLogsIn = "/create-userid-data";
             res.setLoginUrl(userService.createLoginURL(urlToRedirectToAfterUserLogsIn));
         }
 

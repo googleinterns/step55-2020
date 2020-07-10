@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 import com.google.sps.data.*;
+import com.google.sps.managers.*;
+import com.google.sps.utils.*;
 
 import java.util.ArrayList;
 import com.google.gson.Gson;
@@ -38,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-game-data")
 public class LoadGameServlet extends HttpServlet {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
