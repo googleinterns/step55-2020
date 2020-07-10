@@ -182,4 +182,6 @@ public class MockDatastoreManager implements IDataManager {
     public boolean doesUsernameExist(String username) {
         return false;
     }
+
+    public void deleteSinglePlayerProgress(String userID, String gameID) {}
 }

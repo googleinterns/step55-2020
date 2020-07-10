@@ -84,5 +84,12 @@ public interface IDataManager {
   * @return a boolean if the userName exists or not
   */
   public boolean doesUsernameExist(String userName);
+
+  /**
+  * Deletes a single progress entity from the datastore.
+  * @param userID the unique code used to identify this specific user
+  * @param gameID the unique code used to identify this specific game
+  */
+  public void deleteSinglePlayerProgress(String userID, String gameID);
 }
 
