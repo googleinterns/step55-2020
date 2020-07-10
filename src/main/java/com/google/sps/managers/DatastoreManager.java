@@ -334,5 +334,17 @@ public class DatastoreManager implements IDataManager {
   
     return pq.countEntities() > 0;
   }
+  
+  /**
+  * Deletes a single progress entity from the datastore.
+  * @param userID the unique code used to identify this specific user
+  * @param gameID the unique code used to identify this specific game
+  */
+  public void deleteSinglePlayerProgress(String userID, String gameID) {
+    Key singlePlayerProgressEntityKey = KeyFactory.createKey("singlePlayerProgress", userID + gameID);
+    
+    datastore.delete(singlePlayerProgressEntityKey);
+  }
+
 }
 
