@@ -110,7 +110,7 @@ function createStaticMap(stageLocations, size, gameID) {
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('resumeOrStartOver.html?gameID=' + gameID);
+    window.location.replace('gameInfo.html?gameID=' + gameID);
   });
   return staticImage;
 }
@@ -144,7 +144,7 @@ function createStaticMapCaption(mapData, captionID) {
   staticMapInfo.classList.add('cursor-pointer');
 
   staticMapInfo.addEventListener('click', function() {
-    window.location.replace('playGame.html?gameID=' + mapData.gameID);
+    window.location.replace('gameInfo.html?gameID=' + mapData.gameID);
   });
   return staticMapInfo;
 }
