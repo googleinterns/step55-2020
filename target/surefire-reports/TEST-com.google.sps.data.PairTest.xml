@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<<<<<<< HEAD
 <testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.005" errors="0" skipped="0">
+=======
+<<<<<<< HEAD
+<testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.004" errors="0" skipped="0">
+=======
+<testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.026" errors="0" skipped="0">
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.7+10-post-Debian-3deb10u1"/>
@@ -14,9 +22,18 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+<<<<<<< HEAD
     <property name="user.dir" value="/home/smissak/step55-2020"/>
     <property name="java.vm.compressedOopsMode" value="32-bit"/>
     <property name="java.runtime.version" value="11.0.7+10-post-Debian-3deb10u1"/>
+=======
+<<<<<<< HEAD
+    <property name="user.dir" value="/home/ademiluyi/step55-2020"/>
+=======
+    <property name="user.dir" value="/home/ldchen/step55-2020"/>
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+    <property name="java.runtime.version" value="1.8.0_232-8u232-b09-1~deb9u1-b09"/>
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.io.tmpdir" value="/tmp"/>
@@ -34,12 +51,28 @@
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="os.version" value="4.19.112+"/>
     <property name="library.jansi.path" value="/opt/maven/lib/jansi-native"/>
+<<<<<<< HEAD
     <property name="user.home" value="/home/smissak"/>
+=======
+<<<<<<< HEAD
+    <property name="user.home" value="/home/ademiluyi"/>
+=======
+    <property name="user.home" value="/home/ldchen"/>
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
     <property name="user.timezone" value="Etc/UTC"/>
     <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
     <property name="file.encoding" value="UTF-8"/>
+<<<<<<< HEAD
     <property name="java.specification.version" value="11"/>
     <property name="user.name" value="smissak"/>
+=======
+<<<<<<< HEAD
+    <property name="user.name" value="ademiluyi"/>
+=======
+    <property name="user.name" value="ldchen"/>
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
     <property name="java.class.path" value="/opt/maven/boot/plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="11"/>
     <property name="sun.arch.data.model" value="64"/>
@@ -60,5 +93,13 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
+<<<<<<< HEAD
   <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.005"/>
+=======
+<<<<<<< HEAD
+  <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.004"/>
+=======
+  <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.026"/>
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
 </testsuite>

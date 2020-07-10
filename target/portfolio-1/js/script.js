@@ -258,10 +258,20 @@ function onLoadFunctions(page) {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
+<<<<<<< HEAD
   } else if (page == 'gameInfo') {
     loadGameData();
   } else if (page == 'profilePage') {
     //initMapToCreateGame();
+=======
+<<<<<<< HEAD
+  } else if (page == 'profilePage') {
+    //initMapToCreateGame();
+=======
+  } else if (page == 'gameInfo') {
+    loadGameData();
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){

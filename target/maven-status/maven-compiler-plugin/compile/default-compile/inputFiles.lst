@@ -1,4 +1,9 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
+<<<<<<< HEAD
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/HasSinglePlayerProgressServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/managers/DatastoreManager.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadGamePageServlet.java
@@ -26,6 +31,10 @@
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadUserServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadSinglePlayerProgressServlet.java
 =======
+<<<<<<< HEAD
+=======
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
 /home/ademiluyi/step55-2020/src/main/java/com/google/sps/servlets/LoadAuthenticationServlet.java
 /home/ademiluyi/step55-2020/src/main/java/com/google/sps/managers/IDataManager.java
 /home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Authentication.java
@@ -50,4 +59,13 @@
 /home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/Coordinates.java
 /home/ademiluyi/step55-2020/src/main/java/com/google/sps/data/User.java
 /home/ademiluyi/step55-2020/src/main/java/com/google/sps/managers/DatastoreManager.java
+<<<<<<< HEAD
 >>>>>>> 059cf834a486d0eca6b31219f4cc58967814f782
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 2a8fcfbb52951c9068f2f2ba02ff55275de5a55c
+>>>>>>> 1148504fd51e5320a4e59d2c47ea6903957d7f92
+>>>>>>> f88f88ca935ca1b2bd8a6b4d686a53a37182cd38
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+>>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
