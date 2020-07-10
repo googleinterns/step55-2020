@@ -346,5 +346,33 @@ public class DatastoreManager implements IDataManager {
     datastore.delete(singlePlayerProgressEntityKey);
   }
 
+  /**
+  * Retrieves an entity of a single User data in datastore by the username
+  * @param username a User variable representing a single instance of a User.
+  */
+  public User retrieveUserByUsername(String username) {
+    Query query = new Query("User").setFilter(new FilterPredicate("username", FilterOperator.EQUAL, username));
+    PreparedQuery pq = datastore.prepare(query);
+    Entity userEntity = pq.asSingleEntity();
+
+    String userName = (String) userEntity.getProperty("username");
+    String firstName = (String) userEntity.getProperty("firstname");
+    String lastName = (String) userEntity.getProperty("lastname");
+    ArrayList<String> gamesCreated = (ArrayList<String>) userEntity.getProperty("gamesCreated");
+    if (gamesCreated == null) {
+      gamesCreated = new ArrayList<>();
+    }
+    String profilePictureUrl = (String) userEntity.getProperty("profilePictureUrl");
+    String gamesCompletedWithTimeJson = (String) userEntity.getProperty("gamesCompletedWithTime");
+    Type pairListType = new TypeToken<ArrayList<Pair<String, Long>>>(){}.getType();
+    ArrayList<Pair<String, Long>> gamesCompletedWithTime = gson.fromJson(gamesCompletedWithTimeJson, pairListType);
+    if (gamesCompletedWithTime == null) {
+      gamesCompletedWithTime = new ArrayList<>();
+    }
+    User.Builder user = new User.Builder(userID).setUsername(userName).setFirstName(firstName).setLastName(lastName);
+    user.setProfilePictureUrl(profilePictureUrl).setGamesCreated(gamesCreated);
+    user.setGamesCompletedWithTime(gamesCompletedWithTime);
+    return user.build();
+  }
 }
 
