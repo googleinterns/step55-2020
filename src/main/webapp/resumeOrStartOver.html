@@ -5,6 +5,9 @@
 
   <script src='https://www.gstatic.com/charts/loader.js'></script>
 
+  <script src='js/resumeOrStartOver.js'></script>
+  <script src='js/script.js'></script>
+
   <!--Import Google Icon Font-->
   <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
     
@@ -18,32 +21,17 @@
   <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
   <script src='js/materialize.min.js'></script>
 
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
   <link rel='stylesheet' href='css/style.css'>
-<<<<<<< HEAD
-
-=======
->>>>>>> 2a8fcfbb52951c9068f2f2ba02ff55275de5a55c
-  <script src='js/playGame.js'></script>
-  <script src='js/script.js'></script>
-  
-  <title>Street Explorer</title>
+  <title>Resume or Play Again</title>
 
 </head>
-<body class='light-mode' onload='onLoadFunctions("index")'>
+<body class='light-mode' onload='onLoadFunctions("resumeOrStartOver")'>
   <div id='nav-bar'></div>
-  <!-- TODO: Rather than using JS to generate the Nav-Bar use an iframe -->
-  <!-- <iframe src='navBar.html' width='100%'></iframe> -->
-  <div class=container>
-    <div class='center'>
-      <h1> Featured Map</h1>
-    
-        <div id='featured-map'></div>
-        <br/>
-    </div>
+  <div class='container'>
+    <h1>Would you like to...</h1>
+    <input type='button' onclick='restartGame()' value='Restart the Game' />
+    <h3>OR</h3>
+    <input type='button' onclick='continueGame()' value='Continue Game' />
   </div>
-  <div id='all-maps' class='row card'></div>
 </body>
 </html>
