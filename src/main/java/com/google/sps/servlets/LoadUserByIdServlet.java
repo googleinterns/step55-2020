@@ -36,11 +36,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that when given a userID, serves the corresponding User.
+* Servlet that serves the user with the given id.
 */
-@WebServlet("/load-user-data")
-public class LoadUserServlet extends HttpServlet {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+@WebServlet("/load-userbyid-data")
+public class LoadUserByIdServlet extends HttpServlet {
+    DatastoreManager datastoreManager = new DatastoreManager();
+    UserService userService = UserServiceFactory.getUserService();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

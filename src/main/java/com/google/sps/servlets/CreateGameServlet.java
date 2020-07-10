@@ -86,7 +86,8 @@ public class CreateGameServlet extends HttpServlet {
         Game game = gameBuilder.build();
         datastoreManager.createOrReplaceGame(game);
 
-        response.getWriter().println(gameID);
+        String json = new Gson().toJson(gameID);
+        response.getWriter().println(json);
     }
 
     /**

@@ -5,7 +5,10 @@
 
   <script src='https://www.gstatic.com/charts/loader.js'></script>
 
+  <link rel='stylesheet' href='css/style.css'>
+
   <script src='js/playGame.js'></script>
+  <script src='js/gameInfo.js'></script>
   <script src='js/script.js'></script>
 
   <!--Import Google Icon Font-->
@@ -18,15 +21,20 @@
   <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
   <script src='js/materialize.min.js'></script>
 
-  <link rel='stylesheet' href='css/style.css'>
-  <title>Play Game</title>
+  <title>Game Info</title>
 
 </head>
-<body class='light-mode' onload='onLoadFunctions("playGame")'>
+<body class='light-mode' onload='onLoadFunctions("gameInfo")'>
   <div id='nav-bar'></div>
-  <div id='game'>
-      <div id='playMap'></div>
-      <div id='game-info'></div>
+  <div class='container'>
+    <div id='map-name'></div>
+    <div id='map-description'></div>
+    <div id='map-image'></div>
+    <div id='map-difficult'></div>
+    <div id='map-creator'></div>
+    <div id='play-game'></div>
+    <div id='map-rating'></div>
+    <div id='comments'></div>
   </div>
 </body>
 </html>
