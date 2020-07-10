@@ -43,7 +43,7 @@ public class LoadGamePageServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Game gameobject = datastoreManager.retrieveGame(request.getParameter("gameID"));
         ReducedGameData game = new ReducedGameData(gameobject);
 
