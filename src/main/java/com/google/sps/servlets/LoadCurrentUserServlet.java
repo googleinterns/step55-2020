@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-currentuser-data")
 public class LoadCurrentUserServlet extends HttpServlet {
-    MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
     UserService userService = UserServiceFactory.getUserService();
 
     @Override
