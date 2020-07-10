@@ -109,11 +109,26 @@ function addNewStage() {
 
   const newStageHints = document.createElement('div');
   newStageHints.id = getStageNumber(newStage) + 'Hints';
-  newStageHints.innerHTML = "<input type='text' id='key' placeholder='Stage Key'>" +
-                            "<input type='text' id='starter-position' placeholder='Starter Position (click on map to get coordinates)'>" +
-                            "<input type='text' placeholder='Starter Hint' id='starter-hint' required>" +
-                            "<input type='text' id='hint1-position' placeholder='Hint 1 Position (click on map to get coordinates)'>" + 
-                            "<input type='text' placeholder='Hint 1' id='hint1'>";
+  newStageHints.innerHTML = "<div class='input-field'>"+
+                              "<input type='text' id='key'>" +
+                              "<label for='key'>Stage Key</label>" +
+                            "</div>" +
+                            "<div class='input-field'>" +
+                              "<input type='text' id='starter-position'>" +
+                              "<label for='starter-position'>Starter Position (click on map to get coordinates)</label>" +
+                            "</div>" +
+                            "<div class='input-field'>" +
+                              "<input type='text' id='starter-hint' required>" +
+                              "<label for='starter-hint'>Starter Hint</label>" +
+                            "</div>" +
+                            "<div class='input-field'>" +
+                              "<input type='text' id='hint1-position'>" +
+                              "<label for='hint1-position'>Hint 1 Position (click on map to get coordinates)</label>" +
+                            "</div>" + 
+                            "<div class='input-field'>" +
+                              "<input type='text'  id='hint1'>" +
+                              "<label for='hint1'>Hint 1</label>" +
+                            "</div>";
 
   document.getElementById('hints').appendChild(newStageHints);
   setActive('stage' + (numStages + 1));
@@ -129,15 +144,29 @@ function addNewHint() {
 
   const newHintPos = document.createElement('input');
   newHintPos.id = 'hint' + (numHints/2) + '-position';
-  newHintPos.placeholder = 'Hint ' + (numHints/2) + ' Position (click on map to get coordinates)';
   newHintPos.type= 'text';
-  activeHints.appendChild(newHintPos);
+
+  var hintPosLabel = document.createElement('label');
+  hintPosLabel.for = 'hint' + (numHints/2) + '-position';
+  hintPosLabel.innerText = 'Hint ' + (numHints/2) + ' Position (click on map to get coordinates)';
+
+  var hintPosDiv = createInputDiv();
+  hintPosDiv.appendChild(newHintPos);
+  hintPosDiv.appendChild(hintPosLabel);
+  activeHints.appendChild(hintPosDiv);
 
   const newHint = document.createElement('input');
   newHint.id = 'hint' + (numHints/2);
-  newHint.placeholder = 'Hint ' + (numHints/2);
   newHint.type= 'text';
-  activeHints.appendChild(newHint);
+
+  var hintLabel = document.createElement('label');
+  hintLabel.for = 'hint' + (numHints/2);
+  hintLabel.innerText = 'Hint ' + (numHints/2);
+  
+  var hintDiv = createInputDiv();
+  hintDiv.appendChild(newHint);
+  hintDiv.appendChild(hintLabel);
+  activeHints.appendChild(hintDiv);
 }
 
 /**
@@ -170,6 +199,12 @@ function getActiveStageElement() {
 */
 function getStageNumber(stageElement) {
   return stageElement.classList[0];
+}
+
+function createInputDiv() {
+  var div = document.createElement('div');
+  div.className = 'input-field';
+  return div;
 }
 
 /**
