@@ -9,6 +9,7 @@ com/google/sps/data/Game$1.class
 com/google/sps/servlets/CreateGameServlet$1.class
 com/google/sps/data/Hint.class
 com/google/sps/servlets/LoadMainPageServlet.class
+com/google/sps/data/ReducedGameData.class
 com/google/sps/utils/IDGenerator.class
 com/google/sps/data/Game.class
 com/google/sps/data/SinglePlayerProgress$Builder.class
@@ -29,6 +30,7 @@ com/google/sps/servlets/UpdateSinglePlayerProgressServlet$1.class
 com/google/sps/servlets/CreateGameServlet$4.class
 com/google/sps/data/Pair.class
 com/google/sps/data/Stage$1.class
+com/google/sps/servlets/LoadGamePageServlet.class
 com/google/sps/data/SinglePlayerProgress.class
 com/google/sps/managers/MockDatastoreManager.class
 com/google/sps/servlets/LoadGameServlet.class
