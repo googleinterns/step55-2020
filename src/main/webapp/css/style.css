@@ -48,6 +48,22 @@
   background: #74d3aeff;
 }
 
+.light-mode #resume-or-startover-button, 
+.light-mode #finish, 
+.light-mode #addHint, 
+.light-mode #addStage {
+  background: #74d3aeff;
+}
+
+.light-mode #hints input{
+  background-color: #efefefff;
+}
+
+.light-mode #title {
+  background-color: #eeeeeeff;
+  width: 25%;
+}
+
 /* CSS for if the user is playing in dark mode */
 .dark-mode nav {
   background-color: #000000ff;
@@ -90,15 +106,52 @@
 
 
 .dark-mode textarea {
+  color: white;
+  background-color: #666666ff;
   height: 20vh;
   width: 50%;
-  background-color: #666666ff;
-  color: white;
 }
 
 .dark-mode #key-input-button {
   background: #32908F;
 }
+
+.dark-mode #resume-or-startover-button, 
+.dark-mode #finish, 
+.dark-mode #addHint,
+.dark-mode #addStage {
+  background: #32908F;
+}
+
+.dark-mode #hints input {
+  background-color: #666666ff;
+}
+
+.dark-mode #title {
+  background-color: #666666ff;
+  width: 25%;
+}
+
+#finish, #addHint, #addStage, #stages input {
+  border: 0px;
+  border-radius: 7px;
+  height: 30px;
+  margin: 5px;
+  font-size: 1.5em;
+}
+
+#extra-margin {
+  margin: 40px;
+  width: 47%;
+}
+
+#resume-or-startover-button {
+  border: 0px;
+  border-radius: 7px;
+  height: 50px;
+  margin-left: 15px;
+  font-size: 2em;
+}  
 
 #featured-map {
   margin: auto;
@@ -119,11 +172,17 @@ input {
   display:none;
 }
 
+.float-right {
+  float: right;
+}
+
 /* Sets the map to about half of the screen height */
 #map {
+  float: right;
+  margin: 40px;
   border: thin solid black;
   height: 25vw;
-  width: 100%;
+  width: 47%;
 }
 
 /* Sets the map the user plays on to the height of the screen */
@@ -143,7 +202,6 @@ input {
 ol#hints {
   list-style-position: inside
 }
-
 
 .black-text {
   color: black;
@@ -187,8 +245,7 @@ ol#hints {
   margin: 6px;
 }
 
-
-/* Add CSS that starts with pac is for the search bar on the createGame.html page map */
+/* All CSS that starts with pac is for the search bar on the createGame.html page map */
 .pac-card {
   margin: 10px 10px 0 0;
   border-radius: 2px 0 0 2px;

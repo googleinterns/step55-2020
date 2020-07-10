@@ -231,10 +231,12 @@ function onLoadFunctions(page) {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
+  } else if (page == 'gameInfo') {
+    loadGameData();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){
- 		$('.materialbox').materialbox();
+      $('.materialbox').materialbox();
  	});
   }
   
