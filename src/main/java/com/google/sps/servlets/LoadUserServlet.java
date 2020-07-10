@@ -36,15 +36,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that when given a userID, serves the corresponding User.
+* Servlet that serves the current user.
 */
 @WebServlet("/load-user-data")
 public class LoadUserServlet extends HttpServlet {
     MockDatastoreManager datastoreManager = new MockDatastoreManager();
+    UserService userService = UserServiceFactory.getUserService();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userID = request.getParameter("userID");
+        String userID = userService.getCurrentUser().getUserId();
         User user = datastoreManager.retrieveUser(userID);
         
         String json = new Gson().toJson(user);
