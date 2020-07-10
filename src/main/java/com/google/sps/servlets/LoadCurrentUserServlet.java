@@ -38,13 +38,13 @@ import javax.servlet.http.HttpServletResponse;
 /**
 * Servlet that serves the current user.
 */
-@WebServlet("/load-user-data")
-public class LoadUserServlet extends HttpServlet {
+@WebServlet("/load-currentuser-data")
+public class LoadCurrentUserServlet extends HttpServlet {
     MockDatastoreManager datastoreManager = new MockDatastoreManager();
     UserService userService = UserServiceFactory.getUserService();
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userID = userService.getCurrentUser().getUserId();
         User user = datastoreManager.retrieveUser(userID);
         
