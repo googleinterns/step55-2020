@@ -140,15 +140,16 @@ function addNewStage() {
 function addNewHint() {
   const activeStageNum = getActiveStageElement().classList[0] + 'Hints';
   const activeHints = document.getElementById(activeStageNum);
-  const numHints = activeHints.getElementsByTagName('input').length - 1;
+  const numHintInputBoxes = activeHints.getElementsByTagName('input').length - 1;
+  var numHints = numHintInputBoxes/2;
 
   const newHintPos = document.createElement('input');
-  newHintPos.id = 'hint' + (numHints/2) + '-position';
+  newHintPos.id = 'hint' + numHints + '-position';
   newHintPos.type= 'text';
 
   var hintPosLabel = document.createElement('label');
-  hintPosLabel.for = 'hint' + (numHints/2) + '-position';
-  hintPosLabel.innerText = 'Hint ' + (numHints/2) + ' Position (click on map to get coordinates)';
+  hintPosLabel.for = 'hint' + numHints + '-position';
+  hintPosLabel.innerText = 'Hint ' + numHints + ' Position (click on map to get coordinates)';
 
   var hintPosDiv = createInputDiv();
   hintPosDiv.appendChild(newHintPos);
@@ -156,12 +157,12 @@ function addNewHint() {
   activeHints.appendChild(hintPosDiv);
 
   const newHint = document.createElement('input');
-  newHint.id = 'hint' + (numHints/2);
+  newHint.id = 'hint' + numHints;
   newHint.type= 'text';
 
   var hintLabel = document.createElement('label');
-  hintLabel.for = 'hint' + (numHints/2);
-  hintLabel.innerText = 'Hint ' + (numHints/2);
+  hintLabel.for = 'hint' + numHints;
+  hintLabel.innerText = 'Hint ' + numHints;
   
   var hintDiv = createInputDiv();
   hintDiv.appendChild(newHint);
@@ -201,6 +202,10 @@ function getStageNumber(stageElement) {
   return stageElement.classList[0];
 }
 
+/**
+* Creats a div that has the class input-field
+* @returns {Element} a div with the class 'input-field'
+*/
 function createInputDiv() {
   var div = document.createElement('div');
   div.className = 'input-field';
