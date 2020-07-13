@@ -59,13 +59,14 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
 
         if(stageID.equals("N/A")) {
             datastoreManager.deleteSinglePlayerProgress(userID, gameID);
-        }
-        SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
-        progressBuilder.setLocation(location);
-        progressBuilder.setHintsFound(hintsFound);
-        progressBuilder.setStageID(stageID);
+        } else {
+            SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
+            progressBuilder.setLocation(location);
+            progressBuilder.setHintsFound(hintsFound);
+            progressBuilder.setStageID(stageID);
 
-        datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
+            datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
+        }
     }
 
     private String getGameID(HttpServletRequest request) {

@@ -1,2 +1,5 @@
 com/google/sps/data/PairTest.class
 com/google/sps/utils/IDGeneratorTest.class
+com/google/sps/servlets/LoadAuthenticationServletTest.class
+com/google/sps/servlets/LoadAuthenticationServletTest$2.class
+com/google/sps/servlets/LoadAuthenticationServletTest$1.class

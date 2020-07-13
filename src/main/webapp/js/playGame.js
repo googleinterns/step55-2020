@@ -22,7 +22,7 @@ async function initMapToPlayGame() {
     var initStage;
     var stageID;
     console.log(userProgress);
-    if (userProgress == null) {
+    if (userProgress == nul || userProgress.stageID = 'N/A') {
       stageID = data.stages[0];
       initStage = await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
