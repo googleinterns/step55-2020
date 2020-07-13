@@ -2,7 +2,7 @@
 <html>
 <head>
   <link href='images/streetExplorerLogo.png' rel='icon'>
-  
+
   <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
 
   <script src='https://www.gstatic.com/charts/loader.js'></script>
@@ -35,9 +35,11 @@
     <div class='center'>
       <h1> Profile Page</h1>
         <form action="/create-username-data" method='POST'>
-          <label for="uname">User name:</label><br>
-          <input id='userName' type='text' name='userName' placeholder='User Name' required>
-      
+          <div class='input-field'>
+            <h5>Username</h5>
+            <input id='userName' type='text' name='userName' required>
+          </div>
+          <br>
           <input type="submit" value="Submit">
         </form>        
     </div>

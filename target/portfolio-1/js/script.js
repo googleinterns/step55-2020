@@ -20,7 +20,7 @@ function changeToOrFromDarkMode() {
 * @param {string} page is which HTML the navbar should be placed on
 * @example createNavBar("index")
 */
-async function createNavBar(page) {
+async function createNavBar(page, loggedIn, url) {
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -58,7 +58,7 @@ async function createNavBar(page) {
     liHome.className = 'active';
   }
   a = document.createElement('a');
-  a.innerHTML = ('Home');
+  a.innerHTML = 'Home';
   a.href = "index.html";
   liHome.appendChild(a);
 
@@ -67,54 +67,59 @@ async function createNavBar(page) {
       liCreateGame.className = 'active';
   }
   a = document.createElement('a');
-  a.innerHTML = ('Create Game');
-  a.href = "createGame.html";
-  liCreateGame.appendChild(a);
-
-  var liLogin = document.createElement('li');
-  a = document.createElement('a');
-  a.innerHTML = ('Login');
-  var url;
-
-  var loggedIn = false;
-  var liLogout = document.createElement('li');
-  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
-    if (data.loggedIn) {
-      loggedIn = true;
-      url = "profilePage.html";
-      a.innerHTML = ('My profile');
-
-      logoutUrl = document.createElement('a');
-      var url1;
-      logoutUrl.innerHTML = ('Log out');
-      url1 = data.logoutUrl;
-      logoutUrl.href = url1;
-      liLogout.appendChild(logoutUrl);
-    } else {
-      url = data.loginUrl;
-    }
-  });
-  a.href = url;
+  a.innerHTML = 'Create Game';
+  a.href = 'createGame.html';
   
+  var liLogin;
+  var liLogout;
+  var logoutUrl;
+  liLogin = document.createElement('li');
+  if (loggedIn) {
+    liCreateGame.appendChild(a);
+    
+    a = document.createElement('a');
+    a.innerHTML = 'My Profile';
+    a.href = 'profilePage.html';
+    
+    liLogout = document.createElement('li');
+    logoutUrl = document.createElement('a');
+    logoutUrl.innerHTML = 'Log out';
+    logoutUrl.href = url;
+  } else {
+    a = document.createElement('a');
+    a.innerHTML = 'Login';
+    a.href = url;
+  }
+
   liLogin.appendChild(a);
-  
+
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
   ul.appendChild(liCreateGame);
   ul.appendChild(liLogin);
+  
+  
 
-  if (loggedIn) {
+  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
+                                                    '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
+                                                    '<li><a href="index.html">Home</a> </li>' + 
+                                                  '</ul>';
+
+  var navBarForMobile = document.getElementById('mobile-demo');
+  
+  if (liLogout != undefined) {
+    liLogout.appendChild(logoutUrl);
     ul.appendChild(liLogout);
+    navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
+                                 '<li><a href="profilePage.html">My Profile</a> </li>'+ 
+                                 '<li><a href="'+url+'">Log out</a> </li>';
+  } else {
+    navBarForMobile.innerHTML += '<li><a href="'+url+'">Log in</a> </li>';
   }
   
   containerDiv.appendChild(ul);
+
   document.getElementById('nav-bar').appendChild(navbar);
-  
-  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-                                                '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
-                                                '<li><a href="index.html">Home</a></li>' + 
-                                                '<li><a href="createGame.html">Create Game</a></li>' + 
-                                                '<li><a href= '+url+'>Login</a></li> </ul>';
 }
 
 /** 
@@ -243,8 +248,19 @@ function loadMaps() {
 * @param {string} page is which page the onLoadFunction is being called from without the .html 
 * @example onLoadFunction("index")
 */
-function onLoadFunctions(page) {
-  createNavBar(page);
+async function onLoadFunctions(page) {
+  var loggedIn = false;
+  var url;
+  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
+    loggedIn = data.loggedIn
+    if (data.loggedIn) {
+      url = data.logoutUrl;
+    } else {
+      url = data.loginUrl;
+    }
+  }); 
+
+  createNavBar(page, loggedIn, url);
 
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   var elems = document.querySelectorAll('.sidenav');
@@ -253,25 +269,18 @@ function onLoadFunctions(page) {
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
+    if (!loggedIn) {
+      window.location.replace(url);
+    }
     initMapToCreateGame();
   } else if (page == 'afterGame') {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
-<<<<<<< HEAD
+  } else if (page == 'profilePage') {
+    getUserName();
   } else if (page == 'gameInfo') {
     loadGameData();
-  } else if (page == 'profilePage') {
-    //initMapToCreateGame();
-=======
-<<<<<<< HEAD
-  } else if (page == 'profilePage') {
-    //initMapToCreateGame();
-=======
-  } else if (page == 'gameInfo') {
-    loadGameData();
->>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
->>>>>>> 4a163f6477e777661ee9c5ea173274e8fd0c547f
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){
