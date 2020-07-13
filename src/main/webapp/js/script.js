@@ -18,9 +18,11 @@ function changeToOrFromDarkMode() {
 /** 
 * Creates the navigation bar and specifies which page is active
 * @param {string} page is which HTML the navbar should be placed on
+* @param {boolean} loggedIn a boolean which is true if the user is logged in and false if not
+* @param {string} url if loggedIn is true then this url contains the logout url and otherwise the login url
 * @example createNavBar("index")
 */
-async function createNavBar(page) {
+async function createNavBar(page, loggedIn, url) {
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -58,7 +60,7 @@ async function createNavBar(page) {
     liHome.className = 'active';
   }
   a = document.createElement('a');
-  a.innerHTML = ('Home');
+  a.innerHTML = 'Home';
   a.href = "index.html";
   liHome.appendChild(a);
 
@@ -67,54 +69,57 @@ async function createNavBar(page) {
       liCreateGame.className = 'active';
   }
   a = document.createElement('a');
-  a.innerHTML = ('Create Game');
-  a.href = "createGame.html";
-  liCreateGame.appendChild(a);
-
-  var liLogin = document.createElement('li');
-  a = document.createElement('a');
-  a.innerHTML = ('Login');
-  var url;
-
-  var loggedIn = false;
-  var liLogout = document.createElement('li');
-  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
-    if (data.loggedIn) {
-      loggedIn = true;
-      url = "profilePage.html";
-      a.innerHTML = ('My profile');
-
-      logoutUrl = document.createElement('a');
-      var url1;
-      logoutUrl.innerHTML = ('Log out');
-      url1 = data.logoutUrl;
-      logoutUrl.href = url1;
-      liLogout.appendChild(logoutUrl);
-    } else {
-      url = data.loginUrl;
-    }
-  });
-  a.href = url;
+  a.innerHTML = 'Create Game';
+  a.href = 'createGame.html';
   
+  var liLogin;
+  var liLogout;
+  var logoutUrl;
+  liLogin = document.createElement('li');
+  if (loggedIn) {
+    liCreateGame.appendChild(a);
+    
+    a = document.createElement('a');
+    a.innerHTML = 'My Profile';
+    a.href = 'profilePage.html';
+    
+    liLogout = document.createElement('li');
+    logoutUrl = document.createElement('a');
+    logoutUrl.innerHTML = 'Log out';
+    logoutUrl.href = url;
+  } else {
+    a = document.createElement('a');
+    a.innerHTML = 'Login';
+    a.href = url;
+  }
+
   liLogin.appendChild(a);
-  
+
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
   ul.appendChild(liCreateGame);
   ul.appendChild(liLogin);
+  
+  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
+                                                    '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
+                                                    '<li><a href="index.html">Home</a> </li>' + 
+                                                  '</ul>';
 
-  if (loggedIn) {
+  var navBarForMobile = document.getElementById('mobile-demo');
+  
+  if (liLogout != undefined) {
+    liLogout.appendChild(logoutUrl);
     ul.appendChild(liLogout);
+    navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
+                                 '<li><a href="profilePage.html">My Profile</a> </li>'+ 
+                                 '<li><a href="'+url+'">Log out</a> </li>';
+  } else {
+    navBarForMobile.innerHTML += '<li><a href="'+url+'">Log in</a> </li>';
   }
   
   containerDiv.appendChild(ul);
+
   document.getElementById('nav-bar').appendChild(navbar);
-  
-  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-                                                '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
-                                                '<li><a href="index.html">Home</a></li>' + 
-                                                '<li><a href="createGame.html">Create Game</a></li>' + 
-                                                '<li><a href= '+url+'>Login</a></li> </ul>';
 }
 
 /** 
@@ -122,6 +127,7 @@ async function createNavBar(page) {
 * @param {array} stageLocations contains objects with longitude and latitude
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
 * @param {String} gameID is gameID from the server of the game that was clicked on
+* @return {Element} an img element is returned with the stage starting locations marked on the image
 */
 function createStaticMap(stageLocations, size, gameID) { 
   var staticImage = document.createElement('img');
@@ -136,7 +142,7 @@ function createStaticMap(stageLocations, size, gameID) {
   staticImage.classList.add('cursor-pointer');
 
   staticImage.addEventListener('click', function() {
-    window.location.replace('resumeOrStartOver.html?gameID=' + gameID);
+    window.location.replace('gameInfo.html?gameID=' + gameID);
   });
   return staticImage;
 }
@@ -159,29 +165,29 @@ function createStaticMapCaption(mapData, captionID) {
     difficultyColor = 'red-text';
   }
 
-  var fiveStars = getStarRating(mapData);
+  var fiveStars = getStarRating(mapData.stars);
 
   var staticMapInfo = document.createElement('div');
   staticMapInfo.id = captionID;
   staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
-  staticMapInfo.innerHTML += mapData.gameName + ' <i class="' + difficultyColor + '">[' + difficulty + "]</i>";
+  staticMapInfo.innerHTML += '<div id="title-div">' + mapData.gameName + ' </div><i class="' + difficultyColor + '">[' + difficulty + "]</i>";
   staticMapInfo.innerHTML += '<br> By ' + mapData.creatorUsername;
   staticMapInfo.style = 'text-align:left; padding: 6px';
   staticMapInfo.classList.add('cursor-pointer');
 
   staticMapInfo.addEventListener('click', function() {
-    window.location.replace('playGame.html?gameID=' + mapData.gameID);
+    window.location.replace('gameInfo.html?gameID=' + mapData.gameID);
   });
+
   return staticMapInfo;
 }
 
-
 /** 
 * Creates below the image the star ratings of the map
-* @param {string} mapData the JSON data with the map's information
+* @param {int} stars number of stars to be shown
 */
-function getStarRating(mapData) {
-  var avgStarsTemp = mapData.stars;
+function getStarRating(stars) {
+  var avgStarsTemp = stars;
   
   var fullStar = '<i class="material-icons md-18">star</i>';
   var halfStar = '<i class="material-icons md-18">star_half</i>';
@@ -242,8 +248,26 @@ function loadMaps() {
 * @param {string} page is which page the onLoadFunction is being called from without the .html 
 * @example onLoadFunction("index")
 */
-function onLoadFunctions(page) {
-  createNavBar(page);
+async function onLoadFunctions(page) {
+  if (typeof(Storage) !== "undefined") {
+  var color = sessionStorage.getItem("colorMode");
+  if (color == null) {
+    sessionStorage.setItem("colorMode", "light-mode");
+  }
+    document.body.className = color;
+  }
+  var loggedIn = false;
+  var url;
+  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
+    loggedIn = data.loggedIn
+    if (data.loggedIn) {
+      url = data.logoutUrl;
+    } else {
+      url = data.loginUrl;
+    }
+  }); 
+
+  createNavBar(page, loggedIn, url);
 
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   var elems = document.querySelectorAll('.sidenav');
@@ -252,13 +276,16 @@ function onLoadFunctions(page) {
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
+    if (!loggedIn) {
+      window.location.replace(url);
+    }
     initMapToCreateGame();
   } else if (page == 'afterGame') {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
   } else if (page == 'profilePage') {
-    //initMapToCreateGame();
+    getUserName();
   } else if (page == 'gameInfo') {
     loadGameData();
   } else if (page == 'index') {
@@ -266,13 +293,5 @@ function onLoadFunctions(page) {
  	$(document).ready(function(){
       $('.materialbox').materialbox();
  	});
-  }
-  
-  if (typeof(Storage) !== "undefined") {
-    var color = sessionStorage.getItem("colorMode");
-    if (color == null) {
-      sessionStorage.setItem("colorMode", "dark-mode");
-    }
-    document.body.className = color;
   }
 }

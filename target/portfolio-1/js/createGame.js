@@ -259,7 +259,6 @@ function getDataFromGameCreationForm() {
     }
     hintLocations.push(stageHintsLocation);
     hintTexts.push(stageHintsText);
-    window.location.replace('index.html');
   }
 
   var params = new URLSearchParams();
@@ -271,5 +270,7 @@ function getDataFromGameCreationForm() {
   params.append('hintLocations', JSON.stringify(hintLocations));
   params.append('hintTexts', JSON.stringify(hintTexts));
   var request = new Request('/create-game-data', {method: 'POST', body: params});
-  fetch(request);
+  fetch(request).then(response => response.json()).then((data) => {
+    window.location.replace('gameInfo.html?gameID=' + data);
+  });
 }
