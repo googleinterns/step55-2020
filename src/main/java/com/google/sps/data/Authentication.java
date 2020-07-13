@@ -45,4 +45,16 @@ public class Authentication {
     public void setLogoutUrl(String logoutUrl) {
         this.logoutUrl = logoutUrl;
     }
+
+    public boolean getLoggedIn() {
+        return this.loggedIn;
+    }
+
+    public String getLoginUrl() {
+        return this.loginUrl;
+    }
+
+    public String getLogoutUrl() {
+        return this.logoutUrl;
+    }
 }
