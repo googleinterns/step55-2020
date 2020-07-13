@@ -1,6 +1,2 @@
-<<<<<<< HEAD
-/home/ademiluyi/step55-2020/src/test/java/com/google/sps/data/PairTest.java
-=======
-/home/ldchen/step55-2020/src/test/java/com/google/sps/utils/IDGeneratorTest.java
-/home/ldchen/step55-2020/src/test/java/com/google/sps/data/PairTest.java
->>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
+/home/smissak/step55-2020/src/test/java/com/google/sps/utils/IDGeneratorTest.java
+/home/smissak/step55-2020/src/test/java/com/google/sps/data/PairTest.java

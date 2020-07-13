@@ -49,8 +49,6 @@ public class CreateUserIdServlet extends HttpServlet {
       if (currentUser ==  null) {
         User user = new User.Builder(userId).build();
         datastoreManager.createOrReplaceUser(user);
-      } else {
-        return;
       }
 
       response.sendRedirect("/profilePage.html");
