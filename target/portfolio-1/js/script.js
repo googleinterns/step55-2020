@@ -18,6 +18,8 @@ function changeToOrFromDarkMode() {
 /** 
 * Creates the navigation bar and specifies which page is active
 * @param {string} page is which HTML the navbar should be placed on
+* @param {boolean} loggedIn a boolean which is true if the user is logged in and false if not
+* @param {string} url if loggedIn is true then this url contains the logout url and otherwise the login url
 * @example createNavBar("index")
 */
 async function createNavBar(page, loggedIn, url) {
@@ -98,8 +100,6 @@ async function createNavBar(page, loggedIn, url) {
   ul.appendChild(liCreateGame);
   ul.appendChild(liLogin);
   
-  
-
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
                                                     '<li><a href="index.html">Home</a> </li>' + 

@@ -84,7 +84,7 @@ function printPlayGameButton(data) {
   playGameButton.value = 'Play Game!';  
   playGameButton.id = 'play-game-button'; 
   playGameButton.addEventListener("click", function(){
-    window.location.replace('playGame.html?gameID=' + data.gameID);
+    window.location.replace('resumeOrStartOver.html?gameID=' + data.gameID);
   }); 
   playGameDiv.append(playGameButton);
 }
