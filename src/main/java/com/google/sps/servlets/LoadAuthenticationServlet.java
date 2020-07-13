@@ -50,7 +50,7 @@ public class LoadAuthenticationServlet extends HttpServlet {
             String urlToRedirectToAfterUserLogsOut = "/index.html";
             res.setLogoutUrl(userService.createLogoutURL(urlToRedirectToAfterUserLogsOut));
         } else {
-            String urlToRedirectToAfterUserLogsIn = "/create-userid-data";
+            String urlToRedirectToAfterUserLogsIn = "/index.html";
             res.setLoginUrl(userService.createLoginURL(urlToRedirectToAfterUserLogsIn));
         }
 

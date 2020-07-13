@@ -51,8 +51,7 @@
 .light-mode #resume-or-startover-button, 
 .light-mode #finish, 
 .light-mode #addHint, 
-.light-mode #addStage,
-.light-mode #play-game-button {
+.light-mode #addStage {
   background: #74d3aeff;
 }
 
@@ -120,8 +119,7 @@
 .dark-mode #resume-or-startover-button, 
 .dark-mode #finish, 
 .dark-mode #addHint,
-.dark-mode #addStage,
-.dark-mode #play-game-button {
+.dark-mode #addStage {
   background: #32908F;
 }
 
@@ -134,7 +132,7 @@
   width: 25%;
 }
 
-#finish, #addHint, #addStage, #stages input, #play-game-button  {
+#finish, #addHint, #addStage, #stages input {
   border: 0px;
   border-radius: 7px;
   height: 30px;
@@ -183,7 +181,7 @@ input {
   float: right;
   margin: 40px;
   border: thin solid black;
-  height: 45vw;
+  height: 25vw;
   width: 47%;
 }
 
@@ -337,10 +335,4 @@ ol#hints {
 
 #stage-counter {
   font-size: 25px;
-}
-
-#title-div {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

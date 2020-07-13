@@ -1,107 +1,61 @@
-/**
-* Loads the game data to the game info page
-*/
 function loadGameData() {
   var gameID = getGameID();
   const params = new URLSearchParams();
   params.append('gameID', gameID)
   var request = new Request('/load-gamepage-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
-    printMapNameAndDifficulty(data);
+    printMapName(data);
     printMapDescription(data);
     printMapImage(data);
     printMapRating(data);
     printMapCreator(data);
     printPlayGameButton(data);
-    // printRateMapButton(data);
-    // printMapComments(data);
+    printRateMapButton(data);
+    printMapDifficulty(data);
+    printMapComments(data);
   });
 }
 
-/**
-* Adds the game name and difficulty where the div with id 'map-name' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
-function printMapNameAndDifficulty(data) {
+function printMapName(data) {
   var mapName = document.getElementById('map-name');
-  var difficultyClass = 'red-text';
-  var difficulty = '[Hard]'
-  if (data.difficulty == 1) {
-    difficultyClass = 'green-text';
-    difficulty = '[Easy]';
-  } else if (data.difficulty == 2) {
-    difficultyClass = 'orange-text';
-    difficulty = '[Medium]';
-  }
-  mapName.innerHTML = '<h1>' + data.gameName + ' <i class=' + difficultyClass +'>' + difficulty + '</i></h1>';
+  mapName.innerHTML = data.gameName;
 }
 
-/**
-* Adds the game description where the div with id 'map-description' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
 function printMapDescription(data) {
   var mapDescription = document.getElementById('map-description');
-  mapDescription.innerHTML = '<h5>Game Description: </h5>';
-  mapDescription.innerHTML += '<h4>' + data.gameDescription + '</h4>';
+  mapDescription.innerHTML = data.gameDescription;
 }
 
-/**
-* Adds the game image where the div with id 'map-image' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
 function printMapImage(data) {
   var mapImage = document.getElementById('map-image');
-  mapImage.append(createStaticMap(data.stageLocations, 500, data.gameID));
+  mapImage.innerHTML = data.stageLocations;
 }
 
-/**
-* Adds the game rating where the div with id 'map-rating' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
 function printMapRating(data) {
   var mapRating = document.getElementById('map-rating');
-  mapRating.innerHTML = getStarRating(data.stars).replace(/md-18/g, 'large');
+  mapRating.innerHTML = data.stars;
 }
 
-/**
-* Adds the game creator where the div with id 'map-creator' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
 function printMapCreator(data) {
   var mapCreator = document.getElementById('map-creator');
-  mapCreator.innerHTML = '<h4>Created by: ' + data.creatorUsername + '</h4>';
+  mapCreator.innerHTML = data.creatorUsername;
 }
 
-/**
-* Adds a button to play the game where the div with id 'play-game' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
 function printPlayGameButton(data) {
-  var playGameDiv = document.getElementById('play-game');
-  var playGameButton = document.createElement('input');
-  playGameButton.type = 'button';
-  playGameButton.value = 'Play Game!';  
-  playGameButton.id = 'play-game-button'; 
-  playGameButton.addEventListener("click", function(){
-    window.location.replace('resumeOrStartOver.html?gameID=' + data.gameID);
-  }); 
-  playGameDiv.append(playGameButton);
+  var playGameButton = document.getElementById('play-game');
+  playGameButton.innerHTML = data.gameName;
 }
 
-/**
-* Adds a button to rate the game where the div with id 'rate-map' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
 function printRateMapButton(data) {
-  var rateMapButton = document.getElementById('rate-map');
-//   rateMapButton.innerHTML = data.gameName;
+  var rateMapButton = document.getElementById('play-game');
+  rateMapButton.innerHTML = data.gameName;
 }
 
-/**
-* Adds the comments for the map game where the div with id 'comments' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
-*/
+function printMapDifficulty(data) {
+  var rateMapButton = document.getElementById('play-game');
+  rateMapButton.innerHTML = data.difficulty;
+}
+
 function printMapComments(data) {
   var mapComments = document.getElementById('comments');
 //   mapComments.innerHTML = data.gameName;

@@ -44,13 +44,8 @@ public class CreateUserIdServlet extends HttpServlet {
   @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String userId = userService.getCurrentUser().getUserId();
-      User currentUser = datastoreManager.retrieveUser(userId);
-      
-      if (currentUser ==  null) {
-        User user = new User.Builder(userId).build();
-        datastoreManager.createOrReplaceUser(user);
-      }
 
-      response.sendRedirect("/profilePage.html");
+      User user = new User.Builder(userId).build();
+      datastoreManager.createOrReplaceUser(user);
     }
 }

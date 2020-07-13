@@ -50,7 +50,6 @@ public class DatastoreManager implements IDataManager {
   */
   public void createOrReplaceUser(User user) {
     Entity userEntity = new Entity("User", user.getUserID());
-    userEntity.setProperty("userID", user.getUserID());
     userEntity.setProperty("username", user.getUsername());
     userEntity.setProperty("firstname", user.getFirstName());
     userEntity.setProperty("lastname", user.getLastName());
@@ -347,34 +346,5 @@ public class DatastoreManager implements IDataManager {
     datastore.delete(singlePlayerProgressEntityKey);
   }
 
-  /**
-  * Retrieves an entity of a single User data in datastore by the username
-  * @param username a String variable representing the username of a user.
-  */
-  public User retrieveUserByUsername(String username) {
-    Query query = new Query("User").setFilter(new FilterPredicate("username", FilterOperator.EQUAL, username));
-    PreparedQuery pq = datastore.prepare(query);
-    Entity userEntity = pq.asSingleEntity();
-
-    String userID = (String) userEntity.getProperty("userID");
-    String userName = (String) userEntity.getProperty("username");
-    String firstName = (String) userEntity.getProperty("firstname");
-    String lastName = (String) userEntity.getProperty("lastname");
-    ArrayList<String> gamesCreated = (ArrayList<String>) userEntity.getProperty("gamesCreated");
-    if (gamesCreated == null) {
-      gamesCreated = new ArrayList<>();
-    }
-    String profilePictureUrl = (String) userEntity.getProperty("profilePictureUrl");
-    String gamesCompletedWithTimeJson = (String) userEntity.getProperty("gamesCompletedWithTime");
-    Type pairListType = new TypeToken<ArrayList<Pair<String, Long>>>(){}.getType();
-    ArrayList<Pair<String, Long>> gamesCompletedWithTime = gson.fromJson(gamesCompletedWithTimeJson, pairListType);
-    if (gamesCompletedWithTime == null) {
-      gamesCompletedWithTime = new ArrayList<>();
-    }
-    User.Builder user = new User.Builder(userID).setUsername(userName).setFirstName(firstName).setLastName(lastName);
-    user.setProfilePictureUrl(profilePictureUrl).setGamesCreated(gamesCreated);
-    user.setGamesCompletedWithTime(gamesCompletedWithTime);
-    return user.build();
-  }
 }
 

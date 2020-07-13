@@ -91,11 +91,5 @@ public interface IDataManager {
   * @param gameID the unique code used to identify this specific game
   */
   public void deleteSinglePlayerProgress(String userID, String gameID);
-
-  /**
-  * Retrieves an entity of a single User data in datastore by the username
-  * @param username a User variable representing a single instance of a User.
-  */
-  public User retrieveUserByUsername(String username);
 }
 

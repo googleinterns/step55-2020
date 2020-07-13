@@ -44,7 +44,7 @@ public class CreateUsernameServlet extends HttpServlet {
 
   @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String userName = request.getParameter("userName");
+      String userName = request.getParameter("username");
       boolean doesUsernameExist = datastoreManager.doesUsernameExist(userName);
 
       if (!doesUsernameExist) {
@@ -63,6 +63,5 @@ public class CreateUsernameServlet extends HttpServlet {
         String json = new Gson().toJson(null);
         response.getWriter().println(json);
       }
-      response.sendRedirect("/profilePage.html");
     }
 }
