@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.007" errors="0" skipped="0">
-=======
-<<<<<<< HEAD
 <testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.004" errors="0" skipped="0">
-=======
-<testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.026" errors="0" skipped="0">
->>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
->>>>>>> master
-=======
-<testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.004" errors="0" skipped="0">
->>>>>>> 9f177d1acf303f31c656cb78f56020b2ce6860f7
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.7+10-post-Debian-3deb10u1"/>
@@ -55,7 +43,7 @@
     <property name="java.class.path" value="/opt/maven/boot/plexus-classworlds-2.6.0.jar"/>
     <property name="java.vm.specification.version" value="11"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher package appengine:run"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher package appengine:deploy"/>
     <property name="java.home" value="/usr/lib/jvm/java-11-openjdk-amd64"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
@@ -72,17 +60,5 @@
     <property name="sun.cpu.endian" value="little"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-<<<<<<< HEAD
-<<<<<<< HEAD
-  <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.007"/>
-=======
-<<<<<<< HEAD
   <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.004"/>
-=======
-  <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.026"/>
->>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
->>>>>>> master
-=======
-  <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.004"/>
->>>>>>> 9f177d1acf303f31c656cb78f56020b2ce6860f7
 </testsuite>

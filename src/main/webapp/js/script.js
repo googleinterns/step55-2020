@@ -10,7 +10,7 @@ function changeToOrFromDarkMode() {
     body.className = 'light-mode';
   }
   if (typeof(Storage) !== "undefined") {
-    sessionStorage.setItem("colorMode", body.className);
+    localStorage.setItem("colorMode", body.className);
   } 
 }
 
@@ -250,9 +250,9 @@ function loadMaps() {
 */
 async function onLoadFunctions(page) {
   if (typeof(Storage) !== "undefined") {
-    var color = sessionStorage.getItem("colorMode");
+    var color = localStorage.getItem("colorMode");
     if (color == null) {
-      sessionStorage.setItem("colorMode", "light-mode");
+      localStorage.setItem("colorMode", "light-mode");
     }
     document.body.className = color;
   }
