@@ -12,7 +12,7 @@
     
   <!--Import materialize.css from maeralizecss.com-->
   <link rel='stylesheet' href='css/materialize.min.css'>
-
+   
   <!--  Scripts from materalizecss.com-->
   <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
   <script src='js/materialize.min.js'></script>
@@ -21,24 +21,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <link rel='stylesheet' href='css/style.css'>
-
+  <script src='js/profilePage.js'></script>
   <script src='js/script.js'></script>
   
   <title>Street Explorer</title>
 
 </head>
-<body class='light-mode' onload='onLoadFunctions("index")'>
+<body class='light-mode' onload='onLoadFunctions("profilePage")'>
   <div id='nav-bar'></div>
   <!-- TODO: Rather than using JS to generate the Nav-Bar use an iframe -->
   <!-- <iframe src='navBar.html' width='100%'></iframe> -->
   <div class=container>
     <div class='center'>
-      <h1> Featured Map</h1>
-    
-        <div id='featured-map'></div>
-        <br/>
+      <h1> Profile Page</h1>
+        <form action="/create-username-data" method='POST'>
+          <div class='input-field'>
+            <h5>Username</h5>
+            <input id='userName' type='text' name='userName' required>
+          </div>
+          <br>
+          <input type="submit" value="Submit">
+        </form>        
     </div>
   </div>
-  <div id='all-maps' class='row card'></div>
 </body>
 </html>
