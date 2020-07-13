@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 <testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.004" errors="0" skipped="0">
 =======
 <testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.006" errors="0" skipped="0">
 >>>>>>> f33c8b6629cfef230e26c92731dca3b3f41123cd
+=======
+<testsuite tests="1" failures="0" name="com.google.sps.data.PairTest" time="0.009" errors="0" skipped="0">
+>>>>>>> f1ca2ec3c40e96c4d2e8b4356b1182be40a11f0e
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="11.0.7+10-post-Debian-3deb10u1"/>
@@ -65,8 +69,12 @@
     <property name="sun.cpu.isalist" value=""/>
   </properties>
 <<<<<<< HEAD
+<<<<<<< HEAD
   <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.004"/>
 =======
   <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.006"/>
 >>>>>>> f33c8b6629cfef230e26c92731dca3b3f41123cd
+=======
+  <testcase classname="com.google.sps.data.PairTest" name="testEquality" time="0.009"/>
+>>>>>>> f1ca2ec3c40e96c4d2e8b4356b1182be40a11f0e
 </testsuite>
