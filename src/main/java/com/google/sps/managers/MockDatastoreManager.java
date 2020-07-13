@@ -186,6 +186,6 @@ public class MockDatastoreManager implements IDataManager {
     public void deleteSinglePlayerProgress(String userID, String gameID) {}
 
     public User retrieveUserByUsername(String username) {
-      return null;
+        return retrieveUser("mockedUserId");
     }
 }

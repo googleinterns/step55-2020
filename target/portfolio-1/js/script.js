@@ -257,12 +257,17 @@ function onLoadFunctions(page) {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
+<<<<<<< HEAD
   } else if (page == 'profilePage') {
     //initMapToCreateGame();
+=======
+  } else if (page == 'gameInfo') {
+    loadGameData();
+>>>>>>> 3ee401706221e1a13263a44dd635f7a72ed85032
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){
- 		$('.materialbox').materialbox();
+      $('.materialbox').materialbox();
  	});
   }
   

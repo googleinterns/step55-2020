@@ -259,10 +259,12 @@ function onLoadFunctions(page) {
     checkIfUserHasSavedProgress();
   } else if (page == 'profilePage') {
     //initMapToCreateGame();
+  } else if (page == 'gameInfo') {
+    loadGameData();
   } else if (page == 'index') {
     loadMaps();
  	$(document).ready(function(){
- 		$('.materialbox').materialbox();
+      $('.materialbox').materialbox();
  	});
   }
   

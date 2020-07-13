@@ -57,6 +57,9 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
         ArrayList<Integer> hintsFound = getHintsFound(request);
         String stageID = getStageID(request);
 
+        if(stageID.equals("N/A")) {
+            datastoreManager.deleteSinglePlayerProgress(userID, gameID);
+        }
         SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
         progressBuilder.setLocation(location);
         progressBuilder.setHintsFound(hintsFound);
