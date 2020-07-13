@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-userbyusername-data")
 public class LoadUserByUsernameServlet extends HttpServlet {
-    DatastoreManager datastoreManager = new DatastoreManager();
+    MockDatastoreManager datastoreManager = new MockDatastoreManager();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
