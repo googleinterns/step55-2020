@@ -249,6 +249,13 @@ function loadMaps() {
 * @example onLoadFunction("index")
 */
 async function onLoadFunctions(page) {
+  if (typeof(Storage) !== "undefined") {
+  var color = sessionStorage.getItem("colorMode");
+  if (color == null) {
+    sessionStorage.setItem("colorMode", "light-mode");
+  }
+    document.body.className = color;
+  }
   var loggedIn = false;
   var url;
   await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
@@ -286,13 +293,5 @@ async function onLoadFunctions(page) {
  	$(document).ready(function(){
       $('.materialbox').materialbox();
  	});
-  }
-  
-  if (typeof(Storage) !== "undefined") {
-    var color = sessionStorage.getItem("colorMode");
-    if (color == null) {
-      sessionStorage.setItem("colorMode", "dark-mode");
-    }
-    document.body.className = color;
   }
 }

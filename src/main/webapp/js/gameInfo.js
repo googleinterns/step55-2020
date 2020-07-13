@@ -29,7 +29,7 @@ function printMapNameAndDifficulty(data) {
   if (data.difficulty == 1) {
     difficultyClass = 'green-text';
     difficulty = '[Easy]';
-  } else if ( data.difficulty == 2) {
+  } else if (data.difficulty == 2) {
     difficultyClass = 'orange-text';
     difficulty = '[Medium]';
   }
@@ -61,7 +61,7 @@ function printMapImage(data) {
 */
 function printMapRating(data) {
   var mapRating = document.getElementById('map-rating');
-  mapRating.innerHTML = getStarRating(data.stars).replace('md-18', 'large').replace('md-18', 'large').replace('md-18', 'large').replace('md-18', 'large').replace('md-18', 'large');
+  mapRating.innerHTML = getStarRating(data.stars).replace(/md-18/g, 'large');
 }
 
 /**

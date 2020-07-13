@@ -189,6 +189,7 @@ async function checkKey(data, stage, panorama, map) {
   if (data.stages.length == stage.stageNumber) {
     const urlParams = new URLSearchParams(window.location.search)
     var gameID = urlParams.get('gameID');
+    updateUserProgress("N/A", map);
     window.location.replace('afterGame.html?gameID=' + gameID);
     return;
   }
@@ -213,7 +214,7 @@ async function checkKey(data, stage, panorama, map) {
     addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber])
   );
 
-  updateUserProgress('N/A', map);
+  updateUserProgress(nextStage.stageID, map);
 }
 
 /** 
