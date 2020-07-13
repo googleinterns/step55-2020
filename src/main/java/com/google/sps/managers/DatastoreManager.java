@@ -50,6 +50,7 @@ public class DatastoreManager implements IDataManager {
   */
   public void createOrReplaceUser(User user) {
     Entity userEntity = new Entity("User", user.getUserID());
+    userEntity.setProperty("userID", user.getUserID());
     userEntity.setProperty("username", user.getUsername());
     userEntity.setProperty("firstname", user.getFirstName());
     userEntity.setProperty("lastname", user.getLastName());
@@ -348,13 +349,14 @@ public class DatastoreManager implements IDataManager {
 
   /**
   * Retrieves an entity of a single User data in datastore by the username
-  * @param username a User variable representing a single instance of a User.
+  * @param username a String variable representing the username of a user.
   */
   public User retrieveUserByUsername(String username) {
     Query query = new Query("User").setFilter(new FilterPredicate("username", FilterOperator.EQUAL, username));
     PreparedQuery pq = datastore.prepare(query);
     Entity userEntity = pq.asSingleEntity();
 
+    String userID = (String) userEntity.getProperty("userID");
     String userName = (String) userEntity.getProperty("username");
     String firstName = (String) userEntity.getProperty("firstname");
     String lastName = (String) userEntity.getProperty("lastname");

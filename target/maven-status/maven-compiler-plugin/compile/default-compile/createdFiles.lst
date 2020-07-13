@@ -14,6 +14,7 @@ com/google/sps/utils/IDGenerator.class
 com/google/sps/data/Game.class
 com/google/sps/data/SinglePlayerProgress$Builder.class
 com/google/sps/servlets/CreateGameServlet$5.class
+com/google/sps/managers/DatastoreManager$2.class
 com/google/sps/data/User.class
 com/google/sps/data/Hint$Builder.class
 com/google/sps/servlets/CreateUsernameServlet.class
