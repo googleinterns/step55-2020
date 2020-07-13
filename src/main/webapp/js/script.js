@@ -18,6 +18,8 @@ function changeToOrFromDarkMode() {
 /** 
 * Creates the navigation bar and specifies which page is active
 * @param {string} page is which HTML the navbar should be placed on
+* @param {boolean} loggedIn a boolean which is true if the user is logged in and false if not
+* @param {string} url if loggedIn is true then this url contains the logout url and otherwise the login url
 * @example createNavBar("index")
 */
 async function createNavBar(page, loggedIn, url) {

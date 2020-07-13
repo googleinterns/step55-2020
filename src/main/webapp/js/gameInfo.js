@@ -37,7 +37,7 @@ function printMapNameAndDifficulty(data) {
 }
 
 /**
-* Adds the game description where the divw ith id 'map-description' is
+* Adds the game description where the div with id 'map-description' is
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapDescription(data) {
