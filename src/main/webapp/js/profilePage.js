@@ -25,6 +25,11 @@ async function loadProfilePage() {
   });
 }
 
+/**
+* Checks if there is already a user with this username.
+* @param {string} desiredUsername the username to be checked for availability.
+* @return {boolean} whether or not this username is already being used.
+*/
 async function isTaken(desiredUsername) {
   const params = new URLSearchParams();
   params.append('username', desiredUsername);
@@ -67,7 +72,7 @@ async function displayAvailability() {
 async function submitUsername() {
   desiredUsername = document.getElementById('userName').value;
   let availabilityBox = document.getElementById('username-availability-message');
-  availabilityBox.innerText = await getAvailabilityText(desiredUsername);
+  await displayAvailability();
   if(availabilityBox.innerText == 'Available') {
     const params = new URLSearchParams();
     params.append('userName', desiredUsername);
