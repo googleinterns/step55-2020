@@ -46,9 +46,9 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-
+    let markers = []
     stageHints.forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID)
+      markers.push(addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID))
     );
 
     // gets the street view
@@ -66,7 +66,7 @@ async function initMapToPlayGame() {
     if (userProgress != null && userProgress.hintsFound != null) {
       userProgress.hintsFound.forEach(hintNum =>
         changeData(map, {lat: initStage.hints[parseInt(hintNum) - 1].location.latitude, lng: initStage.hints[parseInt(hintNum) - 1].location.longitude}, 
-                    initStage.hints[parseInt(hintNum) - 1].text, hintNum, stageID, false)
+                    initStage.hints[parseInt(hintNum) - 1].text, hintNum, stageID, false, markers[parseInt(hintNum) - 1])
       );
     }
   });
@@ -262,8 +262,9 @@ async function getStage(stageID) {
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {string} stageID the stageID in which the hint is at 
+* @return {object} the marker created
 */
-async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
+function addHintMarker(map, latLng, hint, hintNum, stageID) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
@@ -273,6 +274,8 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
   marker.addListener('click', function() {
     changeData(map, latLng, hint, hintNum, stageID, true, marker)
   });
+
+  return marker;
 }
 
 
@@ -286,7 +289,7 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {object} marker an optional parameter that passes in the marker to remove
 */
-function changeData(map, latLng, hint, hintNum, stageID, updateProgress, marker=null) {
+function changeData(map, latLng, hint, hintNum, stageID, updateProgress, marker) {
   if (marker != null) {
     marker.setMap(null);
   }
