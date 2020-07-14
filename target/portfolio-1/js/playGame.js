@@ -21,12 +21,14 @@ async function initMapToPlayGame() {
     var startingLocation;
     var initStage;
     var stageID;
-    console.log(userProgress);
-    if (userProgress == null) {
+    var startOfGame;
+    if (userProgress == null || userProgress.stageID == 'N/A') {
+      startOfGame = false;
       stageID = data.stages[0];
       initStage = await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     } else {
+      startOfGame = true;
       stageID = userProgress.stageID;
       initStage = await getStage(stageID);
       startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
@@ -38,14 +40,16 @@ async function initMapToPlayGame() {
       gestureHandling: 'greedy',
       streetViewControl: false
     });
+
     var stageHints = initStage.hints;
     if (stageHints.length == null) {
       window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
       window.location.replace('index.html');
       return;
     }
+
     stageHints.forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID)
+      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID, userProgress)
     );
 
     // gets the street view
@@ -211,7 +215,7 @@ async function checkKey(data, stage, panorama, map) {
   }
 
   stageHints.forEach(hint => 
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber])
+    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber], null)
   );
 
   updateUserProgress(nextStage.stageID, map);
@@ -251,22 +255,19 @@ async function getStage(stageID) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 * @param {string} stageID the stageID in which the hint is at 
 */
-async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
+async function addHintMarker(map, latLng, hint, hintNum, stageID, userProgress) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
     icon: 'images/marker_exclamation_point.png'
   });
 
-  var userProgress = await getUserProgress();
-  console.log(userProgress);
-  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
+  if (userProgress != null && userProgress.hints.includes(hintNum)) {
     addHint(hint, hintNum, true, stageID, map);
-  } else {
-    marker.addListener('click', function() {
-      addHint(hint, hintNum, false, stageID, map);
-    });
   }
+  marker.addListener('click', function() {
+    addHint(hint, hintNum, false, stageID, map);
+  });
 }
 
 /** 

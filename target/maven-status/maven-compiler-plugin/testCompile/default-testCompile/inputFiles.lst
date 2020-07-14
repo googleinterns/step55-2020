@@ -1,2 +1,4 @@
 /home/smissak/step55-2020/src/test/java/com/google/sps/utils/IDGeneratorTest.java
 /home/smissak/step55-2020/src/test/java/com/google/sps/data/PairTest.java
+/home/smissak/step55-2020/src/test/java/com/google/sps/servlets/LoadAuthenticationServletTest.java
+/home/smissak/step55-2020/src/test/java/com/google/sps/servlets/CreateGameServletTest.java
