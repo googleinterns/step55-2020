@@ -271,7 +271,7 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
   }); 
 
   marker.addListener('click', function() {
-    changeData(map, latLng, hint, hintNum, stageID, true)
+    changeData(map, latLng, hint, hintNum, stageID, true, marker)
   });
 }
 
@@ -284,8 +284,13 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {string} stageID the stageID in which the hint is at 
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
+* @param {object} marker an optional parameter that passes in the marker to remove
 */
-function changeData(map, latLng, hint, hintNum, stageID, updateProgress) {
+function changeData(map, latLng, hint, hintNum, stageID, updateProgress, marker=null) {
+  if (marker != null) {
+    marker.setMap(null);
+  }
+  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
