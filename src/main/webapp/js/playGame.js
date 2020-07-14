@@ -65,7 +65,8 @@ async function initMapToPlayGame() {
 
     if (userProgress != null && userProgress.hintsFound != null) {
       userProgress.hintsFound.forEach(hintNum =>
-        addHint(initStage.hints[parseInt(hintNum) - 1].text, hintNum, false, stageID, map)
+        changeData(map, {lat: initStage.hints[parseInt(hintNum) - 1].location.latitude, lng: initStage.hints[parseInt(hintNum) - 1].location.longitude}, 
+                    initStage.hints[parseInt(hintNum) - 1].text, hintNum, stageID, false)
       );
     }
   });
@@ -264,22 +265,32 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    icon: 'images/marker_exclamation_point.png'
+    icon: 'images/marker_notfound.png'
   }); 
 
   marker.addListener('click', function() {
-    changeData(map, latLng, hint, hintNum, stageID)
+    changeData(map, latLng, hint, hintNum, stageID, true)
   });
 }
 
-function changeData(map, latLng, hint, hintNum, stageID) {
+
+/** 
+* Changes the color of the marker on the map adds the hint to the list of hints found
+* @param {object} map the panorama of the map created in initMapPlayGame()
+* @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
+* @param {string} hint the plain text of the hint
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
+* @param {string} stageID the stageID in which the hint is at 
+* @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
+*/
+function changeData(map, latLng, hint, hintNum, stageID, updateProgress) {
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    icon: 'images/orange_marker.png'
+    icon: 'images/marker_found.png'
   }); 
 
-  addHint(hint, hintNum, true, stageID, map);
+  addHint(hint, hintNum, updateProgres, stageID, map);
 }
 
 /** 

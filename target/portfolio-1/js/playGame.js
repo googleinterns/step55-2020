@@ -65,7 +65,8 @@ async function initMapToPlayGame() {
 
     if (userProgress != null && userProgress.hintsFound != null) {
       userProgress.hintsFound.forEach(hintNum =>
-        addHint(initStage.hints[parseInt(hintNum) - 1].text, hintNum, true, stageID, map)
+        changeData(map, {lat: initStage.hints[parseInt(hintNum) - 1].location.latitude, lng: initStage.hints[parseInt(hintNum) - 1].location.longitude}, 
+                    initStage.hints[parseInt(hintNum) - 1].text, hintNum, stageID, false)
       );
     }
   });
@@ -264,36 +265,36 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    icon: 'images/marker_exclamation_point.png'
+    icon: 'images/marker_notfound.png'
   }); 
 
   marker.addListener('click', function() {
-    changeData(map, latLng, hint, hintNum, stageID)
+    changeData(map, latLng, hint, hintNum, stageID, true)
   });
 }
 
-function changeData(map, latLng, hint, hintNum, stageID) {
+function changeData(map, latLng, hint, hintNum, stageID, updateProgres) {
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    icon: 'images/orange_marker.png'
+    icon: 'images/marker_found.png'
   }); 
 
-  addHint(hint, hintNum, false, stageID, map);
+  addHint(hint, hintNum, updateProgres, stageID, map);
 }
 
 /** 
 * Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
-* @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress 
+* @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {string} stageID the stageID in which the hint is at
 * @param {object} map the panorama of the map created in initMapPlayGame()
 */
-function addHint(hint, hintNum, startOfGame, stageID, map) {
+function addHint(hint, hintNum, updateProgress, stageID, map) {
   var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
-  if (!startOfGame) updateUserProgress(stageID, map);
+  if (updateProgress) updateUserProgress(stageID, map);
 }
 
 /** 

@@ -3,6 +3,7 @@
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadGamePageServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/LoadCurrentUserServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/servlets/CreateUsernameServlet.java
+/home/smissak/step55-2020/src/main/java/com/google/sps/servlets/UsernameAvailableServlet.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/utils/IDGenerator.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/Pair.java
 /home/smissak/step55-2020/src/main/java/com/google/sps/data/ReducedGameData.java

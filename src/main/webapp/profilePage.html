@@ -33,16 +33,18 @@
   <!-- <iframe src='navBar.html' width='100%'></iframe> -->
   <div class=container>
     <div class='center'>
-      <h1> Profile Page</h1>
-        <form action="/create-username-data" method='POST'>
-          <div class='input-field'>
-            <h5>Username</h5>
-            <input id='userName' type='text' name='userName' required>
-          </div>
-          <br>
-          <input type="submit" value="Submit">
-        </form>        
+      <h1>Profile</h1>
     </div>
+    <form action="/create-username-data" method='POST'>
+      <div class='input-field'>
+        <h5>Username</h5>
+        <input id='userName' type='text' name='userName' required>
+      </div>
+      <br>
+      <div id='username-availability-message'></div>
+      <br>
+      <input type="submit" value="Submit">
+    </form>
   </div>
 </body>
 </html>
