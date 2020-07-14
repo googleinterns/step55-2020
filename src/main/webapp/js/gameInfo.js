@@ -42,8 +42,8 @@ function printMapNameAndDifficulty(data) {
 */
 function printMapDescription(data) {
   var mapDescription = document.getElementById('map-description');
-  mapDescription.innerHTML = '<h5>Game Description: </h5>';
-  mapDescription.innerHTML += '<h4>' + data.gameDescription + '</h4>';
+  mapDescription.innerHTML = '<h4>Game Description: </h4>';
+  mapDescription.innerHTML += '<h5>' + data.gameDescription + '</h5>';
 }
 
 /**
