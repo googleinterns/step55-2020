@@ -21,14 +21,15 @@ async function initMapToPlayGame() {
     var startingLocation;
     var initStage;
     var stageID;
-    console.log(userProgress);
-    if (userProgress == null) {
+    var startOfGame;
+    if (userProgress == null || userProgress.stageID == 'N/A') {
       stageID = data.stages[0];
       initStage = await getStage(stageID);
       startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
     } else {
       stageID = userProgress.stageID;
       initStage = await getStage(stageID);
+      
       startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
     }
     
@@ -38,14 +39,16 @@ async function initMapToPlayGame() {
       gestureHandling: 'greedy',
       streetViewControl: false
     });
+
     var stageHints = initStage.hints;
     if (stageHints.length == null) {
       window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
       window.location.replace('index.html');
       return;
     }
+    let markers = []
     stageHints.forEach(hint => 
-      addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID)
+      markers.push(addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID))
     );
 
     // gets the street view
@@ -59,6 +62,13 @@ async function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
     createGameInfoOnSideOfMap(data, initStage, panorama, map);
+
+    if (userProgress != null && userProgress.hintsFound != null) {
+      userProgress.hintsFound.forEach(hintNum =>
+        changeData(map, {lat: initStage.hints[parseInt(hintNum) - 1].location.latitude, lng: initStage.hints[parseInt(hintNum) - 1].location.longitude}, 
+                    initStage.hints[parseInt(hintNum) - 1].text, hintNum, stageID, false, markers[parseInt(hintNum) - 1])
+      );
+    }
   });
 }
 
@@ -143,6 +153,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
 
   var placeHolderForWrongInput =  document.createElement('div');
   placeHolderForWrongInput.id = 'wrong-input';
+  placeHolderForWrongInput.className = 'wrong-input';
   keySpan.appendChild(placeHolderForWrongInput);
 
   var inputKeyBox = document.createElement('input');
@@ -150,7 +161,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   inputKeyBox.classList = 'input-text-color';
   inputKeyBox.id = 'key-input';
 
-    // This checks if the user clicked enter in the key box
+  // This checks if the user clicked enter in the key box
   inputKeyBox.addEventListener('keydown', function(e) {
     if (e.which == 13) {
       checkKey(data, stage, panorama, map);
@@ -183,7 +194,8 @@ async function checkKey(data, stage, panorama, map) {
   var keyInput = document.getElementById('key-input');
   var inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
-    document.getElementById('wrong-input').innerHTML = '<p class="red-text">Wrong Input! Try again!</p>';
+    document.getElementById('wrong-input').innerHTML = '<i class="red-text">Wrong Input! Try again!</i>';
+    document.getElementById('wrong-input').classList.remove('wrong-input');
     return;
   }
   if (data.stages.length == stage.stageNumber) {
@@ -248,39 +260,61 @@ async function getStage(stageID) {
 * @param {object} map the panorama of the map created in initMapPlayGame()
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
-* @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {string} stageID the stageID in which the hint is at 
+* @return {object} the marker created
 */
-async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
+function addHintMarker(map, latLng, hint, hintNum, stageID) {  
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
-    icon: 'images/marker_exclamation_point.png'
+    icon: 'images/marker_notfound.png'
+  }); 
+
+  marker.addListener('click', function() {
+    changeData(map, latLng, hint, hintNum, stageID, true, marker)
   });
 
-  var userProgress = await getUserProgress();
-  console.log(userProgress);
-  if (userProgress != null && userProgress.hintsFound.includes(hintNum)) {
-    addHint(hint, hintNum, true, stageID, map);
-  } else {
-    marker.addListener('click', function() {
-      addHint(hint, hintNum, false, stageID, map);
-    });
+  return marker;
+}
+
+
+/** 
+* Changes the color of the marker on the map adds the hint to the list of hints found
+* @param {object} map the panorama of the map created in initMapPlayGame()
+* @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
+* @param {string} hint the plain text of the hint
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
+* @param {string} stageID the stageID in which the hint is at 
+* @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
+* @param {object} marker an optional parameter that passes in the marker to remove
+*/
+function changeData(map, latLng, hint, hintNum, stageID, updateProgress, marker) {
+  if (marker != null) {
+    marker.setMap(null);
   }
+  
+  var marker = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    icon: 'images/marker_found.png'
+  }); 
+
+  addHint(hint, hintNum, updateProgress, stageID, map);
 }
 
 /** 
 * Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
-* @param {boolean} startOfGame indicates if the user is adding the hint after starting the game again from continuing from the progress 
+* @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {string} stageID the stageID in which the hint is at
 * @param {object} map the panorama of the map created in initMapPlayGame()
 */
-function addHint(hint, hintNum, startOfGame, stageID, map) {
+function addHint(hint, hintNum, updateProgress, stageID, map) {
   var hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
-  if (!startOfGame) updateUserProgress(stageID, map);
+  if (updateProgress) updateUserProgress(stageID, map);
 }
 
 /** 

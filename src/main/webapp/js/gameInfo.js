@@ -12,7 +12,7 @@ function loadGameData() {
     printMapImage(data);
     printMapRating(data);
     printMapCreator(data);
-    printPlayGameButton(data);
+    printPlayGameButton(data, gameID);
     // printRateMapButton(data);
     // printMapComments(data);
   });
@@ -42,8 +42,8 @@ function printMapNameAndDifficulty(data) {
 */
 function printMapDescription(data) {
   var mapDescription = document.getElementById('map-description');
-  mapDescription.innerHTML = '<h5>Game Description: </h5>';
-  mapDescription.innerHTML += '<h4>' + data.gameDescription + '</h4>';
+  mapDescription.innerHTML = '<h4>Game Description: </h4>';
+  mapDescription.innerHTML += '<h5>' + data.gameDescription + '</h5>';
 }
 
 /**
@@ -77,14 +77,20 @@ function printMapCreator(data) {
 * Adds a button to play the game where the div with id 'play-game' is
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
-function printPlayGameButton(data) {
+async function printPlayGameButton(data, gameID) {
   var playGameDiv = document.getElementById('play-game');
   var playGameButton = document.createElement('input');
   playGameButton.type = 'button';
   playGameButton.value = 'Play Game!';  
   playGameButton.id = 'play-game-button'; 
-  playGameButton.addEventListener("click", function(){
-    window.location.replace('resumeOrStartOver.html?gameID=' + data.gameID);
+  playGameButton.addEventListener("click", async function(){
+    fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
+      if (data == null) {
+        window.location.replace('playGame.html?gameID=' + gameID);
+      } else {
+        window.location.replace('resumeOrStartOver.html?gameID=' + gameID);
+      }
+    }); 
   }); 
   playGameDiv.append(playGameButton);
 }
