@@ -153,6 +153,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
 
   var placeHolderForWrongInput =  document.createElement('div');
   placeHolderForWrongInput.id = 'wrong-input';
+  placeHolderForWrongInput.className = 'wrong-input';
   keySpan.appendChild(placeHolderForWrongInput);
 
   var inputKeyBox = document.createElement('input');
@@ -160,7 +161,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   inputKeyBox.classList = 'input-text-color';
   inputKeyBox.id = 'key-input';
 
-    // This checks if the user clicked enter in the key box
+  // This checks if the user clicked enter in the key box
   inputKeyBox.addEventListener('keydown', function(e) {
     if (e.which == 13) {
       checkKey(data, stage, panorama, map);
@@ -193,7 +194,8 @@ async function checkKey(data, stage, panorama, map) {
   var keyInput = document.getElementById('key-input');
   var inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
-    document.getElementById('wrong-input').innerHTML = '<p class="red-text">Wrong Input! Try again!</p>';
+    document.getElementById('wrong-input').innerHTML = '<i class="red-text">Wrong Input! Try again!</i>';
+    document.getElementById('wrong-input').classList.remove('wrong-input');
     return;
   }
   if (data.stages.length == stage.stageNumber) {
@@ -273,14 +275,24 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
   });
 }
 
-function changeData(map, latLng, hint, hintNum, stageID, updateProgres) {
+
+/** 
+* Changes the color of the marker on the map adds the hint to the list of hints found
+* @param {object} map the panorama of the map created in initMapPlayGame()
+* @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
+* @param {string} hint the plain text of the hint
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
+* @param {string} stageID the stageID in which the hint is at 
+* @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
+*/
+function changeData(map, latLng, hint, hintNum, stageID, updateProgress) {
   var marker = new google.maps.Marker({
     position: latLng,
     map: map,
     icon: 'images/marker_found.png'
   }); 
 
-  addHint(hint, hintNum, updateProgres, stageID, map);
+  addHint(hint, hintNum, updateProgress, stageID, map);
 }
 
 /** 
