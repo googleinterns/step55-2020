@@ -63,7 +63,7 @@ async function initMapToPlayGame() {
     panorama.setVisible(true);
     createGameInfoOnSideOfMap(data, initStage, panorama, map);
 
-    if (userProgress != null) {
+    if (userProgress != null && userProgress.hintsFound != null) {
       userProgress.hintsFound.forEach(hintNum =>
         addHint(initStage.hints[parseInt(hintNum) - 1].text, hintNum, true, stageID, map)
       );
@@ -257,7 +257,7 @@ async function getStage(stageID) {
 * @param {object} map the panorama of the map created in initMapPlayGame()
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
-* @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {string} stageID the stageID in which the hint is at 
 */
 async function addHintMarker(map, latLng, hint, hintNum, stageID) {  
@@ -265,11 +265,21 @@ async function addHintMarker(map, latLng, hint, hintNum, stageID) {
     position: latLng,
     map: map,
     icon: 'images/marker_exclamation_point.png'
-  });
+  }); 
 
   marker.addListener('click', function() {
-    addHint(hint, hintNum, false, stageID, map);
+    changeData(map, latLng, hint, hintNum, stageID)
   });
+}
+
+function changeData(map, latLng, hint, hintNum, stageID) {
+  var marker = new google.maps.Marker({
+    position: latLng,
+    map: map,
+    icon: 'images/orange_marker.png'
+  }); 
+
+  addHint(hint, hintNum, false, stageID, map);
 }
 
 /** 
