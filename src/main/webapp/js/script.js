@@ -10,7 +10,7 @@ function changeToOrFromDarkMode() {
     body.className = 'light-mode';
   }
   if (typeof(Storage) !== "undefined") {
-    sessionStorage.setItem("colorMode", body.className);
+    localStorage.setItem("colorMode", body.className);
   } 
 }
 
@@ -250,16 +250,17 @@ function loadMaps() {
 */
 async function onLoadFunctions(page) {
   if (typeof(Storage) !== "undefined") {
-  var color = sessionStorage.getItem("colorMode");
-  if (color == null) {
-    sessionStorage.setItem("colorMode", "light-mode");
-  }
+    var color = localStorage.getItem("colorMode");
+    if (color == null) {
+      localStorage.setItem("colorMode", "light-mode");
+    }
     document.body.className = color;
   }
+
   var loggedIn = false;
   var url;
   await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
-    loggedIn = data.loggedIn
+    loggedIn = data.loggedIn;
     if (data.loggedIn) {
       url = data.logoutUrl;
     } else {
@@ -280,7 +281,7 @@ async function onLoadFunctions(page) {
       window.location.replace(url);
     }
     initMapToCreateGame();
-  } else if (page == 'afterGame') {
+  }  else if (page == 'afterGame') {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
