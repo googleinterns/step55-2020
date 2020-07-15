@@ -350,3 +350,7 @@ ol#hints {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+#thismf {
+  left: 0px;
+}
