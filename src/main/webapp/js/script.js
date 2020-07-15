@@ -286,7 +286,7 @@ async function onLoadFunctions(page) {
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
   } else if (page == 'profilePage') {
-    getUserName();
+    loadProfilePage();
   } else if (page == 'gameInfo') {
     loadGameData();
   } else if (page == 'index') {

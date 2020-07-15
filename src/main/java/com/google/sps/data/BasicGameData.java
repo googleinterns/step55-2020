@@ -23,20 +23,6 @@ import java.lang.Math;
 */
 public class BasicGameData {
     private transient DatastoreManager datastoreManager = new DatastoreManager();
-    //TODO(ldchen): delete all of the mocking once datastore is working.
-    private int getRandomIntegerBetween(int left, int right) {
-        int res = left + (int)(Math.random()*(right-left+1));
-        return res;
-    }
-
-    private String getRandomWord() {
-        String[] words = {"absorption", "knowledge", "wear", "egg",
-                          "befall", "staking", "light", "muddled",
-                          "dynamic", "attempt", "accurate", "meal",
-                          "trap", "progress", "walk", "muscle"};
-        return words[getRandomIntegerBetween(0, words.length-1)];
-    }
-
     private String gameID = "N/A";
     private String gameName = "N/A";
     private String creatorUsername = "N/A";
@@ -51,7 +37,7 @@ public class BasicGameData {
     public BasicGameData(Game game) {
         this.gameID = game.getGameID();
         this.gameName = game.getGameName();
-        this.creatorUsername = getRandomWord() + getRandomWord();
+        this.creatorUsername = datastoreManager.retrieveUser(game.getGameCreator()).getUsername();
         if(game.getNumDifficultyVotes() != 0) {
             this.difficulty = (double)game.getTotalDifficulty() / (double)game.getNumDifficultyVotes();
         }
