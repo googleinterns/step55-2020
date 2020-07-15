@@ -2,9 +2,9 @@
 * Adds a map to a page where the id "map" is
 */
 function initMapToCreateGame() {
-  var latlng = {lat: 0.0, lng: 0.0};
+  let latlng = {lat: 0.0, lng: 0.0};
 
-  var map = new google.maps.Map(
+  let map = new google.maps.Map(
     document.getElementById('map'), {
       zoom: 1, 
       center: latlng, 
@@ -13,8 +13,8 @@ function initMapToCreateGame() {
   });
 
   // Create the search box and link it to the UI element.
-  var input = document.getElementById("pac-input");
-  var searchBox = new google.maps.places.SearchBox(input);
+  let input = document.getElementById("pac-input");
+  let searchBox = new google.maps.places.SearchBox(input);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
   // Bias the SearchBox results towards current map's viewport.
@@ -22,11 +22,11 @@ function initMapToCreateGame() {
     searchBox.setBounds(map.getBounds());
   });
 
-  var markers = [];
+  let markers = [];
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener("places_changed", function() {
-    var places = searchBox.getPlaces();
+    let places = searchBox.getPlaces();
 
     if (places.length == 0) {
       return;
@@ -39,13 +39,13 @@ function initMapToCreateGame() {
     markers = [];
 
     // For each place, get the icon, name and location.
-    var bounds = new google.maps.LatLngBounds();
+    let bounds = new google.maps.LatLngBounds();
     places.forEach(function(place) {
       if (!place.geometry) {
         console.log("Returned place contains no geometry");
         return;
       }
-      var icon = {
+      let icon = {
         url: place.icon,
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
@@ -74,7 +74,7 @@ function initMapToCreateGame() {
   });
 
   // Create the initial InfoWindow.
-  var infoWindow = new google.maps.InfoWindow();
+  let infoWindow = new google.maps.InfoWindow();
   infoWindow.className = 'black-text';
 
   // Configure the click listener.
@@ -141,17 +141,17 @@ function addNewHint() {
   const activeStageNum = getActiveStageElement().classList[0] + 'Hints';
   const activeHints = document.getElementById(activeStageNum);
   const numHintInputBoxes = activeHints.getElementsByTagName('input').length - 1;
-  var numHints = numHintInputBoxes/2;
+  let numHints = numHintInputBoxes/2;
 
   const newHintPos = document.createElement('input');
   newHintPos.id = 'hint' + numHints + '-position';
   newHintPos.type= 'text';
 
-  var hintPosLabel = document.createElement('label');
+  let hintPosLabel = document.createElement('label');
   hintPosLabel.for = 'hint' + numHints + '-position';
   hintPosLabel.innerText = 'Hint ' + numHints + ' Position (click on map to get coordinates)';
 
-  var hintPosDiv = createInputDiv();
+  let hintPosDiv = createInputDiv();
   hintPosDiv.appendChild(newHintPos);
   hintPosDiv.appendChild(hintPosLabel);
   activeHints.appendChild(hintPosDiv);
@@ -160,11 +160,11 @@ function addNewHint() {
   newHint.id = 'hint' + numHints;
   newHint.type= 'text';
 
-  var hintLabel = document.createElement('label');
+  let hintLabel = document.createElement('label');
   hintLabel.for = 'hint' + numHints;
   hintLabel.innerText = 'Hint ' + numHints;
   
-  var hintDiv = createInputDiv();
+  let hintDiv = createInputDiv();
   hintDiv.appendChild(newHint);
   hintDiv.appendChild(hintLabel);
   activeHints.appendChild(hintDiv);
@@ -207,7 +207,7 @@ function getStageNumber(stageElement) {
 * @returns {Element} a div with the class 'input-field'
 */
 function createInputDiv() {
-  var div = document.createElement('div');
+  let div = document.createElement('div');
   div.className = 'input-field';
   return div;
 }
@@ -217,19 +217,19 @@ function createInputDiv() {
 */
 function getDataFromGameCreationForm() {
   const numStages = document.getElementById('stages').getElementsByTagName('input').length;
-  var stageKeys = [];
-  var stageSpawnLocations = []; // ex: [{'latitude': 1, 'longitude':2}, {'latitude': 3, 'longitude': 4}]
-  var stageStarterHints = [];
-  var hintLocations = []; // 2d array [[{'latitude': 1, 'longitude':2},{'latitude': 1, 'longitude':2}], [{'latitude': 1, 'longitude':2}]]
-  var hintTexts = [];
+  let stageKeys = [];
+  let stageSpawnLocations = []; // ex: [{'latitude': 1, 'longitude':2}, {'latitude': 3, 'longitude': 4}]
+  let stageStarterHints = [];
+  let hintLocations = []; // 2d array [[{'latitude': 1, 'longitude':2},{'latitude': 1, 'longitude':2}], [{'latitude': 1, 'longitude':2}]]
+  let hintTexts = [];
 
   // Stages and hints are 1 indexed
-  for (var count = 1; count <= numStages; count++) {
-    var stage = document.getElementById('stage' + count + 'Hints');
-    var starterPos = stage.querySelector('#starter-position').value;
+  for (let count = 1; count <= numStages; count++) {
+    let stage = document.getElementById('stage' + count + 'Hints');
+    let starterPos = stage.querySelector('#starter-position').value;
     starterPos = starterPos.replace(")", "").replace("(", "").replace(" ", "").split(",");
 
-    var dict = {};
+    let dict = {};
     dict['latitude'] = starterPos[0];
     dict['longitude'] = starterPos[1];
     if (isNaN(starterPos[0]) || isNaN(starterPos[1])) {
@@ -241,11 +241,11 @@ function getDataFromGameCreationForm() {
 
     stageKeys.push(stage.querySelector('#key').value);
 
-    var numHintsForThisStage = stage.getElementsByTagName('input').length - 1;
-    var stageHintsLocation = []
-    var stageHintsText = []
-    for (var hint = 1; hint < numHintsForThisStage/2; hint++) {
-      var hintPos = stage.querySelector('#hint' + hint + '-position').value;
+    let numHintsForThisStage = stage.getElementsByTagName('input').length - 1;
+    let stageHintsLocation = []
+    let stageHintsText = []
+    for (let hint = 1; hint < numHintsForThisStage/2; hint++) {
+      let hintPos = stage.querySelector('#hint' + hint + '-position').value;
       hintPos = hintPos.replace(")", "").replace("(", "").split(",");
       dict = {};
       dict['latitude'] = hintPos[0];
@@ -261,7 +261,7 @@ function getDataFromGameCreationForm() {
     hintTexts.push(stageHintsText);
   }
 
-  var params = new URLSearchParams();
+  let params = new URLSearchParams();
   params.append('gameName', document.getElementById('title').value);
   params.append('gameDescription', document.getElementById('description').value);
   params.append('stageKeys', JSON.stringify(stageKeys));
@@ -269,7 +269,7 @@ function getDataFromGameCreationForm() {
   params.append('stageStarterHints', JSON.stringify(stageStarterHints));
   params.append('hintLocations', JSON.stringify(hintLocations));
   params.append('hintTexts', JSON.stringify(hintTexts));
-  var request = new Request('/create-game-data', {method: 'POST', body: params});
+  let request = new Request('/create-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
     window.location.replace('gameInfo.html?gameID=' + data);
   });
