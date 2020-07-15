@@ -13,6 +13,8 @@
 // limitations under the License.
 
 package com.google.sps.utils;
+import com.google.sps.managers.*;
+import com.google.sps.data.*;
 
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -25,15 +27,36 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 * Class that parses an idToken given by the client.
 */
 public class UserVerifier {
+    private DatastoreManager datastoreManager = new DatastoreManager();
     private final String CLIENT_ID = "683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com";
-    private GoogleIdToken idToken;
     private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new UrlFetchTransport(), new JacksonFactory()).setAudience(Collections.singletonList(CLIENT_ID)).build();
+    private GoogleIdToken idToken;
+    private Payload payload;
 
     public UserVerifier(String idTokenString) {
-        idToken = verifier.verify(idTokenString);
+        try {
+            idToken = verifier.verify(idTokenString);
+            payload = idToken.getPayload();
+        } catch (Exception e) {
+            return;
+        }
     }
 
     public boolean isValid() {
         return (idToken != null);
+    }
+
+    public String getUserID() {
+        return payload.getSubject();
+    }
+
+    public boolean matchesUsername(String username) {
+        String userID = getUserID();
+        User user = datastoreManager.retrieveUser(userID);
+        if(user.getUsername().equals(username)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
