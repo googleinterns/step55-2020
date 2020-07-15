@@ -2,7 +2,7 @@
 * Add's the game name to the page
 */
 function loadGameName() {
-  const urlParams = new URLSearchParams(window.location.search)
+  const urlParams = new URLSearchParams(window.location.search);
   let gameID = urlParams.get('gameID');
 
   let fetchParams = new URLSearchParams();
@@ -74,7 +74,7 @@ function sendDataToServer(nextAction) {
   let request = new Request('/update-feedback-data', {method: 'POST', body: fetchParams});
   fetch(request);
   if (nextAction == 'Play Again') {
-    const urlParams = new URLSearchParams(window.location.search)
+    const urlParams = new URLSearchParams(window.location.search);
     let gameID = urlParams.get('gameID');
     window.location.replace('playGame.html?gameID=' + gameID);
     return;

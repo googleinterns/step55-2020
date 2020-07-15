@@ -2,7 +2,7 @@
 * Checks if the user has saved progress, if not it goes to play the game otherwise asks the user if they would like to continue or restart
 */
 function checkIfUserHasSavedProgress() {
-  const urlParams = new URLSearchParams(window.location.search)
+  const urlParams = new URLSearchParams(window.location.search);
   let gameID = urlParams.get('gameID');
 
   let fetchParams = new URLSearchParams();

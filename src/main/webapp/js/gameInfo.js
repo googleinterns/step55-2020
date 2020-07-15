@@ -4,7 +4,7 @@
 function loadGameData() {
   let gameID = getGameID();
   const params = new URLSearchParams();
-  params.append('gameID', gameID)
+  params.append('gameID', gameID);
   let request = new Request('/load-gamepage-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
     printMapNameAndDifficulty(data);
@@ -25,7 +25,7 @@ function loadGameData() {
 function printMapNameAndDifficulty(data) {
   let mapName = document.getElementById('map-name');
   let difficultyClass = 'red-text';
-  let difficulty = '[Hard]'
+  let difficulty = '[Hard]';
   if (data.difficulty == 1) {
     difficultyClass = 'green-text';
     difficulty = '[Easy]';

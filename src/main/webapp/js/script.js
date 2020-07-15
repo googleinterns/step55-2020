@@ -66,7 +66,7 @@ async function createNavBar(page, loggedIn, url) {
 
   let liCreateGame = document.createElement('li');
   if (page == 'createGame') {
-      liCreateGame.className = 'active';
+    liCreateGame.className = 'active';
   }
   a = document.createElement('a');
   a.innerHTML = 'Create Game';
@@ -220,23 +220,23 @@ function loadMaps() {
     featuredMapDiv.append(featuredMapCaption);
     let allMaps = document.getElementById('all-maps');
     for (let i = 1; i < data.length; i++) {
-        let mapDiv = document.createElement('div');
-        mapDiv.classList.add('col');
-        mapDiv.classList.add('hoverable');
-        mapDiv.id = 'individual-map';
+      let mapDiv = document.createElement('div');
+      mapDiv.classList.add('col');
+      mapDiv.classList.add('hoverable');
+      mapDiv.id = 'individual-map';
 
-        let mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
-        let mapCaption = createStaticMapCaption(data[i], 'map-info');
-        mapImage.classList.add('materialbox');
-        mapImage.classList.add('responsive-img');
-        mapImage.classList.add('width300');
+      let mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
+      let mapCaption = createStaticMapCaption(data[i], 'map-info');
+      mapImage.classList.add('materialbox');
+      mapImage.classList.add('responsive-img');
+      mapImage.classList.add('width300');
 
-        mapCaption.classList.add('materialbox');
-        mapCaption.classList.add('width300');
+      mapCaption.classList.add('materialbox');
+      mapCaption.classList.add('width300');
 
-        mapDiv.append(mapImage)
-        mapDiv.append(mapCaption)
-        allMaps.append(mapDiv);
+      mapDiv.append(mapImage)
+      mapDiv.append(mapCaption)
+      allMaps.append(mapDiv);
     }
   });
 }

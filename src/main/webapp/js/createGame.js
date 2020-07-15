@@ -242,8 +242,8 @@ function getDataFromGameCreationForm() {
     stageKeys.push(stage.querySelector('#key').value);
 
     let numHintsForThisStage = stage.getElementsByTagName('input').length - 1;
-    let stageHintsLocation = []
-    let stageHintsText = []
+    let stageHintsLocation = [];
+    let stageHintsText = [];
     for (let hint = 1; hint < numHintsForThisStage/2; hint++) {
       let hintPos = stage.querySelector('#hint' + hint + '-position').value;
       hintPos = hintPos.replace(")", "").replace("(", "").split(",");

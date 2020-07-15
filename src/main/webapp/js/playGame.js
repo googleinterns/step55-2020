@@ -29,7 +29,6 @@ async function initMapToPlayGame() {
     } else {
       stageID = userProgress.stageID;
       initStage = await getStage(stageID);
-      
       startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
     }
     
@@ -46,7 +45,7 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-    let markers = []
+    let markers = [];
     stageHints.forEach(hint => 
       markers.push(addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID))
     );
@@ -90,7 +89,7 @@ async function getUserProgress() {
 * @return gameID from the URL or returns null and relocates you to index.html page
 */
 function getGameID() {
-  const urlParams = new URLSearchParams(window.location.search)
+  const urlParams = new URLSearchParams(window.location.search);
   let gameID = urlParams.get('gameID');
   if(!urlParams.has('gameID')) {
     window.alert('Failure to initialize game');
@@ -112,7 +111,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
     
   let gameName = document.createElement('h2');
   gameName.innerHTML = data.gameName;
-  gameName.className = 'center'
+  gameName.className = 'center';
   gameInfo.appendChild(gameName);
 
   let gameStage = document.createElement('div');
@@ -146,9 +145,9 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   let keySpan = document.createElement('span');
   keySpan.id = 'keybox';
   let enterKeyText = document.createElement('div');
-  enterKeyText.id = 'enter-key-text'
+  enterKeyText.id = 'enter-key-text';
   enterKeyText.innerHTML = 'Please enter key to continue:';
-  enterKeyText.className = 'center'
+  enterKeyText.className = 'center';
   keySpan.appendChild(enterKeyText);
 
   let placeHolderForWrongInput =  document.createElement('div');
@@ -234,9 +233,9 @@ async function checkKey(data, stage, panorama, map) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 */
 function createHintPlaceHolder(hintNum) {
-    let hintLi = document.createElement('li');
-    hintLi.id = hintNum;
-    return hintLi;
+  let hintLi = document.createElement('li');
+  hintLi.id = hintNum;
+  return hintLi;
 }
 
 /** 
