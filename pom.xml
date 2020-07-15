@@ -50,6 +50,12 @@
     </dependency>
 
     <dependency>
+     <groupId>com.google.api-client</groupId>
+     <artifactId>google-api-client</artifactId>
+     <version>1.30.9</version>
+   </dependency>
+
+    <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-api-labs</artifactId>
       <version>1.9.60</version>

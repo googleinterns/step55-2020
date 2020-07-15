@@ -88,7 +88,6 @@ public class CreateGameServlet extends HttpServlet {
         datastoreManager.createOrReplaceGame(game);
         String json = new Gson().toJson(gameID);
         response.getWriter().println(json);
-
     }
 
     /**
@@ -165,7 +164,8 @@ public class CreateGameServlet extends HttpServlet {
     * @return a String representing the userID.
     */
     private String getUserID(HttpServletRequest request) {
-        return userService.getCurrentUser().getUserId();
+        String idTokenString = request.getParameter("idToken");
+        return idTokenString;
     }
 
     /**
