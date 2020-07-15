@@ -28,13 +28,11 @@
 
 </head>
 <body class='light-mode' onload='onLoadFunctions("index")'>
-  <div id='nav-bar'>
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-  </div>
+  <div id='nav-bar'></div>
   <!-- TODO: Rather than using JS to generate the Nav-Bar use an iframe -->
   <!-- <iframe src='navBar.html' width='100%'></iframe> -->
   <div class=container>
-    
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <a href="#" onclick="signOut();">Sign out</a>
 
     <div class='center'>
