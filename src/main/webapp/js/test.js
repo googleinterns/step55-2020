@@ -1,43 +1,3 @@
-var auth2;
-
-/** 
-* The function called each time a user clicks the sign-in button
-*/
-function onSignIn(googleUser) {
-  // Useful data for your client-side scripts:
-  var profile = googleUser.getBasicProfile();
-  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-  console.log('Full Name: ' + profile.getName());
-
-  //console.log('is signed in?', hasSignedIn());
-
-  // The ID token you need to pass to your backend:
-  var id_token = googleUser.getAuthResponse().id_token;
-  console.log("ID Token: " + id_token);
-  
-  document.getElementById('nav-bar').innerHTML = '';
-
-  createNavBar('index');
-}
-
-/** 
-* returns the sign-in status of the user
-*/
-function hasSignedIn() {
- return auth2.isSignedIn.get();
-}
-
-/** 
-* The function called each time a user clicks the sign-out
-*/
-async function signOut() {
-  var auth2 = gapi.auth2.getAuthInstance();
-  await auth2.signOut().then(function () {
-    console.log('is signed in?', hasSignedIn());
-  });
-  createNavBar('index');
-}
-
 /** 
 * Changes the page to light mode or dark mode
 */
@@ -50,7 +10,7 @@ function changeToOrFromDarkMode() {
     body.className = 'light-mode';
   }
   if (typeof(Storage) !== "undefined") {
-    sessionStorage.setItem("colorMode", body.className);
+    localStorage.setItem("colorMode", body.className);
   } 
 }
 
@@ -62,8 +22,7 @@ function changeToOrFromDarkMode() {
 * @param {string} url if loggedIn is true then this url contains the logout url and otherwise the login url
 * @example createNavBar("index")
 */
-async function createNavBar(page) {
-  document.getElementById('nav-bar').innerHTML = '';
+async function createNavBar(page, loggedIn, url) {
   var navbar = document.createElement('nav');
 
   var navWrapperDiv = document.createElement('div');
@@ -111,45 +70,52 @@ async function createNavBar(page) {
   }
   a = document.createElement('a');
   a.innerHTML = 'Create Game';
-  console.log('This console', await hasSignedIn())
   a.href = 'createGame.html';
-
-  liCreateGame.appendChild(a);
-
-  // var liSignin = document.createElement('li');
-  // var signinDiv = document.getElementsByClassName('g-signin2')[0];
-  // var signinAnchor = document.createElement('a');
-  // signinAnchor.href = '#';
-
-  // signinAnchor.appendChild(signinDiv);
-  // liSignin.appendChild(signinAnchor);
   
-  var liProfile = document.createElement('li');
-  a = document.createElement('a');
-  a.innerHTML = 'Profile';
-  a.href = 'profilePage.html';
-  liProfile.appendChild(a);
+  var liLogin;
+  var liLogout;
+  var logoutUrl;
+  liLogin = document.createElement('li');
+  if (loggedIn) {
+    liCreateGame.appendChild(a);
+    
+    a = document.createElement('a');
+    a.innerHTML = 'My Profile';
+    a.href = 'profilePage.html';
+    
+    liLogout = document.createElement('li');
+    logoutUrl = document.createElement('a');
+    logoutUrl.innerHTML = 'Log out';
+    logoutUrl.href = url;
+  } else {
+    a = document.createElement('a');
+    a.innerHTML = 'Login';
+    a.href = url;
+  }
+
+  liLogin.appendChild(a);
 
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
-  if (await hasSignedIn()) {
-    ul.appendChild(liCreateGame);
-    ul.appendChild(liProfile);
-  } 
-  // ul.appendChild(liSignin);
-  // ul.appendChild(signinDiv);
+  ul.appendChild(liCreateGame);
+  ul.appendChild(liLogin);
   
-  //navbar.appendChild(signinDiv);
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
                                                     '<li><a href="index.html">Home</a> </li>' + 
                                                   '</ul>';
 
   var navBarForMobile = document.getElementById('mobile-demo');
-    
-  navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
-                                 '<li><a href="profilePage.html">Profile</a> </li>';
   
+  if (liLogout != undefined) {
+    liLogout.appendChild(logoutUrl);
+    ul.appendChild(liLogout);
+    navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
+                                 '<li><a href="profilePage.html">My Profile</a> </li>'+ 
+                                 '<li><a href="'+url+'">Log out</a> </li>';
+  } else {
+    navBarForMobile.innerHTML += '<li><a href="'+url+'">Log in</a> </li>';
+  }
   
   containerDiv.appendChild(ul);
 
@@ -284,22 +250,27 @@ function loadMaps() {
 */
 async function onLoadFunctions(page) {
   if (typeof(Storage) !== "undefined") {
-    var color = sessionStorage.getItem("colorMode");
+    var color = localStorage.getItem("colorMode");
     if (color == null) {
-      sessionStorage.setItem("colorMode", "light-mode");
+      localStorage.setItem("colorMode", "light-mode");
     }
     document.body.className = color;
   }
-  
-  gapi.load('auth2', function() {
-    gapi.auth2.init({
-    client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
-  }).then(function(){
-    auth2 = gapi.auth2.getAuthInstance();
-    console.log('is signed in?', auth2.isSignedIn.get()); //now this always returns correctly  
-    createNavBar(page);
-  });
-  });
+
+  var loggedIn = false;
+  var url;
+  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
+    loggedIn = data.loggedIn;
+    if (data.loggedIn) {
+      url = data.logoutUrl;
+      console.log("loggedIn");
+    } else {
+      url = data.loginUrl;
+      console.log("loggedOut");
+    }
+  }); 
+
+  createNavBar(page, loggedIn, url);
 
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   var elems = document.querySelectorAll('.sidenav');
@@ -308,8 +279,11 @@ async function onLoadFunctions(page) {
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
+    if (!loggedIn) {
+      window.location.replace(url);
+    }
     initMapToCreateGame();
-  } else if (page == 'afterGame') {
+  }  else if (page == 'afterGame') {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();

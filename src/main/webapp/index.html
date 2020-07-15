@@ -4,7 +4,6 @@
   <link href='images/streetExplorerLogo.png' rel='icon'>
 
   <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
-
   <script src='https://www.gstatic.com/charts/loader.js'></script>
 
   <!--Import Google Icon Font-->
@@ -19,19 +18,25 @@
 
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
   <link rel='stylesheet' href='css/style.css'>
 
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src='js/script.js'></script>
+  <meta name="google-signin-client_id" content="683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com">
   
   <title>Street Explorer</title>
 
 </head>
 <body class='light-mode' onload='onLoadFunctions("index")'>
-  <div id='nav-bar'></div>
+  <div id='nav-bar'>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  </div>
   <!-- TODO: Rather than using JS to generate the Nav-Bar use an iframe -->
   <!-- <iframe src='navBar.html' width='100%'></iframe> -->
   <div class=container>
+    
+    <a href="#" onclick="signOut();">Sign out</a>
+
     <div class='center'>
       <h1> Featured Map</h1>
     
