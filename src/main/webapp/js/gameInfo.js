@@ -23,7 +23,7 @@ function loadGameData() {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapNameAndDifficulty(data) {
-  let mapName = document.getElementById('map-name');
+  let mapName = document.getElementById('map-name-and-difficulty');
   let difficultyClass = 'red-text';
   let difficulty = '[Hard]';
   if (data.difficulty == 1) {
