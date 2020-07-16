@@ -36,10 +36,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that manages retrieving the progress of a user in game.
+* Servlet that, when called, resets/creates the progress of a user on a game.
 */
-@WebServlet("/load-singleplayerprogress-data")
-public class LoadSinglePlayerProgressServlet extends HttpServlet {
+@WebServlet("/reset-singleplayerprogress-data")
+public class ResetSinglePlayerProgressServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
@@ -47,8 +47,12 @@ public class LoadSinglePlayerProgressServlet extends HttpServlet {
         UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
         String userID = userVerifier.getUserID();
         String gameID = request.getParameter("gameID");
-        SinglePlayerProgress res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
-        String json = new Gson().toJson(res);
-        response.getWriter().println(json);
+        SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
+        Game game = datastoreManager.retrieveGame(gameID);
+        Stage firstStage = datastoreManager.retrieveStage(game.getStages().get(0));
+        progressBuilder.setLocation(firstStage.getStartingLocation());
+        progressBuilder.setHintsFound(new ArrayList<>());
+        progressBuilder.setStageID(firstStage.getStageID());
+        datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
     }
 }
