@@ -15,23 +15,21 @@ function onSignIn(googleUser) {
   var id_token = googleUser.getAuthResponse().id_token;
   console.log("ID Token: " + id_token);
   
-  document.getElementById('nav-bar').innerHTML = '';
-
-  createNavBar('index');
+   createNavBar('index');
 }
 
 /** 
 * returns the sign-in status of the user
 */
 function hasSignedIn() {
- return auth2.isSignedIn.get();
+  return auth2.isSignedIn.get();
 }
 
 /** 
 * The function called each time a user clicks the sign-out
 */
 async function signOut() {
-  var auth2 = gapi.auth2.getAuthInstance();
+  auth2 = gapi.auth2.getAuthInstance();
   await auth2.signOut().then(function () {
     console.log('is signed in?', hasSignedIn());
   });
@@ -61,7 +59,29 @@ function changeToOrFromDarkMode() {
 * @example createNavBar("index")
 */
 async function createNavBar(page) {
-  document.getElementById('nav-bar').innerHTML = '';
+//  var signinDiv  = document.getElementsByClassName('g-signin2')[0].cloneNode(true);
+//   document.getElementsByClassName('g-signin2')[0].parentNode.removeChild(document.getElementsByClassName('g-signin2')[0]);
+  let element = document.getElementById('nav-bar')
+  element.innerHTML = '<div id="gSignInWrapper">'+
+                        '<div id="customBtn" class="customGPlusSignIn">'+
+                         '<span class="icon"></span>'+
+                         '<span class="buttonText">Google</span>'+
+                         '</div>'+
+                      '</div>'+
+                      '<div id="name"></div>';
+
+  element = document.getElementById('customBtn');
+
+//   console.log(element.id);
+//   console.log(auth2);
+//   auth2.attachClickHandler(element, {},
+//     function(googleUser) {
+//       document.getElementById('name').innerText = "Signed in: " + googleUser.getBasicProfile().getName();
+//     }, function(error) {
+//       alert(JSON.stringify(error, undefined, 2));
+//     });
+
+
   var navbar = document.createElement('nav');
 
   let navWrapperDiv = document.createElement('div');
@@ -109,21 +129,20 @@ async function createNavBar(page) {
   }
   a = document.createElement('a');
   a.innerHTML = 'Create Game';
-  console.log('This console', await hasSignedIn())
+//   console.log('This console', await hasSignedIn())
   a.href = 'createGame.html';
 
 
   liCreateGame.appendChild(a);
 
   var liSignin = document.createElement('li');
-  var signinDiv = document.getElementsByClassName('g-signin2')[0].cloneNode(true);
+//   var signinDiv = document.getElementsByClassName('g-signin2')[0].cloneNode(true);
   var signinAnchor = document.createElement('a');
   signinAnchor.href = '#';
+  console.log( document.getElementsByClassName('g-signin2'))
 
-  document.getElementsByClassName('g-signin2')[0].parentNode.removeChild(element);
-
-  signinAnchor.appendChild(signinDiv);
-  liSignin.appendChild(signinAnchor);
+//   signinAnchor.appendChild(signinDiv);
+//   liSignin.appendChild(signinDiv);
   
   var liProfile = document.createElement('li');
   a = document.createElement('a');
@@ -133,14 +152,12 @@ async function createNavBar(page) {
 
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
-//   if (await hasSignedIn()) {
-//     ul.appendChild(liCreateGame);
-//     ul.appendChild(liProfile);
-//   } 
-  // ul.appendChild(liSignin);
-  // ul.appendChild(signinDiv);
+  if (await hasSignedIn()) {
+    ul.appendChild(liCreateGame);
+    ul.appendChild(liProfile);
+  } 
+//   ul.appendChild(liSignin);
   
-  //navbar.appendChild(signinDiv);
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
                                                     '<li><a href="index.html">Home</a> </li>' + 
@@ -281,7 +298,7 @@ function loadMaps() {
 * @param {string} page is which page the onLoadFunction is being called from without the .html 
 * @example onLoadFunction("index")
 */
-async function onLoadFunctions(page) {
+async function onLoadFunctions(page) { 
   if (typeof(Storage) !== "undefined") {
     let color = localStorage.getItem("colorMode");
     if (color == null) {
@@ -289,17 +306,16 @@ async function onLoadFunctions(page) {
     }
     document.body.className = color;
   }
-  
+
   gapi.load('auth2', function() {
     gapi.auth2.init({
     client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
     }).then(function(){
       auth2 = gapi.auth2.getAuthInstance();
-      console.log('is signed in?', auth2.isSignedIn.get()); //now this always returns correctly  
-      createNavBar(page);
+      console.log('is signed in?', auth2.isSignedIn.get()); 
     });
+    createNavBar(page);
   });
-
 
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');
@@ -324,24 +340,3 @@ async function onLoadFunctions(page) {
  	});
   }
 }
-
-//   let liLogin;
-//   let liLogout;
-//   let logoutUrl;
-//   liLogin = document.createElement('li');
-//   if (loggedIn) {
-//     liCreateGame.appendChild(a);
-    
-//     a = document.createElement('a');
-//     a.innerHTML = 'My Profile';
-//     a.href = 'profilePage.html';
-    
-//     liLogout = document.createElement('li');
-//     logoutUrl = document.createElement('a');
-//     logoutUrl.innerHTML = 'Log out';
-//     logoutUrl.href = url;
-//   } else {
-//     a = document.createElement('a');
-//     a.innerHTML = 'Login';
-//     a.href = url;
-//   }
