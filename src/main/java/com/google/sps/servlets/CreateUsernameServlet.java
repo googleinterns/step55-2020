@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 import com.google.sps.data.*;
 import com.google.sps.managers.*;
+import com.google.sps.utils.*;
 
 import java.util.ArrayList;
 import com.google.gson.Gson;
@@ -35,34 +36,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that gets the username and stores it in datastore .
+* Servlet that gets the username and stores it in datastore.
 */
 @WebServlet("/create-username-data")
 public class CreateUsernameServlet extends HttpServlet {
-  UserService userService = UserServiceFactory.getUserService();
-  DatastoreManager datastoreManager = new DatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
 
-  @Override
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String userName = request.getParameter("userName");
-      boolean doesUsernameExist = datastoreManager.doesUsernameExist(userName);
+        String userName = request.getParameter("userName");
+        boolean doesUsernameExist = datastoreManager.doesUsernameExist(userName);
 
-      if (!doesUsernameExist) {
-        String userId = userService.getCurrentUser().getUserId();
-        User.Builder user = new User.Builder(userId).setUsername(userName);
-        User oldUser = datastoreManager.retrieveUser(userId);
+        if (!doesUsernameExist) {
+            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"));
+            String userId = userVerifier.getUserID();
+            User.Builder user = new User.Builder(userId).setUsername(userName);
+            User oldUser = datastoreManager.retrieveUser(userId);
 
-        user.setFirstName(oldUser.getFirstName()).setLastName(oldUser.getLastName()).setProfilePictureUrl(oldUser.getProfilePictureUrl());
-        user.setGamesCreated(oldUser.getGamesCreated()).setGamesCompletedWithTime(oldUser.getGamesCompletedWithTime());
-        datastoreManager.createOrReplaceUser(user.build());
+            user.setFirstName(oldUser.getFirstName()).setLastName(oldUser.getLastName()).setProfilePictureUrl(oldUser.getProfilePictureUrl());
+            user.setGamesCreated(oldUser.getGamesCreated()).setGamesCompletedWithTime(oldUser.getGamesCompletedWithTime());
+            datastoreManager.createOrReplaceUser(user.build());
 
-        String json = new Gson().toJson(userName);
-        response.getWriter().println(json);
-      }
-      else {
-        String json = new Gson().toJson(null);
-        response.getWriter().println(json);
-      }
-      response.sendRedirect("/profilePage.html");
+            String json = new Gson().toJson(userName);
+            response.getWriter().println(json);
+      } else {
+            String json = new Gson().toJson(null);
+            response.getWriter().println(json);
+        }
+        response.sendRedirect("/profilePage.html");
     }
 }
