@@ -216,6 +216,10 @@ function createInputDiv() {
 * Gets the data from the form on the createGame.html page and sends it to the server
 */
 function getDataFromGameCreationForm() {
+  if(!isSignedIn()) {
+    window.alert('You must sign in before creating a game!')
+    return;
+  }
   const numStages = document.getElementById('stages').getElementsByTagName('input').length;
   let stageKeys = [];
   let stageSpawnLocations = []; // ex: [{'latitude': 1, 'longitude':2}, {'latitude': 3, 'longitude': 4}]
@@ -269,6 +273,10 @@ function getDataFromGameCreationForm() {
   params.append('stageStarterHints', JSON.stringify(stageStarterHints));
   params.append('hintLocations', JSON.stringify(hintLocations));
   params.append('hintTexts', JSON.stringify(hintTexts));
+
+  let tokenEmailDict = tokenAndEmail();
+  params.append('email', tokenEmailDict['email']);
+  params.append('token', tokenEmailDict['token']);
   let request = new Request('/create-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
     window.location.replace('gameInfo.html?gameID=' + data);

@@ -1,48 +1,42 @@
 var auth2;
-
-
-function init(page) {
-  gapi.load('auth2', function() {
-    gapi.auth2.init({
+console.log(auth2)
+/** 
+* initalizes the GoogleAuth instance
+*/
+async function init(page) {
+  await gapi.load('auth2', async function() {
+    await gapi.auth2.init({
       client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
-    }).then(function(){
-      auth2 = gapi.auth2.getAuthInstance();
-      createNavBar(page);
-    });
-  });
+    })
+    auth2 = await gapi.auth2.getAuthInstance();
+    console.log(auth2)
+    createNavBar(page);
+  }); 
+  console.log(auth2)
 }
 
-/** 
-* The function called each time a user clicks the sign-in button
+/**
+* Returns a dictionary with a token and the email the google sign in API
 */
-function onSignIn(googleUser) {
-  // Useful data for your client-side scripts:
-  var profile = googleUser.getBasicProfile();
-  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-  console.log('Full Name: ' + profile.getName());
-
-  //console.log('is signed in?', hasSignedIn());
-
-  // The ID token you need to pass to your backend:
+function tokenAndEmail() {
   var id_token = googleUser.getAuthResponse().id_token;
-  console.log("ID Token: " + id_token);
+  var profile = googleUser.getBasicProfile();
+  var email = profile.getEmail(); // Don't send this directly to your server!
+  return {"email": email, "token": id_token};
 }
 
 /** 
-* returns the sign-in status of the user
+* @returns the sign-in status of the user
 */
-function hasSignedIn() {
+function isSignedIn() {
   return auth2.isSignedIn.get();
 }
 
 /** 
-* The function called each time a user clicks the sign-out
+* This signs out the user then reproduces the nav bar
 */
 async function signOut(page) {
-  await auth2.signOut().then(function () {
-    console.log('is signed in?', hasSignedIn());
-  });
-  createNavBar(page);
+  auth2.signOut().then(function () {createNavBar(page);});
 }
 
 /** 
@@ -68,6 +62,7 @@ function changeToOrFromDarkMode() {
 * @example createNavBar("index")
 */
 async function createNavBar(page) {
+    console.log(auth2)
   document.getElementById('nav-bar').innerHTML = "";
   let navbar = document.createElement('nav');
 
@@ -129,7 +124,7 @@ async function createNavBar(page) {
                                '<span class="icon"></span>' +
                                '<span class="buttonText">Google</span></div>';
                                
-  if (await hasSignedIn()) {
+  if (await isSignedIn()) {
     googleSiginIn.querySelector('.buttonText').innerHTML = 'Signed In'
   } 
                         
@@ -154,7 +149,7 @@ async function createNavBar(page) {
 
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
-  if (await hasSignedIn()) {
+  if (await isSignedIn()) {
     ul.appendChild(liCreateGame);
     ul.appendChild(liProfile);
     ul.appendChild(liSignout);
@@ -319,8 +314,8 @@ async function onLoadFunctions(page) {
     document.body.className = "light-mode";
   }
 
-  init(page);
-
+  await init(page);
+  console.log("line 311 " + auth2);
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');
   let instances = M.Sidenav.init(elems, {});
@@ -328,13 +323,17 @@ async function onLoadFunctions(page) {
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
+      console.log(auth2)
+    if(!isSignedIn()) {
+      window.alert('You need to sign in to create a game!');
+    }
     initMapToCreateGame();
   } else if (page == 'afterGame') {
     loadGameName();
   } else if (page == 'resumeOrStartOver') {
     checkIfUserHasSavedProgress();
   } else if (page == 'profilePage') {
-    getUserName();
+    loadProfilePage();
   } else if (page == 'gameInfo') {
     loadGameData();
   } else if (page == 'index') {

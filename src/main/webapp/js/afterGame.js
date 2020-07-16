@@ -47,7 +47,7 @@ function stars(numOfStars) {
 * Gets the data from the page and sends it to the server
 * @param {string} nextAction tells the function whether to play again or go back to home
 */
-function sendDataToServer(nextAction) {  
+function sendDataToServer(nextAction) { 
   let starsCount = document.getElementsByClassName('stars')[0].id;
   if (starsCount == 0) {
     starsCount = null;

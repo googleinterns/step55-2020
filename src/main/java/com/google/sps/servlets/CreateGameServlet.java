@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/create-game-data")
 public class CreateGameServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserService userService = UserServiceFactory.getUserService();
     Gson gson = new Gson();
     String gameID;
     String userID;
@@ -164,8 +165,7 @@ public class CreateGameServlet extends HttpServlet {
     * @return a String representing the userID.
     */
     private String getUserID(HttpServletRequest request) {
-        // TODO(ldchen): actually get the user ID once authentication works.
-        return IDGenerator.gen();
+        return userService.getCurrentUser().getUserId();
     }
 
     /**

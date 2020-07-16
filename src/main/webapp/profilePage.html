@@ -12,7 +12,7 @@
   <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
     
   <!--Import materialize.css from maeralizecss.com-->
-  <link rel='stylesheet' href='css/materialize.min.css'>
+  <link rel='stylesheet' href='/css/materialize.min.css'>
    
   <!--  Scripts from materalizecss.com-->
   <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
@@ -40,16 +40,14 @@
     <div class='center'>
       <h1>Profile</h1>
     </div>
-    <form action="/create-username-data" method='POST'>
-      <div class='input-field'>
-        <h5>Username</h5>
-        <input id='userName' type='text' name='userName' required>
-      </div>
-      <br>
-      <div id='username-availability-message'></div>
-      <br>
-      <input type="submit" value="Submit">
-    </form>
+    <div class='input-field'>
+      <h5>Username</h5>
+      <input id='userName' type='text' name='userName' required>
+    </div>
+    <br>
+    <div id='username-availability-message'></div>
+    <br>
+    <button type="button" onclick='submitUsername()' id='submit-username-button'>Submit</button>
   </div>
 </body>
 </html>

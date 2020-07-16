@@ -22,6 +22,7 @@ async function initMapToPlayGame() {
     let initStage;
     let stageID;
     let startOfGame;
+    // TODO(smissak): remove null check only use data from the userprogress
     if (userProgress == null || userProgress.stageID == 'N/A') {
       stageID = data.stages[0];
       initStage = await getStage(stageID);
@@ -76,9 +77,18 @@ async function initMapToPlayGame() {
 * @return a the user data in json and null if there is no user data or the user is not logged in
 */
 async function getUserProgress() {
-  let gameID =  getGameID();
+  let gameID = getGameID();
   let result;
-  await fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
+  
+  const params = new URLSearchParams();
+  let tokenEmailDict = tokenAndEmail();
+
+  params.append('email', tokenEmailDict['email']);
+  params.append('token', tokenEmailDict['token']);
+  params.append('gameID', gameID);
+
+  let request = new Request('/load-singleplayerprogress-data', {method: 'POST', body: params});
+  await fetch(request).then(response => response.json()).then(data => {
     result = data;
   });
   return result;
@@ -221,9 +231,9 @@ async function checkKey(data, stage, panorama, map) {
     return;
   }
 
-  stageHints.forEach(hint => 
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber])
-  );
+  stageHints.forEach(hint => {
+    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber]);
+  });
 
   updateUserProgress(nextStage.stageID, map);
 }
@@ -271,12 +281,11 @@ function addHintMarker(map, latLng, hint, hintNum, stageID) {
   }); 
 
   marker.addListener('click', function() {
-    changeData(map, latLng, hint, hintNum, stageID, true, marker)
+    changeData(map, latLng, hint, hintNum, stageID, true, marker);
   });
 
   return marker;
 }
-
 
 /** 
 * Changes the color of the marker on the map adds the hint to the list of hints found
@@ -325,6 +334,7 @@ function updateUserProgress(stageID, map) {
   let gameID =  getGameID();
   let params = new URLSearchParams();
   params.append('gameID', gameID);
+  
   let latLng = (map.getStreetView().getPosition());
   let location = {"latitude": latLng.lat(), "longitude": latLng.lng()};
   params.append('location', JSON.stringify(location));
@@ -340,6 +350,10 @@ function updateUserProgress(stageID, map) {
     }
   }
   params.append('hintsFound',  JSON.stringify(hintsFound));
+
+  let tokenEmailDict = tokenAndEmail();
+  params.append('email', tokenEmailDict['email']);
+  params.append('token', tokenEmailDict['token']);
   let request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
   fetch(request);
 }
