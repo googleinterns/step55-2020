@@ -165,17 +165,13 @@ public class CreateGameServlet extends HttpServlet {
     private String getUserID(HttpServletRequest request) throws IOException {
         String idTokenString = request.getParameter("idToken");
         String username = request.getParameter("username");
-        try {
-            UserVerifier userVerifier = new UserVerifier(idTokenString);
-            if(userVerifier.matchesUsername(username)) {
-                return userVerifier.getUserID();
-            } else {
-                throw new IOException("ID token string does not match username");
-            }
-        } catch(Exception e) {
-            throw new IOException("Invalid id token string");
+        UserVerifier userVerifier = new UserVerifier(idTokenString);
+        if(userVerifier.matchesUsername(username)) {
+            return userVerifier.getUserID();
+        } else {
+            throw new IOException("ID token string does not match username");
         }
-    }
+}
 
     /**
     * Retrieves the game's name.

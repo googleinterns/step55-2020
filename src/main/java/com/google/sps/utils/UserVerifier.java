@@ -22,6 +22,7 @@ import java.util.Collections;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import java.io.IOException;
 
 /**
 * Class that parses an idToken given by the client.
@@ -33,12 +34,12 @@ public class UserVerifier {
     private GoogleIdToken idToken;
     private Payload payload;
 
-    public UserVerifier(String idTokenString) throws Exception {
+    public UserVerifier(String idTokenString) throws IOException {
         try {
             idToken = verifier.verify(idTokenString);
             payload = idToken.getPayload();
         } catch (Exception e) {
-            throw new Exception("Invalid id token string");
+            throw new IOException("Invalid id token string");
         }
     }
 
@@ -46,16 +47,16 @@ public class UserVerifier {
         return (idToken != null);
     }
 
-    public String getUserID() throws Exception {
+    public String getUserID() throws IOException {
         if(!isValid()) {
-            throw new Exception("UserVerifier has not been initialized with a valid id token string.");
+            throw new IOException("UserVerifier has not been initialized with a valid id token string.");
         }
         return payload.getSubject();
     }
 
-    public boolean matchesUsername(String username) throws Exception {
+    public boolean matchesUsername(String username) throws IOException {
         if(!isValid()) {
-            throw new Exception("UserVerifier has not been initialized with a valid id token string.");
+            throw new IOException("UserVerifier has not been initialized with a valid id token string.");
         }
         String userID = getUserID();
         User user = datastoreManager.retrieveUser(userID);
