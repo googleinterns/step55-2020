@@ -44,7 +44,7 @@ public class HasSinglePlayerProgressServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserVerifier userVerifier = new UserVerifier(request.getParamter("idToken"), request.getParameter("email"));
+        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
         String userID = userVerifier.getUserID();
         String gameID = request.getParameter("gameID");
         if(datastoreManager.retrieveSinglePlayerProgress(userID, gameID) == null) {

@@ -168,7 +168,6 @@ public class CreateGameServlet extends HttpServlet {
         UserVerifier userVerifier = new UserVerifier(idTokenString, email);
         return userVerifier.getUserID();
     }
-}
 
     /**
     * Retrieves the game's name.

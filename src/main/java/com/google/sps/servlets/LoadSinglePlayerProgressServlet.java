@@ -40,8 +40,8 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/load-singleplayerprogress-data")
 public class LoadSinglePlayerProgressServlet extends HttpServlet {
-    UserService userService = UserServiceFactory.getUserService();
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserService userService = UserServiceFactory.getUserService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
