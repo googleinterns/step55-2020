@@ -41,11 +41,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load-currentuser-data")
 public class LoadCurrentUserServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
-    UserService userService = UserServiceFactory.getUserService();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userID = userService.getCurrentUser().getUserId();
+        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        String userID = userVerifier.getUserID();
         User user = datastoreManager.retrieveUser(userID);
         
         String json = new Gson().toJson(user);
