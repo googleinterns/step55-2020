@@ -1,5 +1,17 @@
 var auth2;
 
+
+function init(page) {
+  gapi.load('auth2', function() {
+    gapi.auth2.init({
+      client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
+    }).then(function(){
+      auth2 = gapi.auth2.getAuthInstance();
+      createNavBar(page);
+    });
+  });
+}
+
 /** 
 * The function called each time a user clicks the sign-in button
 */
@@ -14,8 +26,6 @@ function onSignIn(googleUser) {
   // The ID token you need to pass to your backend:
   var id_token = googleUser.getAuthResponse().id_token;
   console.log("ID Token: " + id_token);
-  
-   createNavBar('index');
 }
 
 /** 
@@ -28,12 +38,11 @@ function hasSignedIn() {
 /** 
 * The function called each time a user clicks the sign-out
 */
-async function signOut() {
-  auth2 = gapi.auth2.getAuthInstance();
+async function signOut(page) {
   await auth2.signOut().then(function () {
     console.log('is signed in?', hasSignedIn());
   });
-  createNavBar('index');
+  createNavBar(page);
 }
 
 /** 
@@ -59,30 +68,8 @@ function changeToOrFromDarkMode() {
 * @example createNavBar("index")
 */
 async function createNavBar(page) {
-//  var signinDiv  = document.getElementsByClassName('g-signin2')[0].cloneNode(true);
-//   document.getElementsByClassName('g-signin2')[0].parentNode.removeChild(document.getElementsByClassName('g-signin2')[0]);
-  let element = document.getElementById('nav-bar')
-  element.innerHTML = '<div id="gSignInWrapper">'+
-                        '<div id="customBtn" class="customGPlusSignIn">'+
-                         '<span class="icon"></span>'+
-                         '<span class="buttonText">Google</span>'+
-                         '</div>'+
-                      '</div>'+
-                      '<div id="name"></div>';
-
-  element = document.getElementById('customBtn');
-
-//   console.log(element.id);
-//   console.log(auth2);
-//   auth2.attachClickHandler(element, {},
-//     function(googleUser) {
-//       document.getElementById('name').innerText = "Signed in: " + googleUser.getBasicProfile().getName();
-//     }, function(error) {
-//       alert(JSON.stringify(error, undefined, 2));
-//     });
-
-
-  var navbar = document.createElement('nav');
+  document.getElementById('nav-bar').innerHTML = "";
+  let navbar = document.createElement('nav');
 
   let navWrapperDiv = document.createElement('div');
   navWrapperDiv.className = 'nav-wrapper';
@@ -129,20 +116,25 @@ async function createNavBar(page) {
   }
   a = document.createElement('a');
   a.innerHTML = 'Create Game';
-//   console.log('This console', await hasSignedIn())
   a.href = 'createGame.html';
-
-
   liCreateGame.appendChild(a);
 
   var liSignin = document.createElement('li');
-//   var signinDiv = document.getElementsByClassName('g-signin2')[0].cloneNode(true);
   var signinAnchor = document.createElement('a');
   signinAnchor.href = '#';
-  console.log( document.getElementsByClassName('g-signin2'))
 
-//   signinAnchor.appendChild(signinDiv);
-//   liSignin.appendChild(signinDiv);
+  let googleSiginIn = document.createElement('div');
+  googleSiginIn.id = 'gSignInWrapper';
+  googleSiginIn.innerHTML += '<div id="customBtn" class="customGPlusSignIn">'+
+                               '<span class="icon"></span>' +
+                               '<span class="buttonText">Google</span></div>';
+                               
+  if (await hasSignedIn()) {
+    googleSiginIn.querySelector('.buttonText').innerHTML = 'Signed In'
+  } 
+                        
+  signinAnchor.appendChild(googleSiginIn);
+  liSignin.appendChild(signinAnchor);
   
   var liProfile = document.createElement('li');
   a = document.createElement('a');
@@ -150,28 +142,45 @@ async function createNavBar(page) {
   a.href = 'profilePage.html';
   liProfile.appendChild(a);
 
+  var liSignout = document.createElement('li');
+  a = document.createElement('a');
+  a.innerHTML = 'Sign Out';
+  a.href = '#';
+  a.addEventListener('click', function() {
+    signOut(page);
+  });
+
+  liSignout.appendChild(a);
+
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
   if (await hasSignedIn()) {
     ul.appendChild(liCreateGame);
     ul.appendChild(liProfile);
+    ul.appendChild(liSignout);
   } 
-//   ul.appendChild(liSignin);
-  
-  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-                                                    '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
-                                                    '<li><a href="index.html">Home</a> </li>' + 
-                                                  '</ul>';
+  ul.appendChild(liSignin);
 
-  let navBarForMobile = document.getElementById('mobile-demo');
-    
-  navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
-                                 '<li><a href="profilePage.html">Profile</a> </li>';
-  
-  
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
+  
+  auth2.attachClickHandler(document.getElementById('customBtn'), {},
+    function(googleUser) { createNavBar(page)}, function(error) {
+      alert(JSON.stringify(error, undefined, 2));
+  });
+  
+//   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
+//                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
+//                                                     '<li><a href="index.html">Home</a> </li>' + 
+//                                                   '</ul>';
+
+//   let navBarForMobile = document.getElementById('mobile-demo');
+    
+//   navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
+//                                  '<li><a href="profilePage.html">Profile</a> </li>';
+
+
 }
 
 /** 
@@ -306,16 +315,11 @@ async function onLoadFunctions(page) {
     }
     document.body.className = color;
   }
+  if (document.body.className == "null" || document.body.className == "undefined") {
+    document.body.className = "light-mode";
+  }
 
-  gapi.load('auth2', function() {
-    gapi.auth2.init({
-    client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
-    }).then(function(){
-      auth2 = gapi.auth2.getAuthInstance();
-      console.log('is signed in?', auth2.isSignedIn.get()); 
-    });
-    createNavBar(page);
-  });
+  init(page);
 
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');

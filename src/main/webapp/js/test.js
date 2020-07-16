@@ -4,6 +4,7 @@ var auth2;
 * The function called each time a user clicks the sign-in button
 */
 function onSignIn(googleUser) {
+  init();
   // Useful data for your client-side scripts:
   var profile = googleUser.getBasicProfile();
   console.log("ID: " + profile.getId()); // Don't send this directly to your server!
@@ -15,13 +16,16 @@ function onSignIn(googleUser) {
   var id_token = googleUser.getAuthResponse().id_token;
   console.log("ID Token: " + id_token);
   
-   createNavBar('index');
+  document.getElementById('nav-bar').innerHTML = '';
+
+  createNavBar('index');
 }
 
 /** 
 * returns the sign-in status of the user
 */
 function hasSignedIn() {
+  console.log(auth2)
   return auth2.isSignedIn.get();
 }
 
@@ -59,62 +63,40 @@ function changeToOrFromDarkMode() {
 * @example createNavBar("index")
 */
 async function createNavBar(page) {
-//  var signinDiv  = document.getElementsByClassName('g-signin2')[0].cloneNode(true);
-//   document.getElementsByClassName('g-signin2')[0].parentNode.removeChild(document.getElementsByClassName('g-signin2')[0]);
-  let element = document.getElementById('nav-bar')
-  element.innerHTML = '<div id="gSignInWrapper">'+
-                        '<div id="customBtn" class="customGPlusSignIn">'+
-                         '<span class="icon"></span>'+
-                         '<span class="buttonText">Google</span>'+
-                         '</div>'+
-                      '</div>'+
-                      '<div id="name"></div>';
-
-  element = document.getElementById('customBtn');
-
-//   console.log(element.id);
-//   console.log(auth2);
-//   auth2.attachClickHandler(element, {},
-//     function(googleUser) {
-//       document.getElementById('name').innerText = "Signed in: " + googleUser.getBasicProfile().getName();
-//     }, function(error) {
-//       alert(JSON.stringify(error, undefined, 2));
-//     });
-
-
+  document.getElementById('nav-bar').innerHTML = '';
   var navbar = document.createElement('nav');
 
-  let navWrapperDiv = document.createElement('div');
+  var navWrapperDiv = document.createElement('div');
   navWrapperDiv.className = 'nav-wrapper';
   navbar.appendChild(navWrapperDiv);
 
-  let containerDiv = document.createElement('div');
+  var containerDiv = document.createElement('div');
   containerDiv.className = 'container';
   navWrapperDiv.appendChild(containerDiv);
 
-  let a = document.createElement('a');
+  var a = document.createElement('a');
   a.innerHTML = 'Street Explorer';
   a.href = "index.html";
   a.className = 'brand-logo';
   containerDiv.appendChild(a);
 
-  let mobileA = document.createElement('a');
+  var mobileA = document.createElement('a');
   mobileA.innerHTML = '<i class="material-icons">menu</i>';
   mobileA.href = "#";
   mobileA.className = 'sidenav-trigger';
   mobileA.dataset.target = 'mobile-demo';
   containerDiv.appendChild(mobileA);
 
-  let ul = document.createElement('ul');
+  var ul = document.createElement('ul');
   ul.className = 'right hide-on-med-and-down';
 
-  let liBrightness = document.createElement('li');
+  var liBrightness = document.createElement('li');
   a = document.createElement('a');
   a.innerHTML = '<i class=\'material-icons\' onclick=\'changeToOrFromDarkMode()\'>brightness_4</i>';
   a.href = "#";
   liBrightness.appendChild(a);
 
-  let liHome= document.createElement('li');
+  var liHome= document.createElement('li');
   if (page == 'index') {
     liHome.className = 'active';
   }
@@ -123,26 +105,24 @@ async function createNavBar(page) {
   a.href = "index.html";
   liHome.appendChild(a);
 
-  let liCreateGame = document.createElement('li');
+  var liCreateGame = document.createElement('li');
   if (page == 'createGame') {
-    liCreateGame.className = 'active';
+      liCreateGame.className = 'active';
   }
   a = document.createElement('a');
   a.innerHTML = 'Create Game';
-//   console.log('This console', await hasSignedIn())
+  
   a.href = 'createGame.html';
-
 
   liCreateGame.appendChild(a);
 
-  var liSignin = document.createElement('li');
-//   var signinDiv = document.getElementsByClassName('g-signin2')[0].cloneNode(true);
-  var signinAnchor = document.createElement('a');
-  signinAnchor.href = '#';
-  console.log( document.getElementsByClassName('g-signin2'))
+  // var liSignin = document.createElement('li');
+  // var signinDiv = document.getElementsByClassName('g-signin2')[0];
+  // var signinAnchor = document.createElement('a');
+  // signinAnchor.href = '#';
 
-//   signinAnchor.appendChild(signinDiv);
-//   liSignin.appendChild(signinDiv);
+  // signinAnchor.appendChild(signinDiv);
+  // liSignin.appendChild(signinAnchor);
   
   var liProfile = document.createElement('li');
   a = document.createElement('a');
@@ -152,18 +132,18 @@ async function createNavBar(page) {
 
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
+  console.log(hasSignedIn())
   if (await hasSignedIn()) {
     ul.appendChild(liCreateGame);
     ul.appendChild(liProfile);
   } 
-//   ul.appendChild(liSignin);
-  
+
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
                                                     '<li><a href="index.html">Home</a> </li>' + 
                                                   '</ul>';
 
-  let navBarForMobile = document.getElementById('mobile-demo');
+  var navBarForMobile = document.getElementById('mobile-demo');
     
   navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
                                  '<li><a href="profilePage.html">Profile</a> </li>';
@@ -182,11 +162,11 @@ async function createNavBar(page) {
 * @return {Element} an img element is returned with the stage starting locations marked on the image
 */
 function createStaticMap(stageLocations, size, gameID) { 
-  let staticImage = document.createElement('img');
-  let staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
+  var staticImage = document.createElement('img');
+  var staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
   staticMapURL += '&size='+size+'x'+size+'&maptype=roadmap';
-  for (let i = 0; i < stageLocations.length; i++) {
+  for (var i = 0; i < stageLocations.length; i++) {
     staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
   }
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
@@ -205,10 +185,10 @@ function createStaticMap(stageLocations, size, gameID) {
 * @param {string} captionID the id of the game info that is under the static image
 */
 function createStaticMapCaption(mapData, captionID) {
-  let avgDifficulty = mapData.difficulty;
+  var avgDifficulty = mapData.difficulty;
 
-  let difficulty = 'Easy';
-  let difficultyColor = 'green-text';
+  var difficulty = 'Easy';
+  var difficultyColor = 'green-text';
   if (avgDifficulty == 2) {
     difficulty = 'Medium';
     difficultyColor = 'orange-text';
@@ -217,9 +197,9 @@ function createStaticMapCaption(mapData, captionID) {
     difficultyColor = 'red-text';
   }
 
-  let fiveStars = getStarRating(mapData.stars);
+  var fiveStars = getStarRating(mapData.stars);
 
-  let staticMapInfo = document.createElement('div');
+  var staticMapInfo = document.createElement('div');
   staticMapInfo.id = captionID;
   staticMapInfo.innerHTML = '<div style="float:right">' + fiveStars + '</div>';
   staticMapInfo.innerHTML += '<div id="title-div">' + mapData.gameName + ' </div><i class="' + difficultyColor + '">[' + difficulty + "]</i>";
@@ -239,14 +219,14 @@ function createStaticMapCaption(mapData, captionID) {
 * @param {int} stars number of stars to be shown
 */
 function getStarRating(stars) {
-  let avgStarsTemp = stars;
+  var avgStarsTemp = stars;
   
-  let fullStar = '<i class="material-icons md-18">star</i>';
-  let halfStar = '<i class="material-icons md-18">star_half</i>';
-  let emptyStar = '<i class="material-icons md-18">star_border</i>';
+  var fullStar = '<i class="material-icons md-18">star</i>';
+  var halfStar = '<i class="material-icons md-18">star_half</i>';
+  var emptyStar = '<i class="material-icons md-18">star_border</i>';
 
-  let fiveStars = '';
-  for (let i = 0; i < 5; i++) {
+  var fiveStars = '';
+  for (var i = 0; i < 5; i++) {
     if(avgStarsTemp >= 1.0) {
        fiveStars += fullStar;
     } else if (avgStarsTemp <= 0) {
@@ -264,32 +244,47 @@ function getStarRating(stars) {
 */
 function loadMaps() {
   fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
-    let featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
-    let featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
-    let featuredMapDiv = document.getElementById('featured-map');
+    var featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
+    console.log(data[0].stageLocations[0].latitude)
+    console.log(data[0].stageLocations[0].longitude)
+    var featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
+    var featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
-    let allMaps = document.getElementById('all-maps');
-    for (let i = 1; i < data.length; i++) {
-      let mapDiv = document.createElement('div');
-      mapDiv.classList.add('col');
-      mapDiv.classList.add('hoverable');
-      mapDiv.id = 'individual-map';
+    var allMaps = document.getElementById('all-maps');
+    for (var i = 1; i < data.length; i++) {
+        var mapDiv = document.createElement('div');
+        mapDiv.classList.add('col');
+        mapDiv.classList.add('hoverable');
+        mapDiv.id = 'individual-map';
 
-      let mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
-      let mapCaption = createStaticMapCaption(data[i], 'map-info');
-      mapImage.classList.add('materialbox');
-      mapImage.classList.add('responsive-img');
-      mapImage.classList.add('width300');
+        var mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
+        var mapCaption = createStaticMapCaption(data[i], 'map-info');
+        mapImage.classList.add('materialbox');
+        mapImage.classList.add('responsive-img');
+        mapImage.classList.add('width300');
 
-      mapCaption.classList.add('materialbox');
-      mapCaption.classList.add('width300');
+        mapCaption.classList.add('materialbox');
+        mapCaption.classList.add('width300');
 
-      mapDiv.append(mapImage)
-      mapDiv.append(mapCaption)
-      allMaps.append(mapDiv);
+        mapDiv.append(mapImage)
+        mapDiv.append(mapCaption)
+        allMaps.append(mapDiv);
     }
+  });
+}
+
+function init() {
+  gapi.load('auth2', function() {
+    gapi.auth2.init({
+      client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
+    }).then(function(){
+      auth2 = gapi.auth2.getAuthInstance();
+      console.log('is signed in?', auth2.isSignedIn.get()); 
+      console.log('onload ' + auth2)
+      createNavBar('index');
+    });
   });
 }
 
@@ -298,28 +293,20 @@ function loadMaps() {
 * @param {string} page is which page the onLoadFunction is being called from without the .html 
 * @example onLoadFunction("index")
 */
-async function onLoadFunctions(page) { 
+async function onLoadFunctions(page) {
   if (typeof(Storage) !== "undefined") {
-    let color = localStorage.getItem("colorMode");
+    var color = sessionStorage.getItem("colorMode");
     if (color == null) {
       sessionStorage.setItem("colorMode", "light-mode");
     }
     document.body.className = color;
   }
-
-  gapi.load('auth2', function() {
-    gapi.auth2.init({
-    client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
-    }).then(function(){
-      auth2 = gapi.auth2.getAuthInstance();
-      console.log('is signed in?', auth2.isSignedIn.get()); 
-    });
-    createNavBar(page);
-  });
+  
+  init(page);
 
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
-  let elems = document.querySelectorAll('.sidenav');
-  let instances = M.Sidenav.init(elems, {});
+  var elems = document.querySelectorAll('.sidenav');
+  var instances = M.Sidenav.init(elems, {});
   
   if (page == 'playGame') {
     initMapToPlayGame();
