@@ -43,7 +43,7 @@ public class CreateUserIdServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"));
+        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
         String userId = userVerifier.getUserID();
         User currentUser = datastoreManager.retrieveUser(userId);
 

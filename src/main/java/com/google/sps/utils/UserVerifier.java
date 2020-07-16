@@ -31,39 +31,28 @@ public class UserVerifier {
     private DatastoreManager datastoreManager = new DatastoreManager();
     private final String CLIENT_ID = "683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com";
     private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new UrlFetchTransport(), new JacksonFactory()).setAudience(Collections.singletonList(CLIENT_ID)).build();
+    private boolean isValid = false;
     private GoogleIdToken idToken;
     private Payload payload;
 
-    public UserVerifier(String idTokenString) throws IOException {
+    public UserVerifier(String idTokenString, String email) throws IOException {
         try {
-            idToken = verifier.verify(idTokenString);
-            payload = idToken.getPayload();
+            this.idToken = verifier.verify(idTokenString);
+            this.payload = idToken.getPayload();
         } catch (Exception e) {
             throw new IOException("Invalid id token string");
         }
-    }
-
-    public boolean isValid() {
-        return (idToken != null);
+        if(this.payload.getEmail().equals(email)) {
+            isValid = true;
+        } else {
+            throw new IOException("Id token string does not match email");
+        }
     }
 
     public String getUserID() throws IOException {
-        if(!isValid()) {
-            throw new IOException("UserVerifier has not been initialized with a valid id token string.");
+        if(isValid) {
+            throw new IOException("UserVerifier has not been initialized correctly.");
         }
         return payload.getSubject();
-    }
-
-    public boolean matchesUsername(String username) throws IOException {
-        if(!isValid()) {
-            throw new IOException("UserVerifier has not been initialized with a valid id token string.");
-        }
-        String userID = getUserID();
-        User user = datastoreManager.retrieveUser(userID);
-        if(user.getUsername().equals(username)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }

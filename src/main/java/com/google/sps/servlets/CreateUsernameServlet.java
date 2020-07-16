@@ -48,7 +48,7 @@ public class CreateUsernameServlet extends HttpServlet {
         boolean doesUsernameExist = datastoreManager.doesUsernameExist(userName);
 
         if (!doesUsernameExist) {
-            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"));
+            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
             String userId = userVerifier.getUserID();
             User.Builder user = new User.Builder(userId).setUsername(userName);
             User oldUser = datastoreManager.retrieveUser(userId);
@@ -59,7 +59,7 @@ public class CreateUsernameServlet extends HttpServlet {
 
             String json = new Gson().toJson(userName);
             response.getWriter().println(json);
-      } else {
+        } else {
             String json = new Gson().toJson(null);
             response.getWriter().println(json);
         }
