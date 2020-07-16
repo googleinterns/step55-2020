@@ -62,8 +62,7 @@ public class CreateGameServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         parseInput(request);
         if(!isInputValid()) {
-            System.out.println("Input json is not valid");
-            System.exit(1);
+            throw new IOException("Input array lengths are inconsistent");
         }
 
         gameID = IDGenerator.gen();
@@ -130,7 +129,7 @@ public class CreateGameServlet extends HttpServlet {
     * Parses all the inputs of the request and sets the corresponding variables.
     * @param request the HttpServletRequest of the doPost.
     */
-    void parseInput(HttpServletRequest request) {
+    void parseInput(HttpServletRequest request) throws IOException {
         userID = getUserID(request);
         gameName = getGameName(request);
         gameDescription = getGameDescription(request);
@@ -163,9 +162,19 @@ public class CreateGameServlet extends HttpServlet {
     * @param request the HttpServletRequest of the doPost.
     * @return a String representing the userID.
     */
-    private String getUserID(HttpServletRequest request) {
+    private String getUserID(HttpServletRequest request) throws IOException {
         String idTokenString = request.getParameter("idToken");
-        return idTokenString;
+        String username = request.getParameter("username");
+        try {
+            UserVerifier userVerifier = new UserVerifier(idTokenString);
+            if(userVerifier.matchesUsername(username)) {
+                return userVerifier.getUserID();
+            } else {
+                throw new IOException("ID token string does not match username");
+            }
+        } catch(Exception e) {
+            throw new IOException("Invalid id token string");
+        }
     }
 
     /**

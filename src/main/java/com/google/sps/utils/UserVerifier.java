@@ -33,12 +33,12 @@ public class UserVerifier {
     private GoogleIdToken idToken;
     private Payload payload;
 
-    public UserVerifier(String idTokenString) {
+    public UserVerifier(String idTokenString) throws Exception {
         try {
             idToken = verifier.verify(idTokenString);
             payload = idToken.getPayload();
         } catch (Exception e) {
-            return;
+            throw new Exception("Invalid id token string");
         }
     }
 
@@ -46,11 +46,17 @@ public class UserVerifier {
         return (idToken != null);
     }
 
-    public String getUserID() {
+    public String getUserID() throws Exception {
+        if(!isValid()) {
+            throw new Exception("UserVerifier has not been initialized with a valid id token string.");
+        }
         return payload.getSubject();
     }
 
-    public boolean matchesUsername(String username) {
+    public boolean matchesUsername(String username) throws Exception {
+        if(!isValid()) {
+            throw new Exception("UserVerifier has not been initialized with a valid id token string.");
+        }
         String userID = getUserID();
         User user = datastoreManager.retrieveUser(userID);
         if(user.getUsername().equals(username)) {
