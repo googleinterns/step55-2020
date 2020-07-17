@@ -50,7 +50,7 @@ public class UserVerifier {
     }
 
     public String getUserID() throws IOException {
-        if(isValid) {
+        if(!isValid) {
             throw new IOException("UserVerifier has not been initialized correctly.");
         }
         return payload.getSubject();
