@@ -36,39 +36,38 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that manages retrieving/creating/resetting the progress of a user in game.
+* Servlet that manages retrieving the progress of a user in game.
 */
 @WebServlet("/load-singleplayerprogress-data")
 public class LoadSinglePlayerProgressServlet extends HttpServlet {
-    UserService userService = UserServiceFactory.getUserService();
     DatastoreManager datastoreManager = new DatastoreManager();
+    String userID;
+    String gameID;
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         SinglePlayerProgress res = null;
-        if(userService.isUserLoggedIn()) {
-            String userID = userService.getCurrentUser().getUserId();
-            String gameID = request.getParameter("gameID");
-            res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
-        }
-        
+        if(userID != null) res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
+        if(res == null) res = getNewGame();
         String json = new Gson().toJson(res);
         response.getWriter().println(json);
     }
 
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(!userService.isUserLoggedIn()) {
-            return;
+    private void parseInput(HttpServletRequest request) throws IOException {
+        if(request.getParameterMap().containsKey("idToken") && request.getParameterMap().containsKey("email")) {
+            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+            userID = userVerifier.getUserID();
         }
-        String userID = userService.getCurrentUser().getUserId();
-        String gameID = request.getParameter("gameID");
+        gameID = request.getParameter("gameID");
+    }
+
+    private SinglePlayerProgress getNewGame() {
         SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
         Game game = datastoreManager.retrieveGame(gameID);
         Stage firstStage = datastoreManager.retrieveStage(game.getStages().get(0));
         progressBuilder.setLocation(firstStage.getStartingLocation());
         progressBuilder.setHintsFound(new ArrayList<>());
         progressBuilder.setStageID(firstStage.getStageID());
-        datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
+        return progressBuilder.build();
     }
 }

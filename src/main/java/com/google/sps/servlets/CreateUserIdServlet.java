@@ -14,6 +14,7 @@
 package com.google.sps.servlets;
 import com.google.sps.data.*;
 import com.google.sps.managers.*;
+import com.google.sps.utils.*;
 
 import java.util.ArrayList;
 import com.google.gson.Gson;
@@ -38,19 +39,19 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/create-userid-data")
 public class CreateUserIdServlet extends HttpServlet {
-  UserService userService = UserServiceFactory.getUserService();
-  DatastoreManager datastoreManager = new DatastoreManager();
+    DatastoreManager datastoreManager = new DatastoreManager();
 
-  @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      String userId = userService.getCurrentUser().getUserId();
-      User currentUser = datastoreManager.retrieveUser(userId);
-      
-      if (currentUser ==  null) {
-        User user = new User.Builder(userId).build();
-        datastoreManager.createOrReplaceUser(user);
-      }
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        String userId = userVerifier.getUserID();
+        User currentUser = datastoreManager.retrieveUser(userId);
 
-      response.sendRedirect("/profilePage.html");
+        if (currentUser ==  null) {
+            User user = new User.Builder(userId).build();
+            datastoreManager.createOrReplaceUser(user);
+        }
+
+        response.sendRedirect("/profilePage.html");
     }
 }

@@ -36,25 +36,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* Servlet that checks whether the user is logged in, and provides either the login url or the logout url.
+* Servlet that, when called, resets/creates the progress of a user on a game.
 */
-@WebServlet("/load-authentication-data")
-public class LoadAuthenticationServlet extends HttpServlet {
-    UserService userService = UserServiceFactory.getUserService();
+@WebServlet("/reset-singleplayerprogress-data")
+public class ResetSinglePlayerProgressServlet extends HttpServlet {
+    DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        boolean loggedIn = userService.isUserLoggedIn();
-        Authentication res = new Authentication(loggedIn);
-        if(loggedIn) {
-            String urlToRedirectToAfterUserLogsOut = "/index.html";
-            res.setLogoutUrl(userService.createLogoutURL(urlToRedirectToAfterUserLogsOut));
-        } else {
-            String urlToRedirectToAfterUserLogsIn = "/create-userid-data";
-            res.setLoginUrl(userService.createLoginURL(urlToRedirectToAfterUserLogsIn));
-        }
-
-        String json = new Gson().toJson(res);
-        response.getWriter().println(json);
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        String userID = userVerifier.getUserID();
+        String gameID = request.getParameter("gameID");
+        SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
+        Game game = datastoreManager.retrieveGame(gameID);
+        Stage firstStage = datastoreManager.retrieveStage(game.getStages().get(0));
+        progressBuilder.setLocation(firstStage.getStartingLocation());
+        progressBuilder.setHintsFound(new ArrayList<>());
+        progressBuilder.setStageID(firstStage.getStageID());
+        datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
     }
 }

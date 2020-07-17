@@ -41,7 +41,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load-userbyid-data")
 public class LoadUserByIdServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
-    UserService userService = UserServiceFactory.getUserService();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
