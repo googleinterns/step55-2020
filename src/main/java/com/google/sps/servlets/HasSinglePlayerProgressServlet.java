@@ -40,22 +40,17 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/has-singleplayerprogress-data")
 public class HasSinglePlayerProgressServlet extends HttpServlet {
-    UserService userService = UserServiceFactory.getUserService();
     DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if (!userService.isUserLoggedIn()) {
-            response.getWriter().println(0);
-            return;
-        }
-        String userID = userService.getCurrentUser().getUserId();
+        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        String userID = userVerifier.getUserID();
         String gameID = request.getParameter("gameID");
         if(datastoreManager.retrieveSinglePlayerProgress(userID, gameID) == null) {
             response.getWriter().println(0);
             return;
         }
-
         response.getWriter().println(1);
     }
 }

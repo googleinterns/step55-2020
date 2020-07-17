@@ -39,7 +39,7 @@ import org.junit.Test;
 
 @RunWith(JUnit4.class)
 public final class CreateGameServletTest {
-    private LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig(), new LocalUserServiceTestConfig());
+    private LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
     private HttpServletRequest request;
     private HttpServletResponse response;
     private StringWriter responseWriter;
