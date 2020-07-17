@@ -14,7 +14,6 @@ function checkIfUserHasSavedProgress() {
 
   let request = new Request('/has-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request).then(response => response.json()).then(async (data) => {
-    console.log(data);
     if (data == 0) {
       window.location.replace('playGame.html?gameID=' + gameID);
     } 

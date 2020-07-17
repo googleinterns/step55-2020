@@ -1,5 +1,5 @@
 var auth2;
-console.log(auth2)
+
 /** 
 * initalizes the GoogleAuth instance
 */
@@ -9,14 +9,11 @@ async function init(page) {
       client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
     })
     auth2 = await gapi.auth2.getAuthInstance();
-    console.log(auth2)
     createNavBar(page);
   }); 
-  console.log(auth2)
 }
 
 function onSignIn(googleUser) {
-  console.log('sign in')
   let params = new URLSearchParams();
   let tokenEmailDict = tokenAndEmail();
   params.append('email', tokenEmailDict['email']);
@@ -48,7 +45,7 @@ function isSignedIn() {
 * This signs out the user then reproduces the nav bar
 */
 async function signOut(page) {
-  auth2.signOut().then(function () {console.log('loggeds in'); createNavBar(page);});
+  auth2.signOut().then(function () {createNavBar(page);});
 }
 
 /** 
@@ -74,7 +71,6 @@ function changeToOrFromDarkMode() {
 * @example createNavBar("index")
 */
 async function createNavBar(page) {
-    console.log(auth2)
   document.getElementById('nav-bar').innerHTML = "";
   let navbar = document.createElement('nav');
 
@@ -345,7 +341,6 @@ async function onLoadFunctions(page) {
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
-    console.log(auth2)
     if(!isSignedIn()) {
       window.alert('You need to sign in to create a game!');
     }

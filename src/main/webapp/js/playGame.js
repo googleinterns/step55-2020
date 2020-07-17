@@ -22,7 +22,6 @@ function initMapToPlayGame() {
     }
 
     let userProgress = await getUserProgress();
-    console.log(userProgress)
     let stageID = userProgress.stageID;
     let initStage = await getStage(stageID);
     let startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
@@ -62,7 +61,7 @@ function initMapToPlayGame() {
     stageHints.forEach(hint => 
       markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber))
     );
-    console.log(currGameData.getHintsFound)
+
     currGameData.getHintsFound.forEach(hintNum => {
       changeData({lat: stageHints[parseInt(hintNum) - 1].location.latitude, lng: stageHints[parseInt(hintNum) - 1].location.longitude}, stageHints[parseInt(hintNum) - 1].text, hintNum, false, markers[parseInt(hintNum) - 1])
     });
@@ -230,7 +229,6 @@ async function checkKey(data, stage, panorama) {
     return;
   }
   currGameData.clearHintsFound;
-  console.log(currGameData.getHintsFound)
 
   stageHints.forEach(hint => {
     addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber);
@@ -242,6 +240,7 @@ async function checkKey(data, stage, panorama) {
 /** 
 * Creates an li for the hint to be places in the ol with the id being the hintNum
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @return {Element} an HTML li element is returned
 */
 function createHintPlaceHolder(hintNum) {
   let hintLi = document.createElement('li');
