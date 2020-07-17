@@ -30,12 +30,11 @@ function restartGame() {
 
   let fetchParams = new URLSearchParams();
   fetchParams.append('gameID', gameID);
-
   let tokenEmailDict = tokenAndEmail();
   fetchParams.append('email', tokenEmailDict['email']);
   fetchParams.append('idToken', tokenEmailDict['token']);
 
-  let request = new Request('/rest-singleplayerprogress-data', {method: 'POST', body: fetchParams});
+  let request = new Request('/reset-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request);
   window.location.replace('playGame.html?gameID=' + gameID);
 }

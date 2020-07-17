@@ -84,6 +84,10 @@ async function printPlayGameButton(data, gameID) {
   playGameButton.value = 'Play Game!';  
   playGameButton.id = 'play-game-button'; 
   playGameButton.addEventListener("click", function(){
+    if (!isSignedIn()) {
+      window.location.replace('playGame.html?gameID=' + gameID);
+      return;
+    }
     const params = new URLSearchParams();
     let tokenEmailDict = tokenAndEmail();
 

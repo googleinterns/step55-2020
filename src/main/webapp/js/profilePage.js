@@ -84,6 +84,11 @@ async function displayAvailability() {
 }
 
 async function submitUsername() {
+  if (!isSignedIn()) {
+    alert('Please sign back in');
+    return;
+  }
+  
   let desiredUsername = document.getElementById('userName').value;
   let availabilityBox = document.getElementById('username-availability-message');
   await displayAvailability();
