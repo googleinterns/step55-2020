@@ -7,7 +7,8 @@ async function loadProfilePage() {
   let waitTime = 500; // wait 500ms after last keyup before we ask the server if this username is taken
 
   if (!isSignedIn()) {
-    window.location.replace(data.loginUrl);
+    alert('You must be signed in to access this page')
+    window.location.replace('index.html');
   }
 
   let tokenEmailDict = tokenAndEmail();
@@ -15,7 +16,7 @@ async function loadProfilePage() {
   const params = new URLSearchParams();
   params.append('email', tokenEmailDict['email']);
   params.append('token', tokenEmailDict['token']);
-  fetch('/load-currentuser-data', {method:'GET', body:params}).then(response => response.json()).then(async (data) => {
+  fetch('/load-currentuser-data', {method:'POST', body:params}).then(response => response.json()).then(async (data) => {
     usernameBox.value = data.username;
   });
 

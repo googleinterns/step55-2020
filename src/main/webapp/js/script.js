@@ -19,9 +19,10 @@ async function init(page) {
 * Returns a dictionary with a token and the email the google sign in API
 */
 function tokenAndEmail() {
+  let googleUser = auth2.currentUser.get()
   var id_token = googleUser.getAuthResponse().id_token;
   var profile = googleUser.getBasicProfile();
-  var email = profile.getEmail(); // Don't send this directly to your server!
+  var email = profile.getEmail(); 
   return {"email": email, "token": id_token};
 }
 
@@ -165,17 +166,20 @@ async function createNavBar(page) {
       alert(JSON.stringify(error, undefined, 2));
   });
   
-//   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-//                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
-//                                                     '<li><a href="index.html">Home</a> </li>' + 
-//                                                   '</ul>';
+  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="slide-out">' + 
+                                                    '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
+                                                    '<li><a href="index.html">Home</a </li>' + 
+                                                  '</ul>';
 
-//   let navBarForMobile = document.getElementById('mobile-demo');
-    
-//   navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
-//                                  '<li><a href="profilePage.html">Profile</a> </li>';
+  let navBarForMobile = document.getElementById('slide-out');
 
+  if(await isSignedIn()) {
+    navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a></li>' +  
+                                 '<li><a href="profilePage.html">Profile</a></li>' + 
+                                 '<li><a href="#" onclick=signOut('+page+');>Sign Out</a></li>';
+  }
 
+  navBarForMobile.innerHTML += document.getElementById('customBtn');
 }
 
 /** 
@@ -297,12 +301,20 @@ function loadMaps() {
   });
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /** 
 * This function is a wrapper function for all of the functions to be called onload of any page
 * @param {string} page is which page the onLoadFunction is being called from without the .html 
 * @example onLoadFunction("index")
 */
 async function onLoadFunctions(page) { 
+  await sleep(10);
+  init(page);
+  await sleep(500);
+        
   if (typeof(Storage) !== "undefined") {
     let color = localStorage.getItem("colorMode");
     if (color == null) {
@@ -314,16 +326,14 @@ async function onLoadFunctions(page) {
     document.body.className = "light-mode";
   }
 
-  await init(page);
-  console.log("line 311 " + auth2);
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');
   let instances = M.Sidenav.init(elems, {});
-  
+    
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
-      console.log(auth2)
+    console.log(auth2)
     if(!isSignedIn()) {
       window.alert('You need to sign in to create a game!');
     }
@@ -338,8 +348,8 @@ async function onLoadFunctions(page) {
     loadGameData();
   } else if (page == 'index') {
     loadMaps();
- 	$(document).ready(function(){
+    $(document).ready(function(){
       $('.materialbox').materialbox();
- 	});
+    });
   }
 }
