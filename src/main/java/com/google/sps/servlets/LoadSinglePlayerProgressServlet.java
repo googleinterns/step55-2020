@@ -41,14 +41,33 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load-singleplayerprogress-data")
 public class LoadSinglePlayerProgressServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    String userID;
+    String gameID;
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
-        String userID = userVerifier.getUserID();
-        String gameID = request.getParameter("gameID");
-        SinglePlayerProgress res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
+        SinglePlayerProgress res = null;
+        if(userID != null) res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
+        if(res == null) res = getNewGame();
         String json = new Gson().toJson(res);
         response.getWriter().println(json);
+    }
+
+    private void parseInput(HttpServletRequest request) throws IOException {
+        if(request.getParameterMap().containsKey("idToken") && request.getParameterMap().containsKey("email")) {
+            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+            userID = userVerifier.getUserID();
+        }
+        gameID = request.getParameter("gameID");
+    }
+
+    private SinglePlayerProgress getNewGame() {
+        SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
+        Game game = datastoreManager.retrieveGame(gameID);
+        Stage firstStage = datastoreManager.retrieveStage(game.getStages().get(0));
+        progressBuilder.setLocation(firstStage.getStartingLocation());
+        progressBuilder.setHintsFound(new ArrayList<>());
+        progressBuilder.setStageID(firstStage.getStageID());
+        return progressBuilder.build();
     }
 }
