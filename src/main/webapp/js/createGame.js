@@ -276,7 +276,7 @@ function getDataFromGameCreationForm() {
 
   let tokenEmailDict = tokenAndEmail();
   params.append('email', tokenEmailDict['email']);
-  params.append('token', tokenEmailDict['token']);
+  params.append('idToken', tokenEmailDict['token']);
   let request = new Request('/create-game-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
     window.location.replace('gameInfo.html?gameID=' + data);

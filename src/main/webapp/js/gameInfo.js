@@ -83,9 +83,16 @@ async function printPlayGameButton(data, gameID) {
   playGameButton.type = 'button';
   playGameButton.value = 'Play Game!';  
   playGameButton.id = 'play-game-button'; 
-  playGameButton.addEventListener("click", async function(){
-    fetch('/load-singleplayerprogress-data?gameID=' + gameID).then(response => response.json()).then(async (data) => {
-      if (data == null) {
+  playGameButton.addEventListener("click", function(){
+    const params = new URLSearchParams();
+    let tokenEmailDict = tokenAndEmail();
+
+    params.append('email', tokenEmailDict['email']);
+    params.append('idToken', tokenEmailDict['token']);
+    params.append('gameID', gameID);
+    let request = new Request('/has-singleplayerprogress-data', {method: 'POST', body: params});
+    fetch(request).then(response => response.json()).then(async (data) => {
+      if (data == 0) {
         window.location.replace('playGame.html?gameID=' + gameID);
       } else {
         window.location.replace('resumeOrStartOver.html?gameID=' + gameID);

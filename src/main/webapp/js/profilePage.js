@@ -15,8 +15,9 @@ async function loadProfilePage() {
   
   const params = new URLSearchParams();
   params.append('email', tokenEmailDict['email']);
-  params.append('token', tokenEmailDict['token']);
-  fetch('/load-currentuser-data', {method:'POST', body:params}).then(response => response.json()).then(async (data) => {
+  params.append('idToken', tokenEmailDict['token']);
+  let request = new Request('/load-currentuser-data', {method: 'POST', body: params});
+  fetch(request).then(response => response.json()).then(async (data) => {
     usernameBox.value = data.username;
   });
 
@@ -92,7 +93,7 @@ async function submitUsername() {
 
     params.append('userName', desiredUsername);
     params.append('email', tokenEmailDict['email']);
-    params.append('token', tokenEmailDict['token']);
+    params.append('idToken', tokenEmailDict['token']);
     
     await fetch('/create-username-data', {method: 'post', body: params});
       window.location = '/profilePage.html';

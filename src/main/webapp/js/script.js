@@ -15,6 +15,17 @@ async function init(page) {
   console.log(auth2)
 }
 
+function onSignIn(googleUser) {
+  console.log('sign in')
+  let params = new URLSearchParams();
+  let tokenEmailDict = tokenAndEmail();
+  params.append('email', tokenEmailDict['email']);
+  params.append('idToken', tokenEmailDict['token']);
+  let request = new Request('create-userid-data', {method: 'POST', body: params});
+  fetch(request)
+}
+
+
 /**
 * Returns a dictionary with a token and the email the google sign in API
 */
@@ -37,7 +48,7 @@ function isSignedIn() {
 * This signs out the user then reproduces the nav bar
 */
 async function signOut(page) {
-  auth2.signOut().then(function () {createNavBar(page);});
+  auth2.signOut().then(function () {console.log('loggeds in'); createNavBar(page);});
 }
 
 /** 
@@ -162,25 +173,26 @@ async function createNavBar(page) {
   document.getElementById('nav-bar').appendChild(navbar);
   
   auth2.attachClickHandler(document.getElementById('customBtn'), {},
-    function(googleUser) { createNavBar(page)}, function(error) {
+    function(googleUser) { 
+        onSignIn(googleUser);
+        createNavBar(page)
+    }, function(error) {
       alert(JSON.stringify(error, undefined, 2));
   });
   
-  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="slide-out">' + 
-                                                    '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
-                                                    '<li><a href="index.html">Home</a </li>' + 
-                                                  '</ul>';
+//   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
+//                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
+//                                                     '<li><a href="index.html">Home</a> </li>' + 
+//                                                   '</ul>';
 
-  let navBarForMobile = document.getElementById('slide-out');
+//   let navBarForMobile = document.getElementById('mobile-demo');
+    
+//   navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
+//                                  '<li><a href="profilePage.html">Profile</a> </li>';
 
-  if(await isSignedIn()) {
-    navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a></li>' +  
-                                 '<li><a href="profilePage.html">Profile</a></li>' + 
-                                 '<li><a href="#" onclick=signOut('+page+');>Sign Out</a></li>';
-  }
 
-  navBarForMobile.innerHTML += document.getElementById('customBtn');
 }
+
 
 /** 
 * Creates a static maps image

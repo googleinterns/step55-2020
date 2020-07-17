@@ -10,7 +10,7 @@ function checkIfUserHasSavedProgress() {
 
   let tokenEmailDict = tokenAndEmail();
   fetchParams.append('email', tokenEmailDict['email']);
-  fetchParams.append('token', tokenEmailDict['token']);
+  fetchParams.append('idToken', tokenEmailDict['token']);
 
   let request = new Request('/has-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request).then(response => response.json()).then(async (data) => {
@@ -33,7 +33,7 @@ function restartGame() {
 
   let tokenEmailDict = tokenAndEmail();
   fetchParams.append('email', tokenEmailDict['email']);
-  fetchParams.append('token', tokenEmailDict['token']);
+  fetchParams.append('idToken', tokenEmailDict['token']);
 
   let request = new Request('/rest-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request);

@@ -18,20 +18,9 @@ async function initMapToPlayGame() {
       return;
     }
     let userProgress = await getUserProgress();
-    let startingLocation;
-    let initStage;
-    let stageID;
-    let startOfGame;
-    // TODO(smissak): remove null check only use data from the userprogress
-    if (userProgress == null || userProgress.stageID == 'N/A') {
-      stageID = data.stages[0];
-      initStage = await getStage(stageID);
-      startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
-    } else {
-      stageID = userProgress.stageID;
-      initStage = await getStage(stageID);
-      startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
-    }
+    let stageID = userProgress.stageID;
+    let initStage = await getStage(stageID);
+    let startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
     
     let map = new google.maps.Map(
       document.getElementById('playMap'), {
@@ -84,7 +73,7 @@ async function getUserProgress() {
   let tokenEmailDict = tokenAndEmail();
 
   params.append('email', tokenEmailDict['email']);
-  params.append('token', tokenEmailDict['token']);
+  params.append('idToken', tokenEmailDict['token']);
   params.append('gameID', gameID);
 
   let request = new Request('/load-singleplayerprogress-data', {method: 'POST', body: params});
@@ -353,7 +342,7 @@ function updateUserProgress(stageID, map) {
 
   let tokenEmailDict = tokenAndEmail();
   params.append('email', tokenEmailDict['email']);
-  params.append('token', tokenEmailDict['token']);
+  params.append('idToken', tokenEmailDict['token']);
   let request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
   fetch(request);
 }

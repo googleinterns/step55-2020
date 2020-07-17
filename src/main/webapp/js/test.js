@@ -57,6 +57,8 @@ function changeToOrFromDarkMode() {
   } 
 }
 
+
+
 // Soon to be depreciated
 /** 
 * Creates the navigation bar and specifies which page is active
@@ -64,6 +66,7 @@ function changeToOrFromDarkMode() {
 * @example createNavBar("index")
 */
 async function createNavBar(page) {
+    console.log(auth2)
   document.getElementById('nav-bar').innerHTML = "";
   let navbar = document.createElement('nav');
 
@@ -85,7 +88,7 @@ async function createNavBar(page) {
   mobileA.innerHTML = '<i class="material-icons">menu</i>';
   mobileA.href = "#";
   mobileA.className = 'sidenav-trigger';
-  mobileA.dataset.target = 'slide-out';
+  mobileA.dataset.target = 'mobile-demo';
   containerDiv.appendChild(mobileA);
 
   let ul = document.createElement('ul');
@@ -145,23 +148,29 @@ async function createNavBar(page) {
   a.addEventListener('click', function() {
     signOut(page);
   });
+
   liSignout.appendChild(a);
 
   ul.appendChild(liBrightness);
   ul.appendChild(liHome);
-
   if (await isSignedIn()) {
     ul.appendChild(liCreateGame);
     ul.appendChild(liProfile);
     ul.appendChild(liSignout);
   } 
-
   ul.appendChild(liSignin);
 
   containerDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
-
+  
+  auth2.attachClickHandler(document.getElementById('customBtn'), {},
+    function(googleUser) {
+        onSignIn(googleUser);
+         createNavBar(page)
+    }, function(error) {
+      alert(JSON.stringify(error, undefined, 2));
+  });
   
   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="slide-out">' + 
                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a></li>' + 
@@ -177,14 +186,6 @@ async function createNavBar(page) {
   }
 
   navBarForMobile.innerHTML += document.getElementById('customBtn');
-  
-  auth2.attachClickHandler(document.getElementById('customBtn'), {},
-    function(googleUser) { 
-      createNavBar(page);
-    }, function(error) {
-      alert(JSON.stringify(error, undefined, 2));
-  });
-  console.log(await isSignedIn());
 }
 
 /** 
