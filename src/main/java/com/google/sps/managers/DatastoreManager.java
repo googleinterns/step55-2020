@@ -385,7 +385,6 @@ public class DatastoreManager implements IDataManager {
   public void createOrReplaceIdentification(String email, String id) {
     Entity identificationEntity = new Entity ("Identification", email);
     identificationEntity.setProperty("id", id);
-    identificationEntity.setProperty("Email", email);
     datastore.put(identificationEntity);
   }
   
