@@ -376,5 +376,34 @@ public class DatastoreManager implements IDataManager {
     user.setGamesCompletedWithTime(gamesCompletedWithTime);
     return user.build();
   }
+  
+  /**
+  * Creates or Replaces the identification of a user in datastore as an entity
+  * @param email a String variable representing the user's email address
+  * @param id a String variable representing the user's id
+  */
+  public void createOrReplaceIdentification(String email, String id) {
+    Entity identificationEntity = new Entity ("Identification", email);
+    identificationEntity.setProperty("id", id);
+    datastore.put(identificationEntity);
+  }
+  
+  /**
+  * Retrieves an id of a user in datastore by the email address
+  * @param email a String variable representing a user's email address
+  */
+  public String retrieveIdByEmail(String email) {
+    Key idEntityKey = KeyFactory.createKey("Identification", email);
+    Entity idEntity;
+    try {
+      idEntity = datastore.get(idEntityKey);
+    }
+    catch(Exception e) {
+      return null;
+    }
+    
+    String id = (String) idEntity.getProperty("id");
+    return id;
+  }
 }
 

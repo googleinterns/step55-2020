@@ -53,6 +53,12 @@ public class UserVerifier {
         if(!isValid) {
             throw new IOException("UserVerifier has not been initialized correctly.");
         }
-        return payload.getSubject();
+        String email = payload.getEmail();
+        String id = datastoreManager.retrieveIdByEmail(email);
+        if(id == null) {
+            id = IDGenerator.gen();
+            datastoreManager.createOrReplaceIdentification(email, id);
+        }
+        return id;
     }
 }
