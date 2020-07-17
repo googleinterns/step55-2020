@@ -97,5 +97,18 @@ public interface IDataManager {
   * @param username a User variable representing a single instance of a User.
   */
   public User retrieveUserByUsername(String username);
+
+  /**
+  * Creates or Replaces the identification of a user in datastore as an entity
+  * @param email a String variable representing the user's email address
+  * @param id a String variable representing the user's id
+  */
+  public void createOrReplaceIdentification(String email, String id);
+
+  /**
+  * Retrieves an id of a user in datastore by the email address
+  * @param email a String variable representing a user's email address
+  */
+  public String retrieveIdByEmail(String email);
 }
 

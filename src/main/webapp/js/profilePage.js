@@ -6,12 +6,16 @@ async function loadProfilePage() {
   let timer; // current ms since last keyup
   let waitTime = 500; // wait 500ms after last keyup before we ask the server if this username is taken
 
-  await fetch('/load-authentication-data').then(response => response.json()).then(async (data) => {
-    if (!data.loggedIn) {
-      window.location.replace(data.loginUrl);
-    }
-  });  
-  fetch('/load-currentuser-data').then(response => response.json()).then(async (data) => {
+  if (!isSignedIn()) {
+    window.location.replace(data.loginUrl);
+  }
+
+  let tokenEmailDict = tokenAndEmail();
+  
+  const params = new URLSearchParams();
+  params.append('email', tokenEmailDict['email']);
+  params.append('token', tokenEmailDict['token']);
+  fetch('/load-currentuser-data', {method:'GET', body:params}).then(response => response.json()).then(async (data) => {
     usernameBox.value = data.username;
   });
 
@@ -83,10 +87,15 @@ async function submitUsername() {
   await displayAvailability();
   if(availabilityBox.innerText == 'Available') {
     const params = new URLSearchParams();
+    let tokenEmailDict = tokenAndEmail();
+
     params.append('userName', desiredUsername);
+    params.append('email', tokenEmailDict['email']);
+    params.append('token', tokenEmailDict['token']);
+    
     await fetch('/create-username-data', {method: 'post', body: params});
-    window.location = '/profilePage.html';
-  } else {
-    alert(availabilityBox.innerText);
-  }
+      window.location = '/profilePage.html';
+    } else {
+      alert(availabilityBox.innerText);
+    }
 }
