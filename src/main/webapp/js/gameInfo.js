@@ -2,10 +2,10 @@
 * Loads the game data to the game info page
 */
 function loadGameData() {
-  var gameID = getGameID();
+  let gameID = getGameID();
   const params = new URLSearchParams();
-  params.append('gameID', gameID)
-  var request = new Request('/load-gamepage-data', {method: 'POST', body: params});
+  params.append('gameID', gameID);
+  let request = new Request('/load-gamepage-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
     printMapNameAndDifficulty(data);
     printMapDescription(data);
@@ -23,9 +23,9 @@ function loadGameData() {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapNameAndDifficulty(data) {
-  var mapName = document.getElementById('map-name');
-  var difficultyClass = 'red-text';
-  var difficulty = '[Hard]'
+  let mapName = document.getElementById('map-name-and-difficulty');
+  let difficultyClass = 'red-text';
+  let difficulty = '[Hard]';
   if (data.difficulty == 1) {
     difficultyClass = 'green-text';
     difficulty = '[Easy]';
@@ -41,7 +41,7 @@ function printMapNameAndDifficulty(data) {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapDescription(data) {
-  var mapDescription = document.getElementById('map-description');
+  let mapDescription = document.getElementById('map-description');
   mapDescription.innerHTML = '<h4>Game Description: </h4>';
   mapDescription.innerHTML += '<h5>' + data.gameDescription + '</h5>';
 }
@@ -51,7 +51,7 @@ function printMapDescription(data) {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapImage(data) {
-  var mapImage = document.getElementById('map-image');
+  let mapImage = document.getElementById('map-image');
   mapImage.append(createStaticMap(data.stageLocations, 500, data.gameID));
 }
 
@@ -60,7 +60,7 @@ function printMapImage(data) {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapRating(data) {
-  var mapRating = document.getElementById('map-rating');
+  let mapRating = document.getElementById('map-rating');
   mapRating.innerHTML = getStarRating(data.stars).replace(/md-18/g, 'large');
 }
 
@@ -69,7 +69,7 @@ function printMapRating(data) {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapCreator(data) {
-  var mapCreator = document.getElementById('map-creator');
+  let mapCreator = document.getElementById('map-creator');
   mapCreator.innerHTML = '<h4>Created by: ' + data.creatorUsername + '</h4>';
 }
 
@@ -78,8 +78,8 @@ function printMapCreator(data) {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 async function printPlayGameButton(data, gameID) {
-  var playGameDiv = document.getElementById('play-game');
-  var playGameButton = document.createElement('input');
+  let playGameDiv = document.getElementById('play-game');
+  let playGameButton = document.createElement('input');
   playGameButton.type = 'button';
   playGameButton.value = 'Play Game!';  
   playGameButton.id = 'play-game-button'; 
@@ -100,7 +100,7 @@ async function printPlayGameButton(data, gameID) {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printRateMapButton(data) {
-  var rateMapButton = document.getElementById('rate-map');
+  let rateMapButton = document.getElementById('rate-map');
 //   rateMapButton.innerHTML = data.gameName;
 }
 
@@ -109,6 +109,6 @@ function printRateMapButton(data) {
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printMapComments(data) {
-  var mapComments = document.getElementById('comments');
+  let mapComments = document.getElementById('comments');
 //   mapComments.innerHTML = data.gameName;
 }

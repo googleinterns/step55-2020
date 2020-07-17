@@ -188,4 +188,10 @@ public class MockDatastoreManager implements IDataManager {
     public User retrieveUserByUsername(String username) {
         return retrieveUser("mockedUserId");
     }
+
+    public void createOrReplaceIdentification(String email, String id){}
+
+    public String retrieveIdByEmail(String email) {
+      return null;
+    }
 }
