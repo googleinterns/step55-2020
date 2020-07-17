@@ -60,7 +60,7 @@ function initMapToPlayGame() {
 
     let markers = [];
     stageHints.forEach(hint => 
-      markers.push(addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber))
+      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber))
     );
     console.log(currGameData.getHintsFound)
     currGameData.getHintsFound.forEach(hintNum => {
@@ -112,7 +112,6 @@ function getGameID() {
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
 * @param {object} panorama the panorama of the map created in initMapPlayGame()
-* @param {object} map is map created in initMapPlayGame()
 */
 function createGameInfoOnSideOfMap(data, stage, panorama) {
   map = currGameData.getMap;
@@ -172,7 +171,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   // This checks if the user clicked enter in the key box
   inputKeyBox.addEventListener('keydown', function(e) {
     if (e.which == 13) {
-      checkKey(data, stage, panorama, map);
+      checkKey(data, stage, panorama);
     }
   });
   let inputBoxAndSubmitButton = document.createElement('div');
@@ -184,7 +183,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   buttonToCheckKey.id = "key-input-button";
   buttonToCheckKey.value = 'Submit';
   buttonToCheckKey.addEventListener('click', function() {
-    checkKey(data, stage, panorama, map);
+    checkKey(data, stage, panorama);
   });
   inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
   keySpan.appendChild(inputBoxAndSubmitButton);
@@ -196,9 +195,8 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
 * @param {object} panorama the panorama of the map created in initMapPlayGame()
-* @param {object} map is map created in initMapPlayGame()
 */
-async function checkKey(data, stage, panorama, map) {
+async function checkKey(data, stage, panorama) {
   let keyInput = document.getElementById('key-input');
   let inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
@@ -210,7 +208,7 @@ async function checkKey(data, stage, panorama, map) {
     const urlParams = new URLSearchParams(window.location.search)
     let gameID = urlParams.get('gameID');
     currGameData.setStageID = 'N/A';
-    updateUserProgress(map);
+    updateUserProgress();
     window.location.replace('afterGame.html?gameID=' + gameID);
     return;
   }
@@ -235,10 +233,10 @@ async function checkKey(data, stage, panorama, map) {
   console.log(currGameData.getHintsFound)
 
   stageHints.forEach(hint => {
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber);
+    addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber);
   });
 
-  updateUserProgress(map);
+  updateUserProgress();
 }
 
 /** 
@@ -269,17 +267,15 @@ async function getStage(stageID) {
 
 /** 
 * Adds a marker to the map containing the hint's data
-* @param {object} map the panorama of the map created in initMapPlayGame()
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
-* @param {string} stageID the stageID in which the hint is at 
 * @return {object} the marker created
 */
-function addHintMarker(map, latLng, hint, hintNum) {  
+function addHintMarker(latLng, hint, hintNum) {  
   let marker = new google.maps.Marker({
     position: latLng,
-    map: map,
+    map: currGameData.getMap,
     icon: 'images/marker_notfound.png'
   }); 
 
@@ -300,18 +296,17 @@ function addHintMarker(map, latLng, hint, hintNum) {
 */
 function changeData(latLng, hint, hintNum, updateProgress, marker) {
   currGameData.addSingleHintFound = hintNum;
-  map = currGameData.getMap;
   if (marker != null) {
     marker.setMap(null);
   }
   
   marker = new google.maps.Marker({
     position: latLng,
-    map: map,
+    map: currGameData.getMap,
     icon: 'images/marker_found.png'
   }); 
 
-  addHint(hint, hintNum, updateProgress, map);
+  addHint(hint, hintNum, updateProgress);
 }
 
 /** 
@@ -320,20 +315,17 @@ function changeData(latLng, hint, hintNum, updateProgress, marker) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {string} stageID the stageID in which the hint is at
-* @param {object} map the panorama of the map created in initMapPlayGame()
 */
-function addHint(hint, hintNum, updateProgress, map) {
+function addHint(hint, hintNum, updateProgress) {
   let hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
-  if (updateProgress) updateUserProgress(map);
+  if (updateProgress) updateUserProgress();
 }
 
 /** 
 * Gets the info about the user and sends it to the server to update the progress for the game
-* @param {string} stageID the stageID in which the hint is at
-* @param {object} map the panorama of the map created in initMapPlayGame()
 */
-function updateUserProgress(map) {
+function updateUserProgress() {
   if (!isSignedIn()) {
     return;
   }
@@ -341,13 +333,11 @@ function updateUserProgress(map) {
   let params = new URLSearchParams();
   params.append('gameID', gameID);
   
-  let latLng = (map.getStreetView().getPosition());
+  let latLng = (currGameData.getMap.getStreetView().getPosition());
   let location = {"latitude": latLng.lat(), "longitude": latLng.lng()};
   params.append('location', JSON.stringify(location));
   
   params.append('stageID', currGameData.getStageID);
-  let hintsDiv = document.getElementById('hints');
-  let hints = hintsDiv.getElementsByTagName('li');
   
   params.append('hintsFound',  JSON.stringify(currGameData.getHintsFound));
 
