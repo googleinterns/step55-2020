@@ -43,7 +43,7 @@ public class LoadCurrentUserServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
         String userID = userVerifier.getUserID();
         User user = datastoreManager.retrieveUser(userID);
