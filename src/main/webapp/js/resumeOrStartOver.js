@@ -10,11 +10,10 @@ function checkIfUserHasSavedProgress() {
 
   let tokenEmailDict = tokenAndEmail();
   fetchParams.append('email', tokenEmailDict['email']);
-  fetchParams.append('token', tokenEmailDict['token']);
+  fetchParams.append('idToken', tokenEmailDict['token']);
 
   let request = new Request('/has-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request).then(response => response.json()).then(async (data) => {
-    console.log(data);
     if (data == 0) {
       window.location.replace('playGame.html?gameID=' + gameID);
     } 
@@ -25,17 +24,20 @@ function checkIfUserHasSavedProgress() {
 * Resets the user progress in the server
 */
 function restartGame() {
+  if (!isSignedIn()) {
+    continueGame();
+    return;
+  }
   const urlParams = new URLSearchParams(window.location.search)
   let gameID = urlParams.get('gameID');
 
   let fetchParams = new URLSearchParams();
   fetchParams.append('gameID', gameID);
-
   let tokenEmailDict = tokenAndEmail();
   fetchParams.append('email', tokenEmailDict['email']);
-  fetchParams.append('token', tokenEmailDict['token']);
+  fetchParams.append('idToken', tokenEmailDict['token']);
 
-  let request = new Request('/rest-singleplayerprogress-data', {method: 'POST', body: fetchParams});
+  let request = new Request('/reset-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request);
   window.location.replace('playGame.html?gameID=' + gameID);
 }

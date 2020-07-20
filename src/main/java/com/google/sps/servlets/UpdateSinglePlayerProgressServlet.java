@@ -42,16 +42,12 @@ import javax.servlet.http.HttpServletResponse;
 */
 @WebServlet("/update-singleplayerprogress-data")
 public class UpdateSinglePlayerProgressServlet extends HttpServlet {
-    UserService userService = UserServiceFactory.getUserService();
     DatastoreManager datastoreManager = new DatastoreManager();
     Gson gson = new Gson();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(!userService.isUserLoggedIn()) {
-            return;
-        }
-        String userID = userService.getCurrentUser().getUserId();
+        String userID = getUserID(request);
         String gameID = getGameID(request);
         Coordinates location = getLocation(request);
         ArrayList<Integer> hintsFound = getHintsFound(request);
@@ -67,6 +63,11 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
 
             datastoreManager.createOrReplaceSinglePlayerProgress(progressBuilder.build());
         }
+    }
+
+    private String getUserID(HttpServletRequest request) throws IOException {
+        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        return userVerifier.getUserID();
     }
 
     private String getGameID(HttpServletRequest request) {

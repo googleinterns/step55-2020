@@ -7,15 +7,18 @@ async function loadProfilePage() {
   let waitTime = 500; // wait 500ms after last keyup before we ask the server if this username is taken
 
   if (!isSignedIn()) {
-    window.location.replace(data.loginUrl);
+    alert('You must be signed in to access this page')
+    window.location.replace('index.html');
+    return;
   }
 
   let tokenEmailDict = tokenAndEmail();
   
   const params = new URLSearchParams();
   params.append('email', tokenEmailDict['email']);
-  params.append('token', tokenEmailDict['token']);
-  fetch('/load-currentuser-data', {method:'GET', body:params}).then(response => response.json()).then(async (data) => {
+  params.append('idToken', tokenEmailDict['token']);
+  let request = new Request('/load-currentuser-data', {method: 'POST', body: params});
+  fetch(request).then(response => response.json()).then(async (data) => {
     usernameBox.value = data.username;
   });
 
@@ -75,13 +78,18 @@ async function displayAvailability() {
   let availabilityBox = document.getElementById('username-availability-message');
   availabilityBox.innerText = await getAvailabilityText(desiredUsername);
   if(availabilityBox.innerText == 'Available') {
-      availabilityBox.className = 'green-text';
+    availabilityBox.className = 'green-text';
   } else {
-      availabilityBox.className = 'red-text';
+    availabilityBox.className = 'red-text';
   }
 }
 
 async function submitUsername() {
+  if (!isSignedIn()) {
+    alert('Please sign back in');
+    return;
+  }
+  
   let desiredUsername = document.getElementById('userName').value;
   let availabilityBox = document.getElementById('username-availability-message');
   await displayAvailability();
@@ -91,7 +99,7 @@ async function submitUsername() {
 
     params.append('userName', desiredUsername);
     params.append('email', tokenEmailDict['email']);
-    params.append('token', tokenEmailDict['token']);
+    params.append('idToken', tokenEmailDict['token']);
     
     await fetch('/create-username-data', {method: 'post', body: params});
       window.location = '/profilePage.html';
