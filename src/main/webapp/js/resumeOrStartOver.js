@@ -24,6 +24,10 @@ function checkIfUserHasSavedProgress() {
 * Resets the user progress in the server
 */
 function restartGame() {
+  if (!isSignedIn()) {
+    continueGame();
+    return;
+  }
   const urlParams = new URLSearchParams(window.location.search)
   let gameID = urlParams.get('gameID');
 

@@ -240,7 +240,7 @@ async function checkKey(data, stage, panorama) {
 /** 
 * Creates an li for the hint to be places in the ol with the id being the hintNum
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
-* @return {Element} an HTML li element is returned
+* @return {Element} an HTML <li> element is returned
 */
 function createHintPlaceHolder(hintNum) {
   let hintLi = document.createElement('li');
@@ -291,7 +291,7 @@ function addHintMarker(latLng, hint, hintNum) {
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
-* @param {object} marker an optional parameter that passes in the marker to remove
+* @param {object} marker passes in a marker to remove
 */
 function changeData(latLng, hint, hintNum, updateProgress, marker) {
   currGameData.addSingleHintFound = hintNum;

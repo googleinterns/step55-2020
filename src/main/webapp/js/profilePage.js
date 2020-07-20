@@ -9,6 +9,7 @@ async function loadProfilePage() {
   if (!isSignedIn()) {
     alert('You must be signed in to access this page')
     window.location.replace('index.html');
+    return;
   }
 
   let tokenEmailDict = tokenAndEmail();
@@ -77,9 +78,9 @@ async function displayAvailability() {
   let availabilityBox = document.getElementById('username-availability-message');
   availabilityBox.innerText = await getAvailabilityText(desiredUsername);
   if(availabilityBox.innerText == 'Available') {
-      availabilityBox.className = 'green-text';
+    availabilityBox.className = 'green-text';
   } else {
-      availabilityBox.className = 'red-text';
+    availabilityBox.className = 'red-text';
   }
 }
 

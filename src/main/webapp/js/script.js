@@ -1,7 +1,8 @@
 var auth2;
 
 /** 
-* initalizes the GoogleAuth instance
+* initalizes the GoogleAuth instance and creates the nav bar
+* @param {string} page is which HTML the navbar should be placed on
 */
 async function init(page) {
   await gapi.load('auth2', async function() {
@@ -11,41 +12,6 @@ async function init(page) {
     auth2 = await gapi.auth2.getAuthInstance();
     createNavBar(page);
   }); 
-}
-
-function onSignIn(googleUser) {
-  let params = new URLSearchParams();
-  let tokenEmailDict = tokenAndEmail();
-  params.append('email', tokenEmailDict['email']);
-  params.append('idToken', tokenEmailDict['token']);
-  let request = new Request('create-userid-data', {method: 'POST', body: params});
-  fetch(request)
-}
-
-
-/**
-* Returns a dictionary with a token and the email the google sign in API
-*/
-function tokenAndEmail() {
-  let googleUser = auth2.currentUser.get()
-  var id_token = googleUser.getAuthResponse().id_token;
-  var profile = googleUser.getBasicProfile();
-  var email = profile.getEmail(); 
-  return {"email": email, "token": id_token};
-}
-
-/** 
-* @returns the sign-in status of the user
-*/
-function isSignedIn() {
-  return auth2.isSignedIn.get();
-}
-
-/** 
-* This signs out the user then reproduces the nav bar
-*/
-async function signOut(page) {
-  auth2.signOut().then(function () {createNavBar(page);});
 }
 
 /** 
@@ -64,6 +30,91 @@ function changeToOrFromDarkMode() {
   } 
 }
 
+/** 
+* The function called when the user signs in
+* @param {Object} googleUser is a GoogleAuth instance with the signed in user data
+*/
+function onSignIn(googleUser) {
+  let params = new URLSearchParams();
+  let tokenEmailDict = tokenAndEmail();
+  params.append('email', tokenEmailDict['email']);
+  params.append('idToken', tokenEmailDict['token']);
+  let request = new Request('create-userid-data', {method: 'POST', body: params});
+  fetch(request);
+}
+
+/** 
+* Checks to see if a user is signed in or not
+* @return {boolean} the sign-in status of the user 
+*/
+function isSignedIn() {
+  return auth2.isSignedIn.get();
+}
+
+/** 
+* This signs out the user then reproduces the nav bar
+* @param {string} page is which HTML the navbar should be placed on
+*/
+async function signOut(page) {
+  auth2.signOut().then(function () {
+    createNavBar(page);
+  });
+}
+
+/**
+* Gets the token and email of the current user
+* @return a dictionary with a token and the email the google sign in API
+*/
+function tokenAndEmail() {
+  let googleUser = auth2.currentUser.get();
+  var id_token = googleUser.getAuthResponse().id_token;
+  var profile = googleUser.getBasicProfile();
+  var email = profile.getEmail(); 
+  return {"email": email, "token": id_token};
+}
+
+/** 
+* Creates the side nav bar for if the screen is small. Typically for mobile use
+* @param {string} page is which HTML the navbar should be placed on
+*/
+function createSideNav(page) {
+  document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
+                                                    '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
+                                                    '<li><a href="index.html">Home</a> </li>' + 
+                                                  '</ul>';
+
+  let navBarForMobile = document.getElementById('mobile-demo');
+  if (isSignedIn()) {
+    navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
+                                 '<li><a href="profilePage.html">Profile</a> </li>' + 
+                                 '<li><a href="#" onclick="signOut(\''+page+'\')">Sign Out</a> </li>';
+  }
+  let googleSiginIn = document.createElement('div');
+  googleSiginIn.id = 'gSignInWrapper';
+  googleSiginIn.innerHTML += '<div id="customBtn2" class="customGPlusSignIn">'+
+                               '<span class="icon"></span>' +
+                               '<span class="buttonText">Google</span></div>';
+                               
+  if (isSignedIn()) {
+    googleSiginIn.querySelector('.buttonText').innerHTML = 'Signed In'
+  } 
+
+  navBarForMobile.appendChild(googleSiginIn);
+
+  auth2.attachClickHandler(document.getElementById('customBtn2'), {},
+    function(googleUser) { 
+        onSignIn(googleUser);
+        createNavBar(page)
+    }, function(error) {
+      alert(JSON.stringify(error, undefined, 2));
+  });
+
+  // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
+  let elems = document.querySelectorAll('.sidenav');
+  let instances = M.Sidenav.init(elems, {});
+    
+}
+
 // Soon to be depreciated
 /** 
 * Creates the navigation bar and specifies which page is active
@@ -72,6 +123,7 @@ function changeToOrFromDarkMode() {
 */
 async function createNavBar(page) {
   document.getElementById('nav-bar').innerHTML = "";
+  createSideNav(page);
   let navbar = document.createElement('nav');
 
   let navWrapperDiv = document.createElement('div');
@@ -175,18 +227,6 @@ async function createNavBar(page) {
     }, function(error) {
       alert(JSON.stringify(error, undefined, 2));
   });
-  
-//   document.getElementById('nav-bar').innerHTML += '<ul class="sidenav" id="mobile-demo">' + 
-//                                                     '<li><a href="#"><i class="material-icons" onclick="changeToOrFromDarkMode()">brightness_4</i></a> </li>' + 
-//                                                     '<li><a href="index.html">Home</a> </li>' + 
-//                                                   '</ul>';
-
-//   let navBarForMobile = document.getElementById('mobile-demo');
-    
-//   navBarForMobile.innerHTML += '<li><a href="createGame.html">Create Game</a> </li>' +  
-//                                  '<li><a href="profilePage.html">Profile</a> </li>';
-
-
 }
 
 
@@ -309,6 +349,10 @@ function loadMaps() {
   });
 }
 
+/** 
+* Stops the JS from executing any code for the amount of miliseconds provided
+* @param {int} ms number miliseconds to stop the JS for
+*/
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -321,6 +365,7 @@ function sleep(ms) {
 async function onLoadFunctions(page) { 
   await sleep(10);
   init(page);
+  // This sleep is required due to a bug in gapi (Google Sigin-In)
   await sleep(500);
         
   if (typeof(Storage) !== "undefined") {
@@ -334,10 +379,6 @@ async function onLoadFunctions(page) {
     document.body.className = "light-mode";
   }
 
-  // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
-  let elems = document.querySelectorAll('.sidenav');
-  let instances = M.Sidenav.init(elems, {});
-    
   if (page == 'playGame') {
     initMapToPlayGame();
   } else if (page == 'createGame') {
