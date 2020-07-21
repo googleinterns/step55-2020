@@ -100,4 +100,16 @@ public final class UpdateSinglePlayerProgressServletTest {
         Assert.assertTrue(hintsFound.get(3) == 4);*/
         Assert.assertTrue(newProgress.getStageID().equals("stageID"));
     }
+
+    @Test
+    public void testFinishedLastStage() throws Exception {
+        SinglePlayerProgress progress = new SinglePlayerProgress.Builder("abcUserId", "gameID").setLocation(new Coordinates(1,1)).setHintsFound(new ArrayList<>()).setStageID("oldStage").build();
+        datastoreManager.createOrReplaceSinglePlayerProgress(progress);
+        when(request.getParameter("stageID")).thenReturn("N/A");
+
+        servlet.doPost(request, response);
+
+        SinglePlayerProgress newProgress = datastoreManager.retrieveSinglePlayerProgress("abcUserId", "gameID");
+        Assert.assertTrue(newProgress == null);
+    }
 }
