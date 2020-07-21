@@ -1,7 +1,9 @@
+var currGameData = new progress([]);
+
 /** 
 * Initalizes a map where there is an id of 'playMap'
 */
-async function initMapToPlayGame() {
+function initMapToPlayGame() {
   let gameID =  getGameID();
   let params = new URLSearchParams();
   params.append('gameID', gameID);
@@ -12,33 +14,20 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
+
     if (data.stages == null || data.stages.length <= 0) {
       window.alert('There are no stages, failure to initialize game');
       window.location.replace('index.html');
       return;
     }
+
     let userProgress = await getUserProgress();
-    let startingLocation;
-    let initStage;
-    let stageID;
-    let startOfGame;
-    // TODO(smissak): remove null check only use data from the userprogress
-    if (userProgress == null || userProgress.stageID == 'N/A') {
-      stageID = data.stages[0];
-      initStage = await getStage(stageID);
-      startingLocation = {lat: initStage.startingLocation.latitude, lng: initStage.startingLocation.longitude};
-    } else {
-      stageID = userProgress.stageID;
-      initStage = await getStage(stageID);
-      startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
-    }
-    
-    let map = new google.maps.Map(
-      document.getElementById('playMap'), {
-      center: startingLocation, 
-      gestureHandling: 'greedy',
-      streetViewControl: false
-    });
+    let stageID = userProgress.stageID;
+    let initStage = await getStage(stageID);
+    let startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
+    currGameData.setStageID = stageID;
+    currGameData.clearHintsFound;
+    currGameData.addListOfHintsFound = userProgress.hintsFound;
 
     let stageHints = initStage.hints;
     if (stageHints.length == null) {
@@ -46,11 +35,15 @@ async function initMapToPlayGame() {
       window.location.replace('index.html');
       return;
     }
-    let markers = [];
-    stageHints.forEach(hint => 
-      markers.push(addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, stageID))
-    );
 
+    let map = new google.maps.Map(
+      document.getElementById('playMap'), {
+      center: startingLocation, 
+      gestureHandling: 'greedy', 
+      streetViewControl: false 
+    });
+    
+    currGameData.setMap = map;
     // gets the street view
     let panorama = map.getStreetView();
     // removes the option to exit streetview
@@ -61,14 +54,17 @@ async function initMapToPlayGame() {
     panorama.setPosition(startingLocation);
     // puts the user in streetView
     panorama.setVisible(true);
-    createGameInfoOnSideOfMap(data, initStage, panorama, map);
 
-    if (userProgress != null && userProgress.hintsFound != null) {
-      userProgress.hintsFound.forEach(hintNum =>
-        changeData(map, {lat: initStage.hints[parseInt(hintNum) - 1].location.latitude, lng: initStage.hints[parseInt(hintNum) - 1].location.longitude}, 
-                    initStage.hints[parseInt(hintNum) - 1].text, hintNum, stageID, false, markers[parseInt(hintNum) - 1])
-      );
-    }
+    createGameInfoOnSideOfMap(data, initStage, panorama);
+
+    let markers = [];
+    stageHints.forEach(hint => 
+      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber))
+    );
+
+    currGameData.getHintsFound.forEach(hintNum => {
+      changeData({lat: stageHints[parseInt(hintNum) - 1].location.latitude, lng: stageHints[parseInt(hintNum) - 1].location.longitude}, stageHints[parseInt(hintNum) - 1].text, hintNum, false, markers[parseInt(hintNum) - 1])
+    });
   });
 }
 
@@ -81,10 +77,11 @@ async function getUserProgress() {
   let result;
   
   const params = new URLSearchParams();
-  let tokenEmailDict = tokenAndEmail();
-
-  params.append('email', tokenEmailDict['email']);
-  params.append('token', tokenEmailDict['token']);
+  if (isSignedIn()) {
+    let tokenEmailDict = tokenAndEmail();
+    params.append('email', tokenEmailDict['email']);
+    params.append('idToken', tokenEmailDict['token']);
+  }
   params.append('gameID', gameID);
 
   let request = new Request('/load-singleplayerprogress-data', {method: 'POST', body: params});
@@ -114,9 +111,9 @@ function getGameID() {
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
 * @param {object} panorama the panorama of the map created in initMapPlayGame()
-* @param {object} map is map created in initMapPlayGame()
 */
-function createGameInfoOnSideOfMap(data, stage, panorama, map) {
+function createGameInfoOnSideOfMap(data, stage, panorama) {
+  map = currGameData.getMap;
   let gameInfo = document.getElementById('game-info');
     
   let gameName = document.createElement('h2');
@@ -173,7 +170,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   // This checks if the user clicked enter in the key box
   inputKeyBox.addEventListener('keydown', function(e) {
     if (e.which == 13) {
-      checkKey(data, stage, panorama, map);
+      checkKey(data, stage, panorama);
     }
   });
   let inputBoxAndSubmitButton = document.createElement('div');
@@ -185,7 +182,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
   buttonToCheckKey.id = "key-input-button";
   buttonToCheckKey.value = 'Submit';
   buttonToCheckKey.addEventListener('click', function() {
-    checkKey(data, stage, panorama, map);
+    checkKey(data, stage, panorama);
   });
   inputBoxAndSubmitButton.appendChild(buttonToCheckKey);
   keySpan.appendChild(inputBoxAndSubmitButton);
@@ -197,9 +194,8 @@ function createGameInfoOnSideOfMap(data, stage, panorama, map) {
 * @param {string} data is the JSON from the server ‘/load-game-data’ 
 * @param {string} stage the current stage data from '/load-stage-data' servlet, in the from of JSON
 * @param {object} panorama the panorama of the map created in initMapPlayGame()
-* @param {object} map is map created in initMapPlayGame()
 */
-async function checkKey(data, stage, panorama, map) {
+async function checkKey(data, stage, panorama) {
   let keyInput = document.getElementById('key-input');
   let inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
@@ -210,7 +206,8 @@ async function checkKey(data, stage, panorama, map) {
   if (data.stages.length == stage.stageNumber) {
     const urlParams = new URLSearchParams(window.location.search)
     let gameID = urlParams.get('gameID');
-    updateUserProgress("N/A", map);
+    currGameData.setStageID = 'N/A';
+    updateUserProgress();
     window.location.replace('afterGame.html?gameID=' + gameID);
     return;
   }
@@ -218,29 +215,32 @@ async function checkKey(data, stage, panorama, map) {
   // This reloads the map and the game info on the side of the map with the next stage data
   // Don't need to add one for nextStageNumber because arrays are 0 indexed and stageNumbers are 1 indexed
   let nextStageNumber = stage.stageNumber;
-  let nextStage = await getStage(data.stages[nextStageNumber]);
+  currGameData.setStageID = data.stages[nextStageNumber];
+  let nextStage = await getStage(currGameData.getStageID);
   let startingLocation = {lat: nextStage.startingLocation.latitude, lng: nextStage.startingLocation.longitude};
   panorama.setPosition(startingLocation);
   document.getElementById('game-info').innerHTML = '';
-  createGameInfoOnSideOfMap(data, nextStage, panorama, map);
-
+  createGameInfoOnSideOfMap(data, nextStage, panorama);
+  
   let stageHints = nextStage.hints;
   if (stageHints.length == null) {
     window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
     window.location.replace('index.html');
     return;
   }
+  currGameData.clearHintsFound;
 
   stageHints.forEach(hint => {
-    addHintMarker(map, {lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, data.stages[nextStageNumber]);
+    addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber);
   });
 
-  updateUserProgress(nextStage.stageID, map);
+  updateUserProgress();
 }
 
 /** 
 * Creates an li for the hint to be places in the ol with the id being the hintNum
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
+* @return {Element} an HTML <li> element is returned
 */
 function createHintPlaceHolder(hintNum) {
   let hintLi = document.createElement('li');
@@ -266,22 +266,20 @@ async function getStage(stageID) {
 
 /** 
 * Adds a marker to the map containing the hint's data
-* @param {object} map the panorama of the map created in initMapPlayGame()
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
-* @param {string} stageID the stageID in which the hint is at 
 * @return {object} the marker created
 */
-function addHintMarker(map, latLng, hint, hintNum, stageID) {  
+function addHintMarker(latLng, hint, hintNum) {  
   let marker = new google.maps.Marker({
     position: latLng,
-    map: map,
+    map: currGameData.getMap,
     icon: 'images/marker_notfound.png'
   }); 
 
   marker.addListener('click', function() {
-    changeData(map, latLng, hint, hintNum, stageID, true, marker);
+    changeData(latLng, hint, hintNum, true, marker);
   });
 
   return marker;
@@ -289,26 +287,25 @@ function addHintMarker(map, latLng, hint, hintNum, stageID) {
 
 /** 
 * Changes the color of the marker on the map adds the hint to the list of hints found
-* @param {object} map the panorama of the map created in initMapPlayGame()
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
-* @param {string} stageID the stageID in which the hint is at 
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
-* @param {object} marker an optional parameter that passes in the marker to remove
+* @param {object} marker passes in a marker to remove
 */
-function changeData(map, latLng, hint, hintNum, stageID, updateProgress, marker) {
+function changeData(latLng, hint, hintNum, updateProgress, marker) {
+  currGameData.addSingleHintFound = hintNum;
   if (marker != null) {
     marker.setMap(null);
   }
   
   marker = new google.maps.Marker({
     position: latLng,
-    map: map,
+    map: currGameData.getMap,
     icon: 'images/marker_found.png'
   }); 
 
-  addHint(hint, hintNum, updateProgress, stageID, map);
+  addHint(hint, hintNum, updateProgress);
 }
 
 /** 
@@ -317,43 +314,35 @@ function changeData(map, latLng, hint, hintNum, stageID, updateProgress, marker)
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {string} stageID the stageID in which the hint is at
-* @param {object} map the panorama of the map created in initMapPlayGame()
 */
-function addHint(hint, hintNum, updateProgress, stageID, map) {
+function addHint(hint, hintNum, updateProgress) {
   let hintsWithNum = document.getElementById(hintNum);
   hintsWithNum.innerText = hint;
-  if (updateProgress) updateUserProgress(stageID, map);
+  if (updateProgress) updateUserProgress();
 }
 
 /** 
 * Gets the info about the user and sends it to the server to update the progress for the game
-* @param {string} stageID the stageID in which the hint is at
-* @param {object} map the panorama of the map created in initMapPlayGame()
 */
-function updateUserProgress(stageID, map) {
+function updateUserProgress() {
+  if (!isSignedIn()) {
+    return;
+  }
   let gameID =  getGameID();
   let params = new URLSearchParams();
   params.append('gameID', gameID);
   
-  let latLng = (map.getStreetView().getPosition());
+  let latLng = (currGameData.getMap.getStreetView().getPosition());
   let location = {"latitude": latLng.lat(), "longitude": latLng.lng()};
   params.append('location', JSON.stringify(location));
   
-  params.append('stageID', stageID);
-  let hintsDiv = document.getElementById('hints');
-  let hints = hintsDiv.getElementsByTagName('li');
+  params.append('stageID', currGameData.getStageID);
   
-  let hintsFound = [];
-  for (let i = 0; i < hints.length; i++) {
-    if (hints[i].innerText != '') {
-      hintsFound.push(parseInt(hints[i].id));
-    }
-  }
-  params.append('hintsFound',  JSON.stringify(hintsFound));
+  params.append('hintsFound',  JSON.stringify(currGameData.getHintsFound));
 
   let tokenEmailDict = tokenAndEmail();
   params.append('email', tokenEmailDict['email']);
-  params.append('token', tokenEmailDict['token']);
+  params.append('idToken', tokenEmailDict['token']);
   let request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
   fetch(request);
 }
