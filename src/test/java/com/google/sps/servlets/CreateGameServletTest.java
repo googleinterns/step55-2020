@@ -43,7 +43,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(UserVerifier.class)
 public final class CreateGameServletTest {
     private DatastoreManager datastoreManager = new DatastoreManager();
     private LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
@@ -70,7 +69,6 @@ public final class CreateGameServletTest {
         response = mock(HttpServletResponse.class);
 
         userVerifier = mock(UserVerifier.class);
-        PowerMockito.whenNew(UserVerifier.class).withNoArguments().thenReturn(userVerifier);
         doNothing().when(userVerifier).build("abcIdToken", "abcEmail@gmail.com");
         when(userVerifier.getUserID()).thenReturn("abcUserId");
 
