@@ -69,7 +69,7 @@ public final class CreateGameServletTest {
         response = mock(HttpServletResponse.class);
 
         userVerifier = mock(UserVerifier.class);
-        doNothing().when(userVerifier).build("abcIdToken", "abcEmail@gmail.com");
+        doNothing().when(userVerifier).build(any(String.class), any(String.class));
         when(userVerifier.getUserID()).thenReturn("abcUserId");
 
         responseWriter = new StringWriter();

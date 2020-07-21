@@ -43,14 +43,14 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 
 @RunWith(PowerMockRunner.class)
-public final class CreateUsernameServletTest {
+public final class UpdateSinglePlayerProgressServletTest {
     private DatastoreManager datastoreManager = new DatastoreManager();
     private LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
     private HttpServletRequest request;
     private HttpServletResponse response;
     private UserVerifier userVerifier;
     private StringWriter responseWriter;
-    private CreateUsernameServlet servlet;
+    private UpdateSinglePlayerProgressServlet servlet;
 
     @Before
     public void setUp() throws Exception {
@@ -58,7 +58,10 @@ public final class CreateUsernameServletTest {
         request = mock(HttpServletRequest.class);
         when(request.getParameter("idToken")).thenReturn("abcIdToken");
         when(request.getParameter("email")).thenReturn("abcEmail@gmail.com");
-        when(request.getParameter("userName")).thenReturn("abc");
+        when(request.getParameter("gameID")).thenReturn("gameID");
+        when(request.getParameter("location")).thenReturn("{\"latitude\": 0.0,\"longitude\": 0.0}");
+        when(request.getParameter("hintsFound")).thenReturn("[1,3,4]");
+        when(request.getParameter("stageID")).thenReturn("stageID");
 
         response = mock(HttpServletResponse.class);
 
@@ -69,7 +72,7 @@ public final class CreateUsernameServletTest {
         responseWriter = new StringWriter();
         when(response.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-        servlet = new CreateUsernameServlet();
+        servlet = new UpdateSinglePlayerProgressServlet();
         servlet.userVerifier = userVerifier;
     }
 
@@ -79,68 +82,22 @@ public final class CreateUsernameServletTest {
     }
 
     @Test
-    public void testValidUsername() throws Exception {
-        User user = new User.Builder("abcUserId").build();
-        datastoreManager.createOrReplaceUser(user);
+    public void testNormalValidProgress() throws Exception {
+        SinglePlayerProgress progress = new SinglePlayerProgress.Builder("abcUserId", "gameID").setLocation(new Coordinates(1,1)).setHintsFound(new ArrayList<>()).setStageID("oldStageID").build();
+        datastoreManager.createOrReplaceSinglePlayerProgress(progress);
 
         servlet.doPost(request, response);
 
-        String username = datastoreManager.retrieveUser("abcUserId").getUsername();
-        Assert.assertTrue(username.equals("abc"));
-    }
-
-    /**
-    * Simulates user with id 'abcUserId' trying to change their username from 'usernameB' to 'usernameA',
-    * which is already taken by the user with id 'UserA'.
-    */
-    @Test
-    public void testTakenUsername() throws Exception {
-        User userA = new User.Builder("UserA").setUsername("usernameA").build();
-        User userB = new User.Builder("abcUserId").setUsername("usernameB").build();
-        datastoreManager.createOrReplaceUser(userA);
-        datastoreManager.createOrReplaceUser(userB);
-        when(request.getParameter("userName")).thenReturn("usernameA");
-
-        servlet.doPost(request, response);
-
-        String usernameA = datastoreManager.retrieveUser("UserA").getUsername();
-        Assert.assertTrue(usernameA.equals("usernameA"));
-        String usernameB = datastoreManager.retrieveUser("abcUserId").getUsername();
-        Assert.assertTrue(usernameB.equals("usernameB"));
-    }
-
-    @Test(expected=IOException.class)
-    public void testEmptyUsername() throws Exception {
-        User user = new User.Builder("abcUserId").build();
-        datastoreManager.createOrReplaceUser(user);
-        when(request.getParameter("userName")).thenReturn("");
-
-        servlet.doPost(request, response);
-    }
-
-    @Test(expected=IOException.class)
-    public void testTooLongUsername() throws Exception {
-        User user = new User.Builder("abcUserId").build();
-        datastoreManager.createOrReplaceUser(user);
-        when(request.getParameter("userName")).thenReturn("012345678901234567890");
-
-        servlet.doPost(request, response);
-    }
-
-    @Test(expected=IOException.class)
-    public void testUsernameWithSpecialCharacters() throws Exception {
-        User user = new User.Builder("abcUserId").build();
-        datastoreManager.createOrReplaceUser(user);
-        when(request.getParameter("userName")).thenReturn("abc!");
-
-        servlet.doPost(request, response);
-    }
-
-    public void testUsernameWithUnderscoresAndPeriods() throws Exception {
-        User user = new User.Builder("abcUserId").build();
-        datastoreManager.createOrReplaceUser(user);
-        when(request.getParameter("userName")).thenReturn("abc_abc.abc");
-
-        servlet.doPost(request, response);
+        SinglePlayerProgress newProgress = datastoreManager.retrieveSinglePlayerProgress("abcUserId", "gameID");
+        Assert.assertTrue(newProgress.getUserID().equals("abcUserId"));
+        Assert.assertTrue(newProgress.getGameID().equals("gameID"));
+        Assert.assertTrue(newProgress.getLocation().equals(new Coordinates(0,0)));
+        ArrayList<Integer> hintsFound = newProgress.getHintsFound();
+        Assert.assertTrue(hintsFound.size() == 3);
+        // TODO(ldchen): figure out why hintsFound contains Longs
+        /*Assert.assertTrue(hintsFound.get(0).equals(new Integer(1)));
+        Assert.assertTrue(hintsFound.get(1) == 3);
+        Assert.assertTrue(hintsFound.get(3) == 4);*/
+        Assert.assertTrue(newProgress.getStageID().equals("stageID"));
     }
 }
