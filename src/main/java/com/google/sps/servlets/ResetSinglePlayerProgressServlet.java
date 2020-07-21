@@ -41,10 +41,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/reset-singleplayerprogress-data")
 public class ResetSinglePlayerProgressServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserVerifier userVerifier = new UserVerifier();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
         String userID = userVerifier.getUserID();
         String gameID = request.getParameter("gameID");
         SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);

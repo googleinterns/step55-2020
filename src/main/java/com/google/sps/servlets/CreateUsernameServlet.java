@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/create-username-data")
 public class CreateUsernameServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserVerifier userVerifier = new UserVerifier();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -48,7 +49,7 @@ public class CreateUsernameServlet extends HttpServlet {
         boolean doesUsernameExist = datastoreManager.doesUsernameExist(userName);
 
         if (!doesUsernameExist) {
-            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+            userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
             String userId = userVerifier.getUserID();
             User.Builder user = new User.Builder(userId).setUsername(userName);
             User oldUser = datastoreManager.retrieveUser(userId);

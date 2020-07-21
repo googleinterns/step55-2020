@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/update-singleplayerprogress-data")
 public class UpdateSinglePlayerProgressServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserVerifier userVerifier = new UserVerifier();
     Gson gson = new Gson();
 
     @Override
@@ -66,7 +67,7 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
     }
 
     private String getUserID(HttpServletRequest request) throws IOException {
-        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
         return userVerifier.getUserID();
     }
 

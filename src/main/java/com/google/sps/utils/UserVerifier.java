@@ -35,7 +35,8 @@ public class UserVerifier {
     private GoogleIdToken idToken;
     private Payload payload;
 
-    public UserVerifier(String idTokenString, String email) throws IOException {
+    public void build(String idTokenString, String email) throws IOException {
+        isValid = false;
         try {
             this.idToken = verifier.verify(idTokenString);
             this.payload = idToken.getPayload();
@@ -51,7 +52,7 @@ public class UserVerifier {
 
     public String getUserID() throws IOException {
         if(!isValid) {
-            throw new IOException("UserVerifier has not been initialized correctly.");
+            throw new IOException("UserVerifier has not been built correctly.");
         }
         String email = payload.getEmail();
         String id = datastoreManager.retrieveIdByEmail(email);

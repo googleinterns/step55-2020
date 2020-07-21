@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load-singleplayerprogress-data")
 public class LoadSinglePlayerProgressServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserVerifier userVerifier = new UserVerifier();
     String userID;
     String gameID;
 
@@ -56,7 +57,7 @@ public class LoadSinglePlayerProgressServlet extends HttpServlet {
 
     private void parseInput(HttpServletRequest request) throws IOException {
         if(request.getParameterMap().containsKey("idToken") && request.getParameterMap().containsKey("email")) {
-            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+            userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
             userID = userVerifier.getUserID();
         }
         gameID = request.getParameter("gameID");

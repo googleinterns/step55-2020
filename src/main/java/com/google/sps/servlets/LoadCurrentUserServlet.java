@@ -41,10 +41,11 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load-currentuser-data")
 public class LoadCurrentUserServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserVerifier userVerifier = new UserVerifier();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+        userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
         String userID = userVerifier.getUserID();
         User user = datastoreManager.retrieveUser(userID);
         

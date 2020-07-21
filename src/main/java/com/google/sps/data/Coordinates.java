@@ -102,4 +102,11 @@ public class Coordinates {
         }
         return res;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Coordinates)) return false;
+        Coordinates otherCoordinates = (Coordinates) other;
+        return this.latitude == otherCoordinates.latitude && this.longitude == otherCoordinates.longitude;
+    }
 }
