@@ -78,12 +78,6 @@ public class CreateGameServlet extends HttpServlet {
             datastoreManager.createOrReplaceStage(stage);
         }
         gameBuilder.setStages(stages);
-        gameBuilder.setNumTimesPlayed(0);
-        gameBuilder.setNumTimesFinished(0);
-        gameBuilder.setNumStarVotes(0);
-        gameBuilder.setTotalStars(0);
-        gameBuilder.setNumDifficultyVotes(0);
-        gameBuilder.setTotalDifficulty(0);
         Game game = gameBuilder.build();
         datastoreManager.createOrReplaceGame(game);
         String json = new Gson().toJson(gameID);

@@ -118,4 +118,14 @@ public class Hint {
     public String getText() {
         return this.text;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Hint)) return false;
+        Hint otherHint = (Hint) other;
+        if(this.hintNumber != otherHint.hintNumber) return false;
+        if(!this.location.equals(otherHint.location)) return false;
+        if(!this.text.equals(otherHint.text)) return false;
+        return true;
+    }
 }

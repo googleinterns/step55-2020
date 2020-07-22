@@ -41,6 +41,8 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Arrays;
 
 @RunWith(PowerMockRunner.class)
 public final class CreateGameServletTest {
@@ -48,7 +50,7 @@ public final class CreateGameServletTest {
     private LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private UserVerifier userVerifier;
+    private UserVerifier mockUserVerifier;
     private StringWriter responseWriter;
     private CreateGameServlet servlet;
 
@@ -68,9 +70,9 @@ public final class CreateGameServletTest {
 
         response = mock(HttpServletResponse.class);
 
-        userVerifier = mock(UserVerifier.class);
-        doNothing().when(userVerifier).build(any(String.class), any(String.class));
-        when(userVerifier.getUserID()).thenReturn("abcUserId");
+        mockUserVerifier = mock(UserVerifier.class);
+        doNothing().when(mockUserVerifier).build(any(String.class), any(String.class));
+        when(mockUserVerifier.getUserID()).thenReturn("abcUserId");
 
         responseWriter = new StringWriter();
         when(response.getWriter()).thenReturn(new PrintWriter(responseWriter));
@@ -84,42 +86,33 @@ public final class CreateGameServletTest {
     @Test
     public void testValidGame() throws Exception {
         servlet = new CreateGameServlet();
-        servlet.userVerifier = userVerifier;
+        servlet.userVerifier = mockUserVerifier;
         servlet.doPost(request, response);
 
         String json = responseWriter.toString();
         Type StringType = new TypeToken<String>(){}.getType();
         String id = new Gson().fromJson(json, StringType);
 
+        Game.Builder gamebuilder = new Game.Builder("expectedGameId", "abcGameName");
+        gamebuilder.setGameCreator("abcUserId").setGameDescription("abcGameDescription").setStages(new ArrayList<String>(Arrays.asList("stage1id", "stage2id")));
+        Game expectedGame = gamebuilder.build();
         Game game = datastoreManager.retrieveGame(id);
-        Assert.assertTrue(game.getGameName().equals("abcGameName"));
-        Assert.assertTrue(game.getGameCreator().equals("abcUserId"));
-        Assert.assertTrue(game.getGameDescription().equals("abcGameDescription"));
-        ArrayList<String> stages = game.getStages();
-        Assert.assertTrue(stages.size() == 2);
-        Stage stage1 = datastoreManager.retrieveStage(stages.get(0));
-        Assert.assertTrue(stage1.getStageNumber() == 1);
-        Assert.assertTrue(stage1.getKey().equals("abc1k"));
-        Assert.assertTrue(stage1.getStartingHint().equals("abc1h"));
-        Assert.assertTrue(stage1.getStartingLocation().equals(new Coordinates(0, 0)));
-        ArrayList<Hint> hints = stage1.getHints();
-        Assert.assertTrue(hints.size() == 2);
-        Assert.assertTrue(hints.get(0).getHintNumber() == 1);
-        Assert.assertTrue(hints.get(0).getLocation().equals(new Coordinates(0, 0)));
-        Assert.assertTrue(hints.get(0).getText().equals("abc11"));
-        Assert.assertTrue(hints.get(1).getHintNumber() == 2);
-        Assert.assertTrue(hints.get(1).getLocation().equals(new Coordinates(0, 0)));
-        Assert.assertTrue(hints.get(1).getText().equals("abc12"));
-        Stage stage2 = datastoreManager.retrieveStage(stages.get(1));
-        Assert.assertTrue(stage2.getStageNumber() == 2);
-        Assert.assertTrue(stage2.getKey().equals("abc2k"));
-        Assert.assertTrue(stage2.getStartingHint().equals("abc2h"));
-        Assert.assertTrue(stage2.getStartingLocation().equals(new Coordinates(1, 1)));
-        hints = stage2.getHints();
-        Assert.assertTrue(hints.size() == 1);
-        Assert.assertTrue(hints.get(0).getHintNumber() == 1);
-        Assert.assertTrue(hints.get(0).getLocation().equals(new Coordinates(0, 0)));
-        Assert.assertTrue(hints.get(0).getText().equals("abc21"));
+        Assert.assertEquals(expectedGame, game);
+
+        Stage.Builder stagebuilder = new Stage.Builder("stage1id", 1);
+        stagebuilder.setKey("abc1k").setStartingHint("abc1h").setStartingLocation(new Coordinates(0.0, 0.0));
+        Hint stage1hint1 = new Hint.Builder("stage1hint1id", 1).setLocation(new Coordinates(0.0, 0.0)).setText("abc11").build();
+        Hint stage1hint2 = new Hint.Builder("stage1hint2id", 2).setLocation(new Coordinates(0.0, 0.0)).setText("abc12").build();
+        stagebuilder.setHints(new ArrayList<Hint>(Arrays.asList(stage1hint1, stage1hint2)));
+        Stage expectedStage1 = stagebuilder.build();
+        Assert.assertEquals(datastoreManager.retrieveStage(game.getStages().get(0)), expectedStage1);
+
+        stagebuilder = new Stage.Builder("stage2id", 2);
+        stagebuilder.setKey("abc2k").setStartingHint("abc2h").setStartingLocation(new Coordinates(1.0, 1.0));
+        Hint stage2hint1 = new Hint.Builder("stage2hint1id", 1).setLocation(new Coordinates(0.0, 0.0)).setText("abc21").build();
+        stagebuilder.setHints(new ArrayList<Hint>(Arrays.asList(stage2hint1)));
+        Stage expectedStage2 = stagebuilder.build();
+        Assert.assertEquals(datastoreManager.retrieveStage(game.getStages().get(1)), expectedStage2);
     }
 
     @Test(expected=IOException.class)
@@ -131,7 +124,7 @@ public final class CreateGameServletTest {
     @Test(expected=IOException.class)
     public void testStageListLengthsDontMatch() throws Exception {
         servlet = new CreateGameServlet();
-        servlet.userVerifier = userVerifier;
+        servlet.userVerifier = mockUserVerifier;
         when(request.getParameter("stageSpawnLocations")).thenReturn("[]");
         servlet.doPost(request, response);
     }

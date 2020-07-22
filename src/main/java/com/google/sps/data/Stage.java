@@ -162,4 +162,21 @@ public class Stage {
     public ArrayList<Hint> getHints() {
         return this.hints;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Stage)) return false;
+        Stage otherStage = (Stage) other;
+        if(this.stageNumber != otherStage.stageNumber) return false;
+        if(!this.key.equals(otherStage.key)) return false;
+        if(!this.startingHint.equals(otherStage.startingHint)) return false;
+        if(!this.startingLocation.equals(otherStage.startingLocation)) return false;
+        if(this.hints.size() != otherStage.hints.size()) return false;
+        for(int i = 0; i < this.hints.size(); i++) {
+            Hint thisHint = this.hints.get(i);
+            Hint otherHint = otherStage.hints.get(i);
+            if(!thisHint.equals(otherHint)) return false;
+        }
+        return true;
+    }
 }
