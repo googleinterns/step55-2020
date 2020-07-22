@@ -41,6 +41,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
+import java.util.Arrays;
 
 @RunWith(PowerMockRunner.class)
 public final class ResetSinglePlayerProgressServletTest {
@@ -50,7 +51,7 @@ public final class ResetSinglePlayerProgressServletTest {
     private HttpServletResponse response;
     private UserVerifier userVerifier;
     private StringWriter responseWriter;
-    private UpdateSinglePlayerProgressServlet servlet;
+    private ResetSinglePlayerProgressServlet servlet;
 
     /**
     * Sets up mocks before each test.
@@ -72,7 +73,7 @@ public final class ResetSinglePlayerProgressServletTest {
         responseWriter = new StringWriter();
         when(response.getWriter()).thenReturn(new PrintWriter(responseWriter));
 
-        servlet = new UpdateSinglePlayerProgressServlet();
+        servlet = new ResetSinglePlayerProgressServlet();
         servlet.userVerifier = userVerifier;
     }
 
@@ -85,10 +86,48 @@ public final class ResetSinglePlayerProgressServletTest {
     }
 
     /**
-    * Tests reseting a progress successfully.
+    * Tests reseting a progress successfully when there is already a progress object.
     */
     @Test
-    public void testValidReset() throws Exception {
-        Assert.assertTrue(true);
+    public void testReplaceProgress() throws Exception {
+        Game game = new Game.Builder("gameID", "gameName").setStages(new ArrayList<String>(Arrays.asList("stage1id"))).build();
+        datastoreManager.createOrReplaceGame(game);
+        Stage stage = new Stage.Builder("stage1id", 1).setStartingLocation(new Coordinates(0,0)).build();
+        datastoreManager.createOrReplaceStage(stage);
+        SinglePlayerProgress progress = new SinglePlayerProgress.Builder("abcUserId", "gameID")
+                                            .setLocation(new Coordinates(123,123))
+                                            .setHintsFound(new ArrayList<Integer>(Arrays.asList(1, 3)))
+                                            .setStageID("stage2id")
+                                            .build();
+        datastoreManager.createOrReplaceSinglePlayerProgress(progress);
+        
+        servlet.doPost(request, response);
+
+        SinglePlayerProgress newprogress = datastoreManager.retrieveSinglePlayerProgress("abcUserId", "gameID");
+        Assert.assertTrue(newprogress.getUserID().equals("abcUserId"));
+        Assert.assertTrue(newprogress.getGameID().equals("gameID"));
+        Assert.assertTrue(newprogress.getLocation().equals(new Coordinates(0,0)));
+        Assert.assertTrue(newprogress.getHintsFound().size() == 0);
+        Assert.assertTrue(newprogress.getStageID().equals("stage1id"));
+    }
+
+    /**
+    * Tests creating a new progress when there is no current progress.
+    */
+    @Test
+    public void testNewProgress() throws Exception {
+        Game game = new Game.Builder("gameID", "gameName").setStages(new ArrayList<String>(Arrays.asList("stage1id"))).build();
+        datastoreManager.createOrReplaceGame(game);
+        Stage stage = new Stage.Builder("stage1id", 1).setStartingLocation(new Coordinates(0,0)).build();
+        datastoreManager.createOrReplaceStage(stage);
+
+        servlet.doPost(request, response);
+
+        SinglePlayerProgress newprogress = datastoreManager.retrieveSinglePlayerProgress("abcUserId", "gameID");
+        Assert.assertTrue(newprogress.getUserID().equals("abcUserId"));
+        Assert.assertTrue(newprogress.getGameID().equals("gameID"));
+        Assert.assertTrue(newprogress.getLocation().equals(new Coordinates(0,0)));
+        Assert.assertTrue(newprogress.getHintsFound().size() == 0);
+        Assert.assertTrue(newprogress.getStageID().equals("stage1id"));
     }
 }
