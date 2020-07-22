@@ -43,6 +43,9 @@ public class CreateUsernameServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
     UserVerifier userVerifier = new UserVerifier();
 
+    /**
+    * Sets the username of the given user if it's valid.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("userName");

@@ -269,6 +269,13 @@ public class Game {
         return this.totalDifficulty;
     }
 
+    /**
+    * Tests equality of this Game with another object. Equality is determined
+    * by whether all fields except for the gameID and the individual stageIDs
+    * are the same.
+    * @param other the other object.
+    * @return a boolean indicating whether this is equal to the other object.
+    */
     @Override
     public boolean equals(Object other) {
         if(!(other instanceof Game)) return false;

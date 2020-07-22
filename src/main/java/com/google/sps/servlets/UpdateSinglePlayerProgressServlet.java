@@ -46,6 +46,9 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
     UserVerifier userVerifier = new UserVerifier();
     Gson gson = new Gson();
 
+    /**
+    * Updates the SinglePlayerProgress entity with the given parameters.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userID = getUserID(request);
@@ -66,15 +69,30 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
         }
     }
 
+    /**
+    * Gets the userID from the request.
+    * @param request the HttpServletRequest
+    * @return a String with the userID.
+    */
     private String getUserID(HttpServletRequest request) throws IOException {
         userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
         return userVerifier.getUserID();
     }
 
+    /**
+    * Gets the gameID from the request.
+    * @param request the HttpServletRequest
+    * @return a String with the gameID.
+    */
     private String getGameID(HttpServletRequest request) {
         return request.getParameter("gameID");
     }
 
+    /**
+    * Gets the coordinates of the user's current position from the request.
+    * @param request the HttpServletRequest
+    * @return a Coordinates object with the position.
+    */
     private Coordinates getLocation(HttpServletRequest request) {
         String json = request.getParameter("location");
         Type coordinatesType = new TypeToken<Coordinates>(){}.getType();
@@ -82,6 +100,11 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
         return res;
     }
 
+    /**
+    * Gets the list of found hint indicies from the request.
+    * @param request the HttpServletRequest
+    * @return an ArrayList<Integer> containing the found hints.
+    */
     private ArrayList<Integer> getHintsFound(HttpServletRequest request) {
         String json = request.getParameter("hintsFound");
         Type integerListType = new TypeToken<ArrayList<Integer>>(){}.getType();
@@ -89,6 +112,11 @@ public class UpdateSinglePlayerProgressServlet extends HttpServlet {
         return res;
     }
 
+    /**
+    * Gets the stageID of the current stage from the request.
+    * @param request the HttpServletRequest
+    * @return a String containing the stageID.
+    */
     private String getStageID(HttpServletRequest request) {
         return request.getParameter("stageID");
     }

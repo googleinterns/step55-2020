@@ -163,6 +163,12 @@ public class Stage {
         return this.hints;
     }
 
+    /**
+    * Tests equality of this Stage with another object. Equality is determined
+    * by whether all fields except for the stageID are the same.
+    * @param other the other object.
+    * @return a boolean indicating whether this is equal to the other object.
+    */
     @Override
     public boolean equals(Object other) {
         if(!(other instanceof Stage)) return false;

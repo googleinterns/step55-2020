@@ -52,6 +52,9 @@ public final class ResetSinglePlayerProgressServletTest {
     private StringWriter responseWriter;
     private UpdateSinglePlayerProgressServlet servlet;
 
+    /**
+    * Sets up mocks before each test.
+    */
     @Before
     public void setUp() throws Exception {
         helper.setUp();
@@ -73,11 +76,17 @@ public final class ResetSinglePlayerProgressServletTest {
         servlet.userVerifier = userVerifier;
     }
 
+    /**
+    * Removes local datastore after each test.
+    */
     @After
     public void tearDown() {
         helper.tearDown();
     }
 
+    /**
+    * Tests reseting a progress successfully.
+    */
     @Test
     public void testValidReset() throws Exception {
         Assert.assertTrue(true);

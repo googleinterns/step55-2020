@@ -43,6 +43,9 @@ public class HasSinglePlayerProgressServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
     UserVerifier userVerifier = new UserVerifier();
 
+    /**
+    * Serves a JSON boolean indicating whether the given user and game has a corresponding progress.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));

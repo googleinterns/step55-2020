@@ -52,6 +52,9 @@ public final class UpdateSinglePlayerProgressServletTest {
     private StringWriter responseWriter;
     private UpdateSinglePlayerProgressServlet servlet;
 
+    /**
+    * Sets up mocks before each test.
+    */
     @Before
     public void setUp() throws Exception {
         helper.setUp();
@@ -76,11 +79,18 @@ public final class UpdateSinglePlayerProgressServletTest {
         servlet.userVerifier = userVerifier;
     }
 
+    /**
+    * Gets rid of local datastore after each test.
+    */
     @After
     public void tearDown() {
         helper.tearDown();
     }
 
+    /**
+    * Tests updating a progress as normal (not at the end of a game). Checks that the
+    * entity that was updated in datastore is correct.
+    */
     @Test
     public void testNormalValidProgress() throws Exception {
         SinglePlayerProgress progress = new SinglePlayerProgress.Builder("abcUserId", "gameID").setLocation(new Coordinates(1,1)).setHintsFound(new ArrayList<>()).setStageID("oldStageID").build();
@@ -101,6 +111,10 @@ public final class UpdateSinglePlayerProgressServletTest {
         Assert.assertTrue(newProgress.getStageID().equals("stageID"));
     }
 
+    /**
+    * Tests updating a progess with stageID set to 'N/A', meaning the game is finished.
+    * Checks that the entity in datastore is deleted.
+    */
     @Test
     public void testFinishedLastStage() throws Exception {
         SinglePlayerProgress progress = new SinglePlayerProgress.Builder("abcUserId", "gameID").setLocation(new Coordinates(1,1)).setHintsFound(new ArrayList<>()).setStageID("oldStage").build();

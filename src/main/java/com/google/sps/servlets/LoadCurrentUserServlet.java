@@ -43,6 +43,9 @@ public class LoadCurrentUserServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
     UserVerifier userVerifier = new UserVerifier();
 
+    /**
+    * Serves the User object corresponding to the given id token and email.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));

@@ -119,6 +119,12 @@ public class Hint {
         return this.text;
     }
 
+    /**
+    * Tests equality of this Hint with another object. Equality is determined
+    * by whether all fields except for the hintID are the same.
+    * @param other the other object.
+    * @return a boolean indicating whether this is equal to the other object.
+    */
     @Override
     public boolean equals(Object other) {
         if(!(other instanceof Hint)) return false;

@@ -41,6 +41,9 @@ import javax.servlet.http.HttpServletResponse;
 public class UsernameAvailableServlet extends HttpServlet {
   DatastoreManager datastoreManager = new DatastoreManager();
 
+  /**
+  * Checks whether the given username has been taken already.
+  */
   @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       String username = request.getParameter("username");

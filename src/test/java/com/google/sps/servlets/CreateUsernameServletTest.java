@@ -52,6 +52,9 @@ public final class CreateUsernameServletTest {
     private StringWriter responseWriter;
     private CreateUsernameServlet servlet;
 
+    /**
+    * Sets up mocks before each test.
+    */
     @Before
     public void setUp() throws Exception {
         helper.setUp();
@@ -73,11 +76,19 @@ public final class CreateUsernameServletTest {
         servlet.userVerifier = userVerifier;
     }
 
+    /**
+    * Removes the local datastore after each test.
+    */
     @After
     public void tearDown() {
         helper.tearDown();
     }
 
+    /**
+    * Tests the creation of a valid username that is not taken. Makes sure
+    * that the username is updated correctly in datastore after the servlet
+    * is run.
+    */
     @Test
     public void testValidUsername() throws Exception {
         User user = new User.Builder("abcUserId").build();
@@ -109,6 +120,10 @@ public final class CreateUsernameServletTest {
         Assert.assertTrue(usernameB.equals("usernameB"));
     }
 
+    /**
+    * Tests a user attempting to create a username of just the empty string.
+    * An error should be thrown.
+    */
     @Test(expected=IOException.class)
     public void testEmptyUsername() throws Exception {
         User user = new User.Builder("abcUserId").build();
@@ -118,6 +133,10 @@ public final class CreateUsernameServletTest {
         servlet.doPost(request, response);
     }
 
+    /**
+    * Tests a user attempting to create a username with more than 20 characters.
+    * An error should be thrown.
+    */
     @Test(expected=IOException.class)
     public void testTooLongUsername() throws Exception {
         User user = new User.Builder("abcUserId").build();
@@ -127,6 +146,10 @@ public final class CreateUsernameServletTest {
         servlet.doPost(request, response);
     }
 
+    /**
+    * Tests a user attempting to create a username containing unallowed special characters.
+    * An error should be thrown.
+    */
     @Test(expected=IOException.class)
     public void testUsernameWithSpecialCharacters() throws Exception {
         User user = new User.Builder("abcUserId").build();
@@ -136,6 +159,10 @@ public final class CreateUsernameServletTest {
         servlet.doPost(request, response);
     }
 
+    /**
+    * Tests a user attmepting to create a username containing allowed special characters
+    * (underscores and periods). This should be allowed (no error should occur).
+    */
     public void testUsernameWithUnderscoresAndPeriods() throws Exception {
         User user = new User.Builder("abcUserId").build();
         datastoreManager.createOrReplaceUser(user);

@@ -54,6 +54,9 @@ public final class CreateGameServletTest {
     private StringWriter responseWriter;
     private CreateGameServlet servlet;
 
+    /**
+    * Sets up mocks before each test.
+    */
     @Before
     public void setUp() throws Exception {
         helper.setUp();
@@ -78,11 +81,18 @@ public final class CreateGameServletTest {
         when(response.getWriter()).thenReturn(new PrintWriter(responseWriter));
     }
 
+    /**
+    * Remove the local datastore after each test.
+    */
     @After
     public void tearDown() {
         helper.tearDown();
     }
 
+    /**
+    * Tests a valid game creation. Checks that nothing goes wrong and that the
+    * inputted game is the same as the one that is stored in datastore.
+    */
     @Test
     public void testValidGame() throws Exception {
         servlet = new CreateGameServlet();
@@ -115,12 +125,20 @@ public final class CreateGameServletTest {
         Assert.assertEquals(datastoreManager.retrieveStage(game.getStages().get(1)), expectedStage2);
     }
 
+    /**
+    * Tests what happens if an invalid id token is used. An
+    * error should be thrown by the servlet.
+    */
     @Test(expected=IOException.class)
     public void testBadIdToken() throws Exception {
         servlet = new CreateGameServlet();
         servlet.doPost(request, response);
     }
 
+    /**
+    * Tests what happens if the length of stageSpawnLocations is changed to something
+    * that doesn't match the lengths of the other stage lists. An error should be thrown.
+    */
     @Test(expected=IOException.class)
     public void testStageListLengthsDontMatch() throws Exception {
         servlet = new CreateGameServlet();
