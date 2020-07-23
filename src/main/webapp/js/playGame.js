@@ -80,16 +80,19 @@ async function getUserProgress() {
   
   const params = new URLSearchParams();
   if (isSignedIn()) {
+    console.log("signed in in user progress")
     let tokenEmailDict = tokenAndEmail();
     params.append('email', tokenEmailDict['email']);
     params.append('idToken', tokenEmailDict['token']);
   }
   params.append('gameID', gameID);
+  console.log(params)
 
   let request = new Request('/load-singleplayerprogress-data', {method: 'POST', body: params});
   await fetch(request).then(response => response.json()).then(data => {
     result = data;
   });
+  console.log(result);
   return result;
 }
 
