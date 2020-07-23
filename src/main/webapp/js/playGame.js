@@ -352,6 +352,11 @@ function updateUserProgress() {
   fetch(request);
 }
 
+/**
+* Adds a minimap to the street view panorama
+* @param mapdiv the div in which to put the minimap.
+* @param panorama the panorama where the mapdiv will be placed.
+*/
 function addMinimap(mapdiv, panorama) {
   const minimapdiv = document.createElement("div");
   minimapdiv.id = "minimap";
@@ -377,15 +382,5 @@ function addMinimap(mapdiv, panorama) {
     minimap.setCenter(panorama.getPosition());
   });
 
-  const controlUI = document.createElement("div");
-  controlUI.style.backgroundColor = "#fff";
-  controlUI.style.border = "2px solid #fff";
-  controlUI.style.borderRadius = "3px";
-  controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
-  controlUI.style.cursor = "pointer";
-  controlUI.style.marginBottom = "15px";
-  controlUI.style.textAlign = "center";
-
-  //mapdiv.appendChild(controlUI);
   mapdiv.appendChild(minimapdiv);
 }
