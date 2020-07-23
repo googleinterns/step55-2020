@@ -101,9 +101,9 @@ async function submitUsername() {
     params.append('email', tokenEmailDict['email']);
     params.append('idToken', tokenEmailDict['token']);
     
-    await fetch('/create-username-data', {method: 'post', body: params});
-      window.location = '/profilePage.html';
-    } else {
-      alert(availabilityBox.innerText);
-    }
+    await fetch('/create-username-data', {method: 'POST', body: params});
+    window.location = '/profilePage.html';
+  } else {
+    alert(availabilityBox.innerText);
+  }
 }

@@ -1,7 +1,7 @@
 /**
 * Class to contains data of the current game, used in playGame.js only
 */
-class progress {
+class Progress {
   hintsFound;
   stageID;
   map;
@@ -30,7 +30,9 @@ class progress {
   */
   set addListOfHintsFound(hints) {
     for (let i = 0; i < hints.length; i++) {
-      this.addSingleHintFound(hints[i]);
+      if (!this.hintsFound.includes(hints[i])) {
+        this.hintsFound.push(hints[i]);
+      }
     }
   }
   
@@ -40,13 +42,6 @@ class progress {
   */
   get getHintsFound() {
     return this.hintsFound;
-  }
-  
-  /**
-  * Setter method to clear the list of found hints
-  */
-  get clearHintsFound() {
-    this.hintsFound = [];
   }
 
   /**
@@ -79,5 +74,12 @@ class progress {
   */
   get getMap() {
     return this.map;
+  }
+
+  /**
+  * Method to clear the list of found hints
+  */
+  clearHintsFound() {
+    this.hintsFound = [];
   }
 }
