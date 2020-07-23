@@ -55,6 +55,11 @@ function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
+    const minimapControlDiv = document.createElement("div");
+    addMinimap(minimapControlDiv, panorama);
+    minimapControlDiv.index = 1;
+    panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControlDiv);
+
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
     let markers = [];
@@ -345,4 +350,42 @@ function updateUserProgress() {
   params.append('idToken', tokenEmailDict['token']);
   let request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
   fetch(request);
+}
+
+function addMinimap(mapdiv, panorama) {
+  const minimapdiv = document.createElement("div");
+  minimapdiv.id = "minimap";
+  minimapdiv.style.height = "150px";
+  minimapdiv.style.width = "200px";
+  minimapdiv.style.pointerEvents = "none";
+  minimapdiv.style.opacity = 0.55;
+  
+  const minimap = new google.maps.Map(minimapdiv, {
+    center: panorama.getPosition(),
+    zoom: 15,
+    gestureHandling: 'none',
+    clickableIcons: false,
+    zoomControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    streetViewControl: true,
+    rotateControl: false,
+    fullscreenControl: false
+  });
+  minimap.setStreetView(panorama);
+  panorama.addListener("pano_changed", () => {
+    minimap.setCenter(panorama.getPosition());
+  });
+
+  const controlUI = document.createElement("div");
+  controlUI.style.backgroundColor = "#fff";
+  controlUI.style.border = "2px solid #fff";
+  controlUI.style.borderRadius = "3px";
+  controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
+  controlUI.style.cursor = "pointer";
+  controlUI.style.marginBottom = "15px";
+  controlUI.style.textAlign = "center";
+
+  //mapdiv.appendChild(controlUI);
+  mapdiv.appendChild(minimapdiv);
 }
