@@ -1,4 +1,5 @@
 var currGameData = new Progress([]);
+var minimap;
 
 /** 
 * Initalizes a map where there is an id of 'playMap'
@@ -313,7 +314,12 @@ function changeData(latLng, hint, hintNum, updateProgress, marker) {
     position: latLng,
     map: currGameData.getMap,
     icon: 'images/marker_found.png'
-  }); 
+  });
+  minimapmarker = new google.maps.Marker({
+    position: latLng,
+    map: minimap,
+    icon: 'images/marker_found_mini.png'
+  });
 
   addHint(hint, hintNum, updateProgress);
 }
@@ -370,7 +376,7 @@ function addMinimap(mapdiv, panorama) {
   mapdiv.style.pointerEvents = "none";
   minimapdiv.style.opacity = 0.55;
   
-  const minimap = new google.maps.Map(minimapdiv, {
+  minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
     zoom: 15,
     gestureHandling: 'none',
@@ -383,7 +389,7 @@ function addMinimap(mapdiv, panorama) {
     fullscreenControl: false
   });
   minimap.setStreetView(panorama);
-  panorama.addListener("pano_changed", () => {
+  google.maps.event.addListener(panorama, 'position_changed', function() {
     minimap.setCenter(panorama.getPosition());
   });
 
