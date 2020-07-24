@@ -44,11 +44,13 @@ public class LoadMainPageServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int pageNum = Integer.parseInt(request.getParameter("page"));
         ArrayList<Game> gameslist = datastoreManager.retrieveAllGames();
         ArrayList<BasicGameData> games = new ArrayList<>();
-        for(Game game: gameslist) {
-            games.add(new BasicGameData(game));
+        for(int i = pageNum*20; i < (1+pageNum)*20 && i < gameslist.size(); i++) {
+            games.add(new BasicGameData(gameslist.get(i)));
         }
+        pageNum += 1;
         String json = new Gson().toJson(games);
         response.getWriter().println(json);
     }

@@ -52,7 +52,8 @@
 .light-mode #finish, 
 .light-mode #addHint, 
 .light-mode #addStage,
-.light-mode #play-game-button {
+.light-mode #play-game-button,
+.light-mode #more-maps {
   background: #74d3aeff;
 }
 
@@ -121,7 +122,8 @@
 .dark-mode #finish, 
 .dark-mode #addHint,
 .dark-mode #addStage,
-.dark-mode #play-game-button {
+.dark-mode #play-game-button, 
+.dark-mode #more-maps {
   background: #32908F;
 }
 
@@ -134,7 +136,7 @@
   width: 25%;
 }
 
-#finish, #addHint, #addStage, #stages input, #play-game-button  {
+#finish, #addHint, #addStage, #stages input, #play-game-button, #more-maps  {
   border: 0px;
   border-radius: 7px;
   height: 30px;

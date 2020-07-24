@@ -319,15 +319,39 @@ function getStarRating(stars) {
 * Adds a featured map where the ID 'featured-map' is and the rest of the maps where the ID 'all-maps' is
 */
 function loadMaps() {
-  fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
+  fetch('/load-mainpage-data?page='+0).then(response => response.json()).then(async (data) => {
     let featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
     let featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     let featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
+    if (data.length == 0 || data.length < 20) {
+      let moreMapsButton = document.getElementById('more-maps');
+      moreMapsButton.value = 'No more maps to be loaded!';
+      moreMapsButton.disabled = true;
+    }
+    data = data.splice(1,data.length);
+    addMaps(data);
+  });
+}
+
+function loadMoreMaps(pageNum) {
+  fetch('/load-mainpage-data?page='+pageNum).then(response => response.json()).then((data) => {
+    addMaps(data);
+    let moreMapsButton = document.getElementById('more-maps');
+    if (data.length == 0 || data.length < 20) {
+      moreMapsButton.value = 'No more maps to be loaded!';
+      moreMapsButton.disabled = true;
+    } else {
+      moreMapsButton.setAttribute( "onClick", "loadMoreMaps("+ (pageNum + 1) +")" );
+    }
+  });
+}
+
+function addMaps(data) {
     let allMaps = document.getElementById('all-maps');
-    for (let i = 1; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       let mapDiv = document.createElement('div');
       mapDiv.classList.add('col');
       mapDiv.classList.add('hoverable');
@@ -346,7 +370,6 @@ function loadMaps() {
       mapDiv.append(mapCaption)
       allMaps.append(mapDiv);
     }
-  });
 }
 
 // Depreciated
