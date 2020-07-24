@@ -13,9 +13,11 @@
 // limitations under the License.
 
 package com.google.sps.managers;
+
+// see why the format document isn't working
 import com.google.sps.data.*;
 import com.google.sps.utils.*;
-
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -65,16 +67,13 @@ public class DatastoreManager implements IDataManager {
   * Retrieves a single user entity from the datastore.
   * @param userID the unique code used to identify this specific user.
   * @return a User object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public User retrieveUser(String userID) {
+  public User retrieveUser(String userID) throws  EntityNotFoundException { 
     Key userEntityKey = KeyFactory.createKey("User", userID);
     Entity userEntity;
-    try {
-      userEntity = datastore.get(userEntityKey);
-    }
-    catch(Exception e) {
-      return null;
-    }
+    userEntity = datastore.get(userEntityKey);
+    
     String userName = (String) userEntity.getProperty("username");
     String firstName = (String) userEntity.getProperty("firstname");
     String lastName = (String) userEntity.getProperty("lastname");
@@ -82,6 +81,7 @@ public class DatastoreManager implements IDataManager {
     if (gamesCreated == null) {
       gamesCreated = new ArrayList<>();
     }
+    
     String profilePictureUrl = (String) userEntity.getProperty("profilePictureUrl");
     String gamesCompletedWithTimeJson = (String) userEntity.getProperty("gamesCompletedWithTime");
     Type pairListType = new TypeToken<ArrayList<Pair<String, Long>>>(){}.getType();
@@ -89,6 +89,7 @@ public class DatastoreManager implements IDataManager {
     if (gamesCompletedWithTime == null) {
       gamesCompletedWithTime = new ArrayList<>();
     }
+
     User.Builder user = new User.Builder(userID).setUsername(userName).setFirstName(firstName).setLastName(lastName);
     user.setProfilePictureUrl(profilePictureUrl).setGamesCreated(gamesCreated);
     user.setGamesCompletedWithTime(gamesCompletedWithTime);
@@ -119,16 +120,12 @@ public class DatastoreManager implements IDataManager {
   * Retrieves a single game entity from the datastore.
   * @param gameID the unique code used to identify this specific game.
   * @return a Game object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public Game retrieveGame(String gameID) {
+  public Game retrieveGame(String gameID) throws EntityNotFoundException {
     Key gameEntityKey = KeyFactory.createKey("Game", gameID);
     Entity gameEntity;
-    try {
-      gameEntity = datastore.get(gameEntityKey);
-    }
-    catch(Exception e) {
-      return null;
-    }
+    gameEntity = datastore.get(gameEntityKey);
 
     String gameName = (String) gameEntity.getProperty("gameName");
     String gameDescription = (String) gameEntity.getProperty("gameDescription");
@@ -137,6 +134,7 @@ public class DatastoreManager implements IDataManager {
     if (stages == null) {
       stages = new ArrayList<>();
     }
+
     int numTimesPlayed = ((Long)gameEntity.getProperty("numTimesPlayed")).intValue();
     int numTimesFinished = ((Long)gameEntity.getProperty("numTimesFinished")).intValue();
     int numStarVotes = ((Long)gameEntity.getProperty("numStarVotes")).intValue();
@@ -162,10 +160,12 @@ public class DatastoreManager implements IDataManager {
     stageEntity.setProperty("startingHint", stage.getStartingHint());
     stageEntity.setProperty("latitude", stage.getStartingLocation().getLatitude());
     stageEntity.setProperty("longitude", stage.getStartingLocation().getLongitude());
+
     for (Hint hint : stage.getHints()) {
       createOrReplaceHint(hint);
       hints.add(hint.getHintID());
     }
+
     stageEntity.setProperty("hints", hints);
     datastore.put(stageEntity);
   }
@@ -174,15 +174,13 @@ public class DatastoreManager implements IDataManager {
   * Retrieves a single stage entity from the datastore.
   * @param stageID the unique code used to identify this specific stage.
   * @return a Stage object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public Stage retrieveStage(String stageID) {
+  public Stage retrieveStage(String stageID) throws EntityNotFoundException {
     Key stageEntityKey = KeyFactory.createKey("Stage", stageID);
     Entity stageEntity;
-    try {
-      stageEntity = datastore.get(stageEntityKey);
-    } catch(Exception e) {
-      return null;
-    }
+    stageEntity = datastore.get(stageEntityKey);
+    
     int stageNumber = ((Long)stageEntity.getProperty("stageNumber")).intValue();
     String key = (String) stageEntity.getProperty("key");
     String startingHint = (String) stageEntity.getProperty("startingHint");
@@ -194,6 +192,7 @@ public class DatastoreManager implements IDataManager {
     if (hintIDs == null) {
       hintIDs = new ArrayList<>();
     }
+
     ArrayList<Hint> hints = new ArrayList<Hint>();
     for (String hintid : hintIDs) {
       hints.add(retrieveHint(hintid));
@@ -226,15 +225,12 @@ public class DatastoreManager implements IDataManager {
   * @param userID the unique code used to identify this specific user.
   * @param gameID the unique code used to identify this specific game.
   * @return a SinglePlayerProgress object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID) {
+  public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID) throws EntityNotFoundException {
     Key singlePlayerProgressEntityKey = KeyFactory.createKey("singlePlayerProgress", userID + gameID);
     Entity singlePlayerProgress;
-    try {
-      singlePlayerProgress = datastore.get(singlePlayerProgressEntityKey);
-    } catch(Exception e) {
-      return null;
-    }
+    singlePlayerProgress = datastore.get(singlePlayerProgressEntityKey);
     
     String stageID = (String) singlePlayerProgress.getProperty("stageID");
     double latitude = (double) singlePlayerProgress.getProperty("latitude");
@@ -242,9 +238,11 @@ public class DatastoreManager implements IDataManager {
     Coordinates Location;
     Location = new Coordinates(latitude, longitude);
     ArrayList<Integer> hintsFound = (ArrayList<Integer>) singlePlayerProgress.getProperty("hintsFound");
+
     if (hintsFound == null) {
       hintsFound = new ArrayList<>();
     }
+
     SinglePlayerProgress.Builder progress = new SinglePlayerProgress.Builder(userID, gameID);
     progress.setLocation(Location).setHintsFound(hintsFound).setStageID(stageID);
     return progress.build();
@@ -268,16 +266,12 @@ public class DatastoreManager implements IDataManager {
   * Retrieves a single hint entity from the datastore.
   * @param hintID the unique code used to identify this specific hint.
   * @return a Hint object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public Hint retrieveHint(String hintID) {
+  public Hint retrieveHint(String hintID) throws EntityNotFoundException {
     Key hintEntityKey = KeyFactory.createKey("Hint", hintID);
     Entity hintEntity;
-    try {
-      hintEntity = datastore.get(hintEntityKey);
-    }
-    catch(Exception e) {
-      return null;
-    }
+    hintEntity = datastore.get(hintEntityKey);
 
     int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
     String text = (String) hintEntity.getProperty("text");
@@ -306,9 +300,11 @@ public class DatastoreManager implements IDataManager {
       String gameDescription = (String) gameEntity.getProperty("gameDescription");
       String gameCreator = (String) gameEntity.getProperty("gameCreator");
       ArrayList<String> stages = (ArrayList<String>)gameEntity.getProperty("stages");
+
       if (stages == null) {
         stages = new ArrayList<>();
       }
+
       int numTimesPlayed = ((Long)gameEntity.getProperty("numTimesPlayed")).intValue();
       int numTimesFinished = ((Long)gameEntity.getProperty("numTimesFinished")).intValue();
       int numStarVotes = ((Long)gameEntity.getProperty("numStarVotes")).intValue();
@@ -361,16 +357,20 @@ public class DatastoreManager implements IDataManager {
     String firstName = (String) userEntity.getProperty("firstname");
     String lastName = (String) userEntity.getProperty("lastname");
     ArrayList<String> gamesCreated = (ArrayList<String>) userEntity.getProperty("gamesCreated");
+
     if (gamesCreated == null) {
       gamesCreated = new ArrayList<>();
     }
+
     String profilePictureUrl = (String) userEntity.getProperty("profilePictureUrl");
     String gamesCompletedWithTimeJson = (String) userEntity.getProperty("gamesCompletedWithTime");
     Type pairListType = new TypeToken<ArrayList<Pair<String, Long>>>(){}.getType();
     ArrayList<Pair<String, Long>> gamesCompletedWithTime = gson.fromJson(gamesCompletedWithTimeJson, pairListType);
+    
     if (gamesCompletedWithTime == null) {
       gamesCompletedWithTime = new ArrayList<>();
     }
+
     User.Builder user = new User.Builder(userID).setUsername(userName).setFirstName(firstName).setLastName(lastName);
     user.setProfilePictureUrl(profilePictureUrl).setGamesCreated(gamesCreated);
     user.setGamesCompletedWithTime(gamesCompletedWithTime);
@@ -385,22 +385,19 @@ public class DatastoreManager implements IDataManager {
   public void createOrReplaceIdentification(String email, String id) {
     Entity identificationEntity = new Entity ("Identification", email);
     identificationEntity.setProperty("id", id);
+
     datastore.put(identificationEntity);
   }
   
   /**
   * Retrieves an id of a user in datastore by the email address
   * @param email a String variable representing a user's email address
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public String retrieveIdByEmail(String email) {
+  public String retrieveIdByEmail(String email) throws EntityNotFoundException {
     Key idEntityKey = KeyFactory.createKey("Identification", email);
     Entity idEntity;
-    try {
-      idEntity = datastore.get(idEntityKey);
-    }
-    catch(Exception e) {
-      return null;
-    }
+    idEntity = datastore.get(idEntityKey);
     
     String id = (String) idEntity.getProperty("id");
     return id;
