@@ -360,6 +360,11 @@ function updateUserProgress() {
   fetch(request);
 }
 
+/**
+* Creates a button element that is used for the minimap.
+* @param text the text that should go in the button.
+* @return {Element} an HTML element.
+*/
 function createMinimapButton(text) {
   const button = document.createElement("div");
   button.style.backgroundColor = "#fff";
@@ -385,7 +390,6 @@ function createMinimapButton(text) {
 
 /**
 * Adds a minimap to the street view panorama
-* @param element the div in which to put the minimap.
 * @param panorama the panorama where the mapdiv will be placed.
 */
 function addMinimap(panorama) {
