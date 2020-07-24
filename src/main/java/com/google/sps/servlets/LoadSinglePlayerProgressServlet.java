@@ -56,7 +56,13 @@ public class LoadSinglePlayerProgressServlet extends HttpServlet {
 
         parseInput(request);
         SinglePlayerProgress res = null;
-        if(userID != null) res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
+        if(userID != null) {
+            try {
+                res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
+            } catch(Exception e) {
+                res = null;
+            }
+        }
         if(res == null) res = getNewGame();
         String json = new Gson().toJson(res);
         response.getWriter().println(json);
@@ -80,8 +86,18 @@ public class LoadSinglePlayerProgressServlet extends HttpServlet {
     */
     private SinglePlayerProgress getNewGame() {
         SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
-        Game game = datastoreManager.retrieveGame(gameID);
-        Stage firstStage = datastoreManager.retrieveStage(game.getStages().get(0));
+        Game game;
+        try {
+            game = datastoreManager.retrieveGame(gameID);
+        } catch(Exception e) {
+            game = null;
+        }
+        Stage firstStage;
+        try {
+            firstStage = datastoreManager.retrieveStage(game.getStages().get(0));
+        } catch(Exception e) {
+            firstStage = null;
+        }
         progressBuilder.setLocation(firstStage.getStartingLocation());
         progressBuilder.setHintsFound(new ArrayList<>());
         progressBuilder.setStageID(firstStage.getStageID());

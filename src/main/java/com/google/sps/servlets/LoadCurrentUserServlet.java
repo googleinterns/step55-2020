@@ -50,7 +50,12 @@ public class LoadCurrentUserServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
         String userID = userVerifier.getUserID();
-        User user = datastoreManager.retrieveUser(userID);
+        User user;
+        try {
+            user = datastoreManager.retrieveUser(userID);
+        } catch(Exception e) {
+            user = null;
+        }
         
         String json = new Gson().toJson(user);
         response.getWriter().println(json);

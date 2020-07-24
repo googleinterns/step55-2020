@@ -49,7 +49,12 @@ public class CreateUserIdServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
         String userId = userVerifier.getUserID();
-        User currentUser = datastoreManager.retrieveUser(userId);
+        User currentUser;
+        try {
+            currentUser = datastoreManager.retrieveUser(userId);
+        } catch(Exception e) {
+            currentUser = null;
+        }
 
         if (currentUser !=  null) {
             response.sendRedirect("/profilePage.html");

@@ -51,10 +51,11 @@ public class HasSinglePlayerProgressServlet extends HttpServlet {
         userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
         String userID = userVerifier.getUserID();
         String gameID = request.getParameter("gameID");
-        if(datastoreManager.retrieveSinglePlayerProgress(userID, gameID) == null) {
+        try {
+            datastoreManager.retrieveSinglePlayerProgress(userID, gameID);
+            response.getWriter().println(1);
+        } catch(Exception e) {
             response.getWriter().println(0);
-            return;
         }
-        response.getWriter().println(1);
     }
 }

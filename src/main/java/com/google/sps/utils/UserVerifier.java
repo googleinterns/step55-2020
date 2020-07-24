@@ -68,7 +68,12 @@ public class UserVerifier {
             throw new IOException("UserVerifier has not been built correctly.");
         }
         String email = payload.getEmail();
-        String id = datastoreManager.retrieveIdByEmail(email);
+        String id;
+        try {
+            id = datastoreManager.retrieveIdByEmail(email);
+        } catch(Exception e) {
+            id = null;
+        }
         if(id == null) {
             id = IDGenerator.gen();
             datastoreManager.createOrReplaceIdentification(email, id);

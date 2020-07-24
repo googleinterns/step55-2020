@@ -47,7 +47,12 @@ public class LoadGamePageServlet extends HttpServlet {
     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Game gameobject = datastoreManager.retrieveGame(request.getParameter("gameID"));
+        Game gameobject;
+        try {
+            gameobject = datastoreManager.retrieveGame(request.getParameter("gameID"));
+        } catch(Exception e) {
+            gameobject = null;
+        }
         ReducedGameData game = new ReducedGameData(gameobject);
 
         String json = new Gson().toJson(game);
