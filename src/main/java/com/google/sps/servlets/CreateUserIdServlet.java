@@ -51,16 +51,16 @@ public class CreateUserIdServlet extends HttpServlet {
             response.sendRedirect("/profilePage.html");
         }
         
-        String randomUserName = randomUserNameGenerator();
+        String randomUserName = generateRandomUsername();
         while (datastoreManager.doesUsernameExist(randomUserName)) {
-            randomUserName = randomUserNameGenerator();
+            randomUserName = generateRandomUsername();
         }
 
         User user = new User.Builder(userId).setUsername(randomUserName).build();
         datastoreManager.createOrReplaceUser(user);   
     }
 
-    private String randomUserNameGenerator() {
+    private String generateRandomUsername() {
         String validCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz._0123456789";
         int userNameLen = 4 + (int) (Math.random() * 16);
         String result = "";
