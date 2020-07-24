@@ -51,11 +51,29 @@ public class CreateUserIdServlet extends HttpServlet {
         String userId = userVerifier.getUserID();
         User currentUser = datastoreManager.retrieveUser(userId);
 
-        if (currentUser ==  null) {
-            User user = new User.Builder(userId).build();
-            datastoreManager.createOrReplaceUser(user);
+        if (currentUser !=  null) {
+            response.sendRedirect("/profilePage.html");
+        }
+        
+        String randomUserName = generateRandomUsername();
+        while (datastoreManager.doesUsernameExist(randomUserName)) {
+            randomUserName = generateRandomUsername();
         }
 
-        response.sendRedirect("/profilePage.html");
+        User user = new User.Builder(userId).setUsername(randomUserName).build();
+        datastoreManager.createOrReplaceUser(user);   
     }
+
+    private String generateRandomUsername() {
+        String validCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz._0123456789";
+        int userNameLen = 4 + (int) (Math.random() * 16);
+        String result = "";
+        for (int i = 0; i < userNameLen; i++) {
+            int index = (int)(Math.random() * validCharacters.length());
+            char letterToAdd = validCharacters.charAt(index);
+            String letterAsString = Character.toString(letterToAdd);
+            result = result.concat(letterAsString);
+        }
+        return result;
+    } 
 }

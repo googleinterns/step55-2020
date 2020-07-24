@@ -1,4 +1,4 @@
-var currGameData = new progress([]);
+var currGameData = new Progress([]);
 
 /** 
 * Initalizes a map where there is an id of 'playMap'
@@ -15,7 +15,7 @@ function initMapToPlayGame() {
       return;
     }
 
-    if (data.stages == null || data.stages.length <= 0) {
+    if (data.stages == null) {
       window.alert('There are no stages, failure to initialize game');
       window.location.replace('index.html');
       return;
@@ -26,7 +26,7 @@ function initMapToPlayGame() {
     let initStage = await getStage(stageID);
     let startingLocation = {lat: userProgress.location.latitude, lng: userProgress.location.longitude};
     currGameData.setStageID = stageID;
-    currGameData.clearHintsFound;
+    currGameData.clearHintsFound();
     currGameData.addListOfHintsFound = userProgress.hintsFound;
 
     let stageHints = initStage.hints;
@@ -42,8 +42,8 @@ function initMapToPlayGame() {
       gestureHandling: 'greedy', 
       streetViewControl: false 
     });
-    
     currGameData.setMap = map;
+
     // gets the street view
     let panorama = map.getStreetView();
     // removes the option to exit streetview
@@ -68,7 +68,9 @@ function initMapToPlayGame() {
     );
 
     currGameData.getHintsFound.forEach(hintNum => {
-      changeData({lat: stageHints[parseInt(hintNum) - 1].location.latitude, lng: stageHints[parseInt(hintNum) - 1].location.longitude}, stageHints[parseInt(hintNum) - 1].text, hintNum, false, markers[parseInt(hintNum) - 1])
+      let num = parseInt(hintNum);
+      let hintLatLng = {lat: stageHints[num - 1].location.latitude, lng: stageHints[num - 1].location.longitude};
+      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1]);
     });
   });
 }
@@ -83,16 +85,19 @@ async function getUserProgress() {
   
   const params = new URLSearchParams();
   if (isSignedIn()) {
+    console.log("signed in in user progress")
     let tokenEmailDict = tokenAndEmail();
     params.append('email', tokenEmailDict['email']);
     params.append('idToken', tokenEmailDict['token']);
   }
   params.append('gameID', gameID);
+  console.log(params)
 
   let request = new Request('/load-singleplayerprogress-data', {method: 'POST', body: params});
   await fetch(request).then(response => response.json()).then(data => {
     result = data;
   });
+  console.log(result);
   return result;
 }
 
@@ -209,10 +214,10 @@ async function checkKey(data, stage, panorama) {
     return;
   }
   if (data.stages.length == stage.stageNumber) {
-    const urlParams = new URLSearchParams(window.location.search)
-    let gameID = urlParams.get('gameID');
     currGameData.setStageID = 'N/A';
     updateUserProgress();
+    const urlParams = new URLSearchParams(window.location.search)
+    let gameID = urlParams.get('gameID');
     window.location.replace('afterGame.html?gameID=' + gameID);
     return;
   }
@@ -233,7 +238,7 @@ async function checkKey(data, stage, panorama) {
     window.location.replace('index.html');
     return;
   }
-  currGameData.clearHintsFound;
+  currGameData.clearHintsFound();
 
   stageHints.forEach(hint => {
     addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber);
