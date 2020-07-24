@@ -93,7 +93,7 @@ public final class CreateUserIdServletTest {
 
         User user = datastoreManager.retrieveUser("abcUserId");
         Assert.assertTrue(user.getUserID().equals("abcUserId"));
-        Assert.assertTrue(user.getUsername().equals("N/A"));
+        Assert.assertFalse(user.getUsername().equals("N/A"));
         Assert.assertTrue(user.getFirstName().equals("N/A"));
         Assert.assertTrue(user.getLastName().equals("N/A"));
         Assert.assertTrue(user.getProfilePictureUrl().equals("N/A"));
