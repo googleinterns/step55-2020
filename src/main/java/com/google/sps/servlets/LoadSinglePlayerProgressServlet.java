@@ -46,6 +46,9 @@ public class LoadSinglePlayerProgressServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        userID = null;
+        gameID = null;
+
         parseInput(request);
         SinglePlayerProgress res = null;
         if(userID != null) res = datastoreManager.retrieveSinglePlayerProgress(userID, gameID);

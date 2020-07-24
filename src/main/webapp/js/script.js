@@ -1,5 +1,6 @@
 var auth2;
 
+// Depreciated
 /** 
 * initalizes the GoogleAuth instance and creates the nav bar
 * @param {string} page is which HTML the navbar should be placed on
@@ -26,7 +27,7 @@ function changeToOrFromDarkMode() {
     body.className = 'light-mode';
   }
   if (typeof(Storage) !== "undefined") {
-    sessionStorage.setItem("colorMode", body.className);
+    localStorage.setItem("colorMode", body.className);
   } 
 }
 
@@ -112,7 +113,6 @@ function createSideNav(page) {
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');
   let instances = M.Sidenav.init(elems, {});
-    
 }
 
 // Soon to be depreciated
@@ -349,6 +349,7 @@ function loadMaps() {
   });
 }
 
+// Depreciated
 /** 
 * Stops the JS from executing any code for the amount of miliseconds provided
 * @param {int} ms number miliseconds to stop the JS for
@@ -363,41 +364,46 @@ function sleep(ms) {
 * @example onLoadFunction("index")
 */
 async function onLoadFunctions(page) { 
-  await sleep(10);
-  init(page);
-  // This sleep is required due to a bug in gapi (Google Sigin-In)
-  await sleep(500);
-        
   if (typeof(Storage) !== "undefined") {
     let color = localStorage.getItem("colorMode");
     if (color == null) {
-      sessionStorage.setItem("colorMode", "light-mode");
+      localStorage.setItem("colorMode", "light-mode");
     }
     document.body.className = color;
   }
+
   if (document.body.className == "null" || document.body.className == "undefined") {
     document.body.className = "light-mode";
   }
 
-  if (page == 'playGame') {
-    initMapToPlayGame();
-  } else if (page == 'createGame') {
-    if(!isSignedIn()) {
-      window.alert('You need to sign in to create a game!');
+  gapi.load('auth2', async function() {
+    gapi.auth2.init({
+      client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
+    })
+    auth2 = await gapi.auth2.getAuthInstance();
+    createNavBar(page);
+
+    if (page == 'playGame') {
+      initMapToPlayGame();
+    } else if (page == 'createGame') {
+      if(!isSignedIn()) {
+        window.alert('You need to sign in to create a game!');
+      }
+      initMapToCreateGame();
+    } else if (page == 'afterGame') {
+      loadGameName();
+    } else if (page == 'resumeOrStartOver') {
+      // checkIfUserHasSavedProgress();
+    } else if (page == 'profilePage') {
+      loadProfilePage();
+    } else if (page == 'gameInfo') {
+      loadGameData();
+    } else if (page == 'index') {
+      loadMaps();
+      $(document).ready(function(){
+        $('.materialbox').materialbox();
+      });
     }
-    initMapToCreateGame();
-  } else if (page == 'afterGame') {
-    loadGameName();
-  } else if (page == 'resumeOrStartOver') {
-    checkIfUserHasSavedProgress();
-  } else if (page == 'profilePage') {
-    loadProfilePage();
-  } else if (page == 'gameInfo') {
-    loadGameData();
-  } else if (page == 'index') {
-    loadMaps();
-    $(document).ready(function(){
-      $('.materialbox').materialbox();
-    });
-  }
+  }); 
+  
 }
