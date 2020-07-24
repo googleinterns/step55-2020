@@ -56,10 +56,7 @@ function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
-    const minimapControlDiv = document.createElement("div");
-    addMinimap(minimapControlDiv, panorama);
-    minimapControlDiv.index = 1;
-    panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControlDiv);
+    addMinimap(panorama);
 
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
@@ -287,7 +284,7 @@ function addHintMarker(latLng, hint, hintNum) {
     position: latLng,
     map: currGameData.getMap,
     icon: 'images/marker_notfound.png'
-  }); 
+  });
 
   marker.addListener('click', function() {
     changeData(latLng, hint, hintNum, true, marker);
@@ -363,22 +360,45 @@ function updateUserProgress() {
   fetch(request);
 }
 
+function createMinimapButton(text) {
+  const button = document.createElement("div");
+  button.style.backgroundColor = "#fff";
+  button.style.border = "1px solid #000";
+  button.style.cursor = "pointer";
+  button.style.textAlign = "center";
+  button.style.float = "left";
+  button.style.minWidth = "30px";
+  button.style.height = "30px";
+
+  const buttonText = document.createElement("div");
+  buttonText.style.color = "rgb(25,25,25)";
+  buttonText.style.fontFamily = "Roboto,Arial,sans-serif";
+  buttonText.style.fontSize = "16px";
+  buttonText.style.paddingLeft = "5px";
+  buttonText.style.paddingRight = "5px";
+  buttonText.style.userSelect = "none";
+  buttonText.style.lineHeight = "27px";
+  buttonText.innerHTML = text;
+  button.appendChild(buttonText);
+  return button;
+}
+
 /**
 * Adds a minimap to the street view panorama
-* @param mapdiv the div in which to put the minimap.
+* @param element the div in which to put the minimap.
 * @param panorama the panorama where the mapdiv will be placed.
 */
-function addMinimap(mapdiv, panorama) {
+function addMinimap(panorama) {
   const minimapdiv = document.createElement("div");
   minimapdiv.id = "minimap";
   minimapdiv.style.height = "150px";
   minimapdiv.style.width = "200px";
-  mapdiv.style.pointerEvents = "none";
+  minimapdiv.style.pointerEvents = "none";
   minimapdiv.style.opacity = 0.55;
   
   minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
-    zoom: 15,
+    zoom: 16,
     gestureHandling: 'none',
     clickableIcons: false,
     zoomControl: false,
@@ -392,6 +412,31 @@ function addMinimap(mapdiv, panorama) {
   google.maps.event.addListener(panorama, 'position_changed', function() {
     minimap.setCenter(panorama.getPosition());
   });
+  panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapdiv);
 
-  mapdiv.appendChild(minimapdiv);
+  const minimapControls = document.createElement("div");
+  const zoomInButton = createMinimapButton("+");
+  zoomInButton.addEventListener("click", () => {
+    minimap.setZoom(minimap.getZoom()+1);
+  });
+
+  const zoomOutButton = createMinimapButton("-");
+  zoomOutButton.addEventListener("click", () => {
+    minimap.setZoom(minimap.getZoom()-1);
+  });
+
+  const toggleViewButton = createMinimapButton("Toggle View");
+  toggleViewButton.addEventListener("click", () => {
+    let currentType = minimap.getMapTypeId();
+    if(currentType === "roadmap") {
+      minimap.setMapTypeId("satellite");
+    } else {
+      minimap.setMapTypeId("roadmap");
+    }
+  });
+
+  minimapControls.appendChild(zoomInButton);
+  minimapControls.appendChild(zoomOutButton);
+  minimapControls.appendChild(toggleViewButton);
+  panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControls);
 }
