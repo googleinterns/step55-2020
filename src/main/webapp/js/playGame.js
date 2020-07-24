@@ -362,7 +362,7 @@ function addMinimap(mapdiv, panorama) {
   minimapdiv.id = "minimap";
   minimapdiv.style.height = "150px";
   minimapdiv.style.width = "200px";
-  minimapdiv.style.pointerEvents = "none";
+  mapdiv.style.pointerEvents = "none";
   minimapdiv.style.opacity = 0.55;
   
   const minimap = new google.maps.Map(minimapdiv, {
