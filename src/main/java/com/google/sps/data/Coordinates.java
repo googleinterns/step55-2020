@@ -102,4 +102,17 @@ public class Coordinates {
         }
         return res;
     }
+
+    /**
+    * Tests equality of this Coordinates with another object. Equality is determined
+    * by whether the latitude and longitude are the same.
+    * @param other the other object.
+    * @return a boolean indicating whether this is equal to the other object.
+    */
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Coordinates)) return false;
+        Coordinates otherCoordinates = (Coordinates) other;
+        return this.latitude == otherCoordinates.latitude && this.longitude == otherCoordinates.longitude;
+    }
 }

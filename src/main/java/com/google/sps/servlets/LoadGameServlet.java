@@ -42,6 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadGameServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
+    /**
+    * Serves the full game data needed to play the game.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String gameID = request.getParameter("gameID");

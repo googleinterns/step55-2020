@@ -35,7 +35,15 @@ public class UserVerifier {
     private GoogleIdToken idToken;
     private Payload payload;
 
-    public UserVerifier(String idTokenString, String email) throws IOException {
+    /**
+    * Checks the validity of the given idTokenString and email. If the token is invalid or
+    * if it doesn't match the email, an error is thrown. Otherwise the payload will be initiated
+    * with the corresponding user information.
+    * @param idTokenString the id token string of the user.
+    * @param email the email corresponding to the same id token string.
+    */
+    public void build(String idTokenString, String email) throws IOException {
+        isValid = false;
         try {
             this.idToken = verifier.verify(idTokenString);
             this.payload = idToken.getPayload();
@@ -49,9 +57,14 @@ public class UserVerifier {
         }
     }
 
+    /**
+    * Retrieves the userID from datastore using the email. Throws an error if the payload
+    * has not been initiated.
+    * @return a String containing the userID.
+    */
     public String getUserID() throws IOException {
         if(!isValid) {
-            throw new IOException("UserVerifier has not been initialized correctly.");
+            throw new IOException("UserVerifier has not been built correctly.");
         }
         String email = payload.getEmail();
         String id = datastoreManager.retrieveIdByEmail(email);

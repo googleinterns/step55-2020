@@ -42,6 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadUserByIdServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
+    /**
+    * Serves the User object corresponding to the given userID.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String userID = request.getParameter("userID");

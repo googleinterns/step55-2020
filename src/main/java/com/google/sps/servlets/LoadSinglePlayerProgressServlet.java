@@ -41,9 +41,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/load-singleplayerprogress-data")
 public class LoadSinglePlayerProgressServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserVerifier userVerifier = new UserVerifier();
     String userID;
     String gameID;
 
+    /**
+    * Serves a SinglePlayerProgress object corresponding to the given user and game.
+    * Returns a progress corresponding to a newly started game if no old progrses exists.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         userID = null;
@@ -57,14 +62,22 @@ public class LoadSinglePlayerProgressServlet extends HttpServlet {
         response.getWriter().println(json);
     }
 
+    /**
+    * Sets the values of the userID and gameID variables according to the request.
+    * @param request the HttpServletRequest
+    */
     private void parseInput(HttpServletRequest request) throws IOException {
         if(request.getParameterMap().containsKey("idToken") && request.getParameterMap().containsKey("email")) {
-            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+            userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
             userID = userVerifier.getUserID();
         }
         gameID = request.getParameter("gameID");
     }
 
+    /**
+    * Returns a progress corresponding to a newly started game.
+    * @return a SinglePlayerProgress object corresponding to a new game.
+    */
     private SinglePlayerProgress getNewGame() {
         SinglePlayerProgress.Builder progressBuilder = new SinglePlayerProgress.Builder(userID, gameID);
         Game game = datastoreManager.retrieveGame(gameID);

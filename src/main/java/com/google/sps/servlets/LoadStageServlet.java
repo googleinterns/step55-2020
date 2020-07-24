@@ -42,6 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadStageServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
+    /**
+    * Serves the stage corresponding to the given stageID.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String stageID = request.getParameter("stageID");

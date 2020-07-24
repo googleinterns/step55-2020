@@ -42,6 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadGamePageServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
+    /**
+    * Serves the ReducedGameData that is needed to display a game on its individual page.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Game gameobject = datastoreManager.retrieveGame(request.getParameter("gameID"));

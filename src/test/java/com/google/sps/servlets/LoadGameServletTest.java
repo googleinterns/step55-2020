@@ -18,6 +18,7 @@ import com.google.sps.managers.*;
 import com.google.sps.utils.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import static org.mockito.Mockito.*;
 import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
@@ -41,18 +42,15 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Arrays;
 
 @RunWith(PowerMockRunner.class)
-public final class CreateGameServletTest {
+public final class LoadGameServletTest {
     private DatastoreManager datastoreManager = new DatastoreManager();
     private LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private UserVerifier mockUserVerifier;
     private StringWriter responseWriter;
-    private CreateGameServlet servlet;
+    private LoadGameServlet servlet;
 
     /**
     * Sets up mocks before each test.
@@ -61,28 +59,18 @@ public final class CreateGameServletTest {
     public void setUp() throws Exception {
         helper.setUp();
         request = mock(HttpServletRequest.class);
-        when(request.getParameter("idToken")).thenReturn("abcIdToken");
-        when(request.getParameter("email")).thenReturn("abcEmail@gmail.com");
-        when(request.getParameter("gameName")).thenReturn("abcGameName");
-        when(request.getParameter("gameDescription")).thenReturn("abcGameDescription");
-        when(request.getParameter("stageKeys")).thenReturn("[\"abc1k\",\"abc2k\"]");
-        when(request.getParameter("stageSpawnLocations")).thenReturn("[{\"latitude\": 0.0,\"longitude\": 0.0},{\"latitude\": 1.0,\"longitude\": 1.0}]");
-        when(request.getParameter("stageStarterHints")).thenReturn("[\"abc1h\",\"abc2h\"]");
-        when(request.getParameter("hintLocations")).thenReturn("[[{\"latitude\": 0.0,\"longitude\": 0.0},{\"latitude\": 0.0,\"longitude\": 0.0}],[{\"latitude\": 0.0,\"longitude\": 0.0}]]");
-        when(request.getParameter("hintTexts")).thenReturn("[[\"abc11\",\"abc12\"],[\"abc21\"]]");
+        when(request.getParameter("gameID")).thenReturn("abcGameId");
 
         response = mock(HttpServletResponse.class);
 
-        mockUserVerifier = mock(UserVerifier.class);
-        doNothing().when(mockUserVerifier).build(any(String.class), any(String.class));
-        when(mockUserVerifier.getUserID()).thenReturn("abcUserId");
-
         responseWriter = new StringWriter();
         when(response.getWriter()).thenReturn(new PrintWriter(responseWriter));
+
+        servlet = new LoadGameServlet();
     }
 
     /**
-    * Remove the local datastore after each test.
+    * Gets rid of local datastore after each test.
     */
     @After
     public void tearDown() {
@@ -90,24 +78,15 @@ public final class CreateGameServletTest {
     }
 
     /**
-    * Tests a valid game creation. Checks that nothing goes wrong and that the
-    * inputted game is the same as the one that is stored in datastore.
+    * Tests that the game information is correctly loaded.
     */
     @Test
-    public void testValidGame() throws Exception {
-        servlet = new CreateGameServlet();
-        servlet.userVerifier = mockUserVerifier;
-        servlet.doPost(request, response);
-
-        String json = responseWriter.toString();
-        Type StringType = new TypeToken<String>(){}.getType();
-        String id = new Gson().fromJson(json, StringType);
-
-        Game.Builder gamebuilder = new Game.Builder("expectedGameId", "abcGameName");
+    public void testLoadExisitingGame() throws Exception {
+        Game.Builder gamebuilder = new Game.Builder("abcGameId", "abcGameName");
         gamebuilder.setGameCreator("abcUserId").setGameDescription("abcGameDescription").setStages(new ArrayList<String>(Arrays.asList("stage1id", "stage2id")));
+        gamebuilder.setNumTimesPlayed(10).setNumTimesFinished(5).setNumStarVotes(12).setTotalStars(48).setNumDifficultyVotes(12).setTotalDifficulty(24);
         Game expectedGame = gamebuilder.build();
-        Game game = datastoreManager.retrieveGame(id);
-        Assert.assertEquals(expectedGame, game);
+        datastoreManager.createOrReplaceGame(expectedGame);
 
         Stage.Builder stagebuilder = new Stage.Builder("stage1id", 1);
         stagebuilder.setKey("abc1k").setStartingHint("abc1h").setStartingLocation(new Coordinates(0.0, 0.0));
@@ -115,35 +94,22 @@ public final class CreateGameServletTest {
         Hint stage1hint2 = new Hint.Builder("stage1hint2id", 2).setLocation(new Coordinates(0.0, 0.0)).setText("abc12").build();
         stagebuilder.setHints(new ArrayList<Hint>(Arrays.asList(stage1hint1, stage1hint2)));
         Stage expectedStage1 = stagebuilder.build();
-        Assert.assertEquals(datastoreManager.retrieveStage(game.getStages().get(0)), expectedStage1);
+        datastoreManager.createOrReplaceStage(expectedStage1);
 
         stagebuilder = new Stage.Builder("stage2id", 2);
         stagebuilder.setKey("abc2k").setStartingHint("abc2h").setStartingLocation(new Coordinates(1.0, 1.0));
         Hint stage2hint1 = new Hint.Builder("stage2hint1id", 1).setLocation(new Coordinates(0.0, 0.0)).setText("abc21").build();
         stagebuilder.setHints(new ArrayList<Hint>(Arrays.asList(stage2hint1)));
         Stage expectedStage2 = stagebuilder.build();
-        Assert.assertEquals(datastoreManager.retrieveStage(game.getStages().get(1)), expectedStage2);
-    }
+        datastoreManager.createOrReplaceStage(expectedStage2);
 
-    /**
-    * Tests what happens if an invalid id token is used. An
-    * error should be thrown by the servlet.
-    */
-    @Test(expected=IOException.class)
-    public void testBadIdToken() throws Exception {
-        servlet = new CreateGameServlet();
         servlet.doPost(request, response);
-    }
-
-    /**
-    * Tests what happens if the length of stageSpawnLocations is changed to something
-    * that doesn't match the lengths of the other stage lists. An error should be thrown.
-    */
-    @Test(expected=IOException.class)
-    public void testStageListLengthsDontMatch() throws Exception {
-        servlet = new CreateGameServlet();
-        servlet.userVerifier = mockUserVerifier;
-        when(request.getParameter("stageSpawnLocations")).thenReturn("[]");
-        servlet.doPost(request, response);
+        String json = responseWriter.toString();
+        Type GameType = new TypeToken<Game>(){}.getType();
+        Game res = new Gson().fromJson(json, GameType);
+        
+        Assert.assertEquals(res, expectedGame);
+        Assert.assertEquals(datastoreManager.retrieveStage(res.getStages().get(0)), expectedStage1);
+        Assert.assertEquals(datastoreManager.retrieveStage(res.getStages().get(1)), expectedStage2);
     }
 }

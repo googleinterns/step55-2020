@@ -22,6 +22,9 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class IDGeneratorTest {
+    /**
+    * Generates 100,000 ids and checks that they are all unique.
+    */
     @Test
     public void testUniqueness() {
         HashSet<String> ids = new HashSet<String>();

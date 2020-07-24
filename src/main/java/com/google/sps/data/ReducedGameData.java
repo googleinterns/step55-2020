@@ -23,13 +23,13 @@ import java.lang.Math;
 */
 public class ReducedGameData {
     private transient DatastoreManager datastoreManager = new DatastoreManager();
-    private String gameID = "N/A";
-    private String gameName = "N/A";
-    private String gameDescription = "N/A";
-    private String creatorUsername = "N/A";
-    private double difficulty = 2.0;
-    private double stars = 2.5;
-    private ArrayList<Coordinates> stageLocations = new ArrayList<>();
+    public String gameID = "N/A";
+    public String gameName = "N/A";
+    public String gameDescription = "N/A";
+    public String creatorUsername = "N/A";
+    public double difficulty = 2.0;
+    public double stars = 2.5;
+    public ArrayList<Coordinates> stageLocations = new ArrayList<>();
 
     /**
     * Creates a ReducedGameData object that corresponds to the inputted Game object.

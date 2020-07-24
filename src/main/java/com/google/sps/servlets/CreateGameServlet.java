@@ -44,6 +44,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CreateGameServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
     UserService userService = UserServiceFactory.getUserService();
+    UserVerifier userVerifier = new UserVerifier();
     Gson gson = new Gson();
     String gameID;
     String userID;
@@ -77,12 +78,6 @@ public class CreateGameServlet extends HttpServlet {
             datastoreManager.createOrReplaceStage(stage);
         }
         gameBuilder.setStages(stages);
-        gameBuilder.setNumTimesPlayed(0);
-        gameBuilder.setNumTimesFinished(0);
-        gameBuilder.setNumStarVotes(0);
-        gameBuilder.setTotalStars(0);
-        gameBuilder.setNumDifficultyVotes(0);
-        gameBuilder.setTotalDifficulty(0);
         Game game = gameBuilder.build();
         datastoreManager.createOrReplaceGame(game);
         String json = new Gson().toJson(gameID);
@@ -165,7 +160,7 @@ public class CreateGameServlet extends HttpServlet {
     private String getUserID(HttpServletRequest request) throws IOException {
         String idTokenString = request.getParameter("idToken");
         String email = request.getParameter("email");
-        UserVerifier userVerifier = new UserVerifier(idTokenString, email);
+        userVerifier.build(idTokenString, email);
         return userVerifier.getUserID();
     }
 

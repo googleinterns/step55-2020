@@ -42,6 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadUserByUsernameServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
+    /**
+    * Serves the User object corresponding to the given username.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("username");

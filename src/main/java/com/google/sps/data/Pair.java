@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Pair<Type1, Type2> {
     public Type1 first;
     public Type2 second;
-    
+
     /**
     * Constructor that creates a new pair of null.
     */

@@ -41,28 +41,35 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/create-username-data")
 public class CreateUsernameServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
+    UserVerifier userVerifier = new UserVerifier();
 
+    /**
+    * Sets the username of the given user if it's valid.
+    */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String userName = request.getParameter("userName");
-        boolean doesUsernameExist = datastoreManager.doesUsernameExist(userName);
+        String username = request.getParameter("userName");
+        if(username.length() == 0) {
+            throw new IOException("Username must be at least 1 character");
+        }
+        if(username.length() > 20) {
+            throw new IOException("Username cannot be more than 20 characters");
+        }
+        String pattern = "^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz._0123456789]*$";
+        if(!username.matches(pattern)) {
+            throw new IOException("Only letters, digits, underscores, and periods are allowed");
+        }
 
+        boolean doesUsernameExist = datastoreManager.doesUsernameExist(username);
         if (!doesUsernameExist) {
-            UserVerifier userVerifier = new UserVerifier(request.getParameter("idToken"), request.getParameter("email"));
+            userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
             String userId = userVerifier.getUserID();
-            User.Builder user = new User.Builder(userId).setUsername(userName);
+            User.Builder user = new User.Builder(userId).setUsername(username);
             User oldUser = datastoreManager.retrieveUser(userId);
 
             user.setFirstName(oldUser.getFirstName()).setLastName(oldUser.getLastName()).setProfilePictureUrl(oldUser.getProfilePictureUrl());
             user.setGamesCreated(oldUser.getGamesCreated()).setGamesCompletedWithTime(oldUser.getGamesCompletedWithTime());
             datastoreManager.createOrReplaceUser(user.build());
-
-            String json = new Gson().toJson(userName);
-            response.getWriter().println(json);
-        } else {
-            String json = new Gson().toJson(null);
-            response.getWriter().println(json);
         }
-        response.sendRedirect("/profilePage.html");
     }
 }

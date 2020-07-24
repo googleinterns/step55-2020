@@ -14,6 +14,7 @@
 
 package com.google.sps.data;
 
+import com.google.sps.managers.*;
 import java.util.ArrayList;
 
 /**
@@ -266,5 +267,29 @@ public class Game {
     */
     public int getTotalDifficulty() {
         return this.totalDifficulty;
+    }
+
+    /**
+    * Tests equality of this Game with another object. Equality is determined
+    * by whether all fields except for the gameID and the individual stageIDs
+    * are the same.
+    * @param other the other object.
+    * @return a boolean indicating whether this is equal to the other object.
+    */
+    @Override
+    public boolean equals(Object other) {
+        if(!(other instanceof Game)) return false;
+        Game otherGame = (Game) other;
+        if(!this.gameName.equals(otherGame.gameName)) return false;
+        if(!this.gameCreator.equals(otherGame.gameCreator)) return false;
+        if(!this.gameDescription.equals(otherGame.gameDescription)) return false;
+        if(this.stages.size() != otherGame.stages.size()) return false;
+        if(this.numTimesPlayed != otherGame.numTimesPlayed) return false;
+        if(this.numTimesFinished != otherGame.numTimesFinished) return false;
+        if(this.numStarVotes != otherGame.numStarVotes) return false;
+        if(this.totalStars != otherGame.totalStars) return false;
+        if(this.numDifficultyVotes != otherGame.numDifficultyVotes) return false;
+        if(this.totalDifficulty != otherGame.totalDifficulty) return false;
+        return true;
     }
 }

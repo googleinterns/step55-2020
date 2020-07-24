@@ -35,7 +35,7 @@ public class SinglePlayerProgress {
         private final String gameID;
 
         // Optional parameters - initialized to default values
-        private Coordinates location;
+        private Coordinates location = new Coordinates();
         private ArrayList<Integer> hintsFound = new ArrayList<>();
         private ArrayList<String> players = new ArrayList<>();
         private String stageID = "N/A";

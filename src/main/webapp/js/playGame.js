@@ -55,6 +55,11 @@ function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
+    const minimapControlDiv = document.createElement("div");
+    addMinimap(minimapControlDiv, panorama);
+    minimapControlDiv.index = 1;
+    panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControlDiv);
+
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
     let markers = [];
@@ -350,4 +355,37 @@ function updateUserProgress() {
   params.append('idToken', tokenEmailDict['token']);
   let request = new Request('/update-singleplayerprogress-data', {method: 'POST', body: params});
   fetch(request);
+}
+
+/**
+* Adds a minimap to the street view panorama
+* @param mapdiv the div in which to put the minimap.
+* @param panorama the panorama where the mapdiv will be placed.
+*/
+function addMinimap(mapdiv, panorama) {
+  const minimapdiv = document.createElement("div");
+  minimapdiv.id = "minimap";
+  minimapdiv.style.height = "150px";
+  minimapdiv.style.width = "200px";
+  mapdiv.style.pointerEvents = "none";
+  minimapdiv.style.opacity = 0.55;
+  
+  const minimap = new google.maps.Map(minimapdiv, {
+    center: panorama.getPosition(),
+    zoom: 15,
+    gestureHandling: 'none',
+    clickableIcons: false,
+    zoomControl: false,
+    mapTypeControl: false,
+    scaleControl: false,
+    streetViewControl: true,
+    rotateControl: false,
+    fullscreenControl: false
+  });
+  minimap.setStreetView(panorama);
+  panorama.addListener("pano_changed", () => {
+    minimap.setCenter(panorama.getPosition());
+  });
+
+  mapdiv.appendChild(minimapdiv);
 }

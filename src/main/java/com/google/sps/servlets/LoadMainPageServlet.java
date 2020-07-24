@@ -42,6 +42,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoadMainPageServlet extends HttpServlet {
     DatastoreManager datastoreManager = new DatastoreManager();
 
+    /**
+    * Serves a list of BasicGameData, which only contains the information needed about each game on the main page.
+    */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ArrayList<Game> gameslist = datastoreManager.retrieveAllGames();
