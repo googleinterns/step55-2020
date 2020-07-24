@@ -8,11 +8,11 @@ function loadGameData() {
   let request = new Request('/load-gamepage-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
     printMapNameAndDifficulty(data);
+    printMapCreator(data);
     printMapDescription(data);
     printMapImage(data);
     printMapRating(data);
-    printMapCreator(data);
-    printPlayGameButton(data, gameID);
+    printPlayGameButton(gameID);
     // printRateMapButton(data);
     // printMapComments(data);
   });
@@ -75,9 +75,9 @@ function printMapCreator(data) {
 
 /**
 * Adds a button to play the game where the div with id 'play-game' is
-* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
+* @param {string} gameID teh gameID of the current game
 */
-async function printPlayGameButton(data, gameID) {
+async function printPlayGameButton(gameID) {
   let playGameDiv = document.getElementById('play-game');
   let playGameButton = document.createElement('input');
   playGameButton.type = 'button';

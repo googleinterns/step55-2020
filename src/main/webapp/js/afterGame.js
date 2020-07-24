@@ -5,10 +5,21 @@ function loadGameName() {
   const urlParams = new URLSearchParams(window.location.search);
   let gameID = urlParams.get('gameID');
 
+  if (gameID == null) {
+    alert("Failure to load game");
+    window.location.replace("index.html");
+    return;
+  }
+
   let fetchParams = new URLSearchParams();
   fetchParams.append('gameID', gameID);
   let request = new Request('/load-game-data', {method: 'POST', body: fetchParams});
   fetch(request).then(response => response.json()).then(async (data) => {
+    if (data == null) {
+      alert("Failure to load game, this is not a valid game");
+      window.location.replace("index.html");
+      return;
+    }
     let gameTitle = document.getElementById('game-title');
     gameTitle.innerHTML = '<h1>' + data.gameName + '</h1>';    
   });
