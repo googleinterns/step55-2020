@@ -86,8 +86,12 @@ public final class DatastoreManagerTest {
     expected = user.build();
 
     datastoreManager.createOrReplaceUser(expected);
-
-    actual = datastoreManager.retrieveUser("0001");
+ 
+    try {
+      actual = datastoreManager.retrieveUser("0001");
+    } catch(Exception e) {
+      actual = null;
+    }
 
     Assert.assertEquals(expected.getUserID(), actual.getUserID());
   }
@@ -109,7 +113,11 @@ public final class DatastoreManagerTest {
 
     datastoreManager.createOrReplaceGame(expected);
 
-    actual = datastoreManager.retrieveGame("0001");
+    try {
+      actual = datastoreManager.retrieveGame("0001");
+    } catch(Exception e) {
+      actual = null;
+    }
 
     Assert.assertEquals(expected.getGameID(), actual.getGameID());
   }
@@ -126,7 +134,11 @@ public final class DatastoreManagerTest {
 
     datastoreManager.createOrReplaceStage(expected);
 
-    actual = datastoreManager.retrieveStage("0001");
+    try {
+      actual = datastoreManager.retrieveStage("0001");
+    } catch(Exception e) {
+      actual = null;
+    }
 
     Assert.assertEquals(expected.getStageID(), actual.getStageID());
   }
@@ -143,7 +155,11 @@ public final class DatastoreManagerTest {
 
     datastoreManager.createOrReplaceSinglePlayerProgress(expected);
 
-    actual = datastoreManager.retrieveSinglePlayerProgress("0000", "0001");
+    try {
+      actual = datastoreManager.retrieveSinglePlayerProgress("0000", "0001");
+    } catch(Exception e) {
+      actual = null;
+    }
 
     Assert.assertEquals(expected.getUserID(), actual.getUserID());
   }
@@ -160,7 +176,11 @@ public final class DatastoreManagerTest {
 
     datastoreManager.createOrReplaceHint(expected);
 
-    actual = datastoreManager.retrieveHint("0001");
+    try {
+      actual = datastoreManager.retrieveHint("0001");
+    } catch(Exception e) {
+      actual = null;
+    }
 
     Assert.assertEquals(expected.getHintID(), actual.getHintID());
   }
@@ -190,7 +210,6 @@ public final class DatastoreManagerTest {
     test = user.build();
 
     datastoreManager.createOrReplaceUser(test);
-
     actual = datastoreManager.doesUsernameExist("user1");
 
     Assert.assertEquals(expected, actual);
@@ -212,7 +231,11 @@ public final class DatastoreManagerTest {
 
     datastoreManager.deleteSinglePlayerProgress("0000", "0001");
 
-    test2 = datastoreManager.retrieveSinglePlayerProgress("0000", "0001");
+    try {
+      test2 = datastoreManager.retrieveSinglePlayerProgress("0000", "0001");
+    } catch(Exception e) {
+      test2 = null;
+    }
 
     if (test2 == null) {
       actual = false;
@@ -240,7 +263,11 @@ public final class DatastoreManagerTest {
 
     datastoreManager.createOrReplaceUser(expected);
 
-    actual = datastoreManager.retrieveUserByUsername("user1");
+    try {
+      actual = datastoreManager.retrieveUserByUsername("user1");
+    } catch(Exception e) {
+      actual = null;
+    }
 
     Assert.assertEquals(expected.getUsername(), actual.getUsername());
   }
@@ -253,7 +280,11 @@ public final class DatastoreManagerTest {
     
     datastoreManager.createOrReplaceIdentification(testEmail, testID);
     
-    actual = datastoreManager.retrieveIdByEmail(testEmail);
+    try {
+      actual = datastoreManager.retrieveIdByEmail(testEmail);
+    } catch(Exception e) {
+      actual = null;
+    }
     String expected = testID;
 
     Assert.assertEquals(expected, actual);
