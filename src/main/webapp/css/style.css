@@ -389,4 +389,23 @@ span.buttonText {
   /* Use the Roboto font that is loaded in the <head> */
   font-family: 'Roboto', sans-serif;
 }
-    
+
+#minimap-button {
+  background-color: #fff;
+  border: 1px solid #000;
+  cursor: pointer;
+  text-align: center;
+  float: left;
+  min-width: 30px;
+  min-height: 30px;
+}
+
+#minimap-button-text {
+  color: rgb(25, 25, 25);
+  font-family: Roboto, Arial, sans-serif;
+  font-size: 16px;
+  padding-left: 5px;
+  padding-right: 5px;
+  user-select: none;
+  line-height: 27px;
+}

@@ -366,22 +366,10 @@ function updateUserProgress() {
 */
 function createMinimapButton(text) {
   const button = document.createElement("div");
-  button.style.backgroundColor = "#fff";
-  button.style.border = "1px solid #000";
-  button.style.cursor = "pointer";
-  button.style.textAlign = "center";
-  button.style.float = "left";
-  button.style.minWidth = "30px";
-  button.style.height = "30px";
+  button.id = "minimap-button";
 
   const buttonText = document.createElement("div");
-  buttonText.style.color = "rgb(25,25,25)";
-  buttonText.style.fontFamily = "Roboto,Arial,sans-serif";
-  buttonText.style.fontSize = "16px";
-  buttonText.style.paddingLeft = "5px";
-  buttonText.style.paddingRight = "5px";
-  buttonText.style.userSelect = "none";
-  buttonText.style.lineHeight = "27px";
+  buttonText.id = "minimap-button-text";
   buttonText.innerHTML = text;
   button.appendChild(buttonText);
   return button;
