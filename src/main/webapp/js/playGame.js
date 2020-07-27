@@ -1,5 +1,4 @@
 var currGameData = new Progress([]);
-var minimap;
 
 /** 
 * Initalizes a map where there is an id of 'playMap'
@@ -361,9 +360,9 @@ function updateUserProgress() {
 }
 
 /**
-* Creates a button element that is used for the minimap.
+* Creates a stylized button element that is used for the minimap controls (zoom and map view).
 * @param text the text that should go in the button.
-* @return {Element} an HTML element.
+* @return {Element} an HTML element of the button.
 */
 function createMinimapButton(text) {
   const button = document.createElement("div");
@@ -400,7 +399,7 @@ function addMinimap(panorama) {
   minimapdiv.style.pointerEvents = "none";
   minimapdiv.style.opacity = 0.55;
   
-  minimap = new google.maps.Map(minimapdiv, {
+  let minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
     zoom: 16,
     gestureHandling: 'none',
