@@ -423,6 +423,6 @@ span.buttonText {
  padding: 0;
 }
 
-#gotta-flex {
+#flex-between {
   flex: space-between;
 }

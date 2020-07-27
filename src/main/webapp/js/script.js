@@ -128,22 +128,18 @@ async function createNavBar(page) {
   navWrapperDiv.className = 'nav-wrapper';
   navbar.appendChild(navWrapperDiv);
 
-  let containerDiv = document.createElement('div');
-  containerDiv.className = 'container';
-  navWrapperDiv.appendChild(containerDiv);
-
   let a = document.createElement('a');
   a.innerHTML = 'Street Explorer';
   a.href = "index.html";
   a.className = 'brand-logo';
-  containerDiv.appendChild(a);
+  navWrapperDiv.appendChild(a);
 
   let mobileA = document.createElement('a');
   mobileA.innerHTML = '<i class="material-icons">menu</i>';
   mobileA.href = "#";
   mobileA.className = 'sidenav-trigger';
   mobileA.dataset.target = 'mobile-demo';
-  containerDiv.appendChild(mobileA);
+  navWrapperDiv.appendChild(mobileA);
 
   let ul = document.createElement('ul');
   ul.className = 'right hide-on-med-and-down';
@@ -217,7 +213,7 @@ async function createNavBar(page) {
   } 
   ul.appendChild(liSignin);
 
-  containerDiv.appendChild(ul);
+  navWrapperDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
   
