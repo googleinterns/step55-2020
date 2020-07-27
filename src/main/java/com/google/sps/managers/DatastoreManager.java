@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import java.util.ArrayList;
+import java.util.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -346,6 +347,7 @@ public class DatastoreManager implements IDataManager {
   /**
   * Retrieves an entity of a single User data in datastore by the username
   * @param username a String variable representing the username of a user.
+  * @return a User object with the properties specified in the Builder.
   */
   public User retrieveUserByUsername(String username) {
     Query query = new Query("User").setFilter(new FilterPredicate("username", FilterOperator.EQUAL, username));
@@ -393,6 +395,7 @@ public class DatastoreManager implements IDataManager {
   * Retrieves an id of a user in datastore by the email address
   * @param email a String variable representing a user's email address
   * @throws EntityNotFoundException an exception thrown when an entity is not found
+  * @return a String Id identified a users email
   */
   public String retrieveIdByEmail(String email) throws EntityNotFoundException {
     Key idEntityKey = KeyFactory.createKey("Identification", email);
@@ -401,6 +404,27 @@ public class DatastoreManager implements IDataManager {
     
     String id = (String) idEntity.getProperty("id");
     return id;
+  }
+  
+  /**
+  * Retrieves API keys stored in datastore
+  * @return a Map with 2 api keys
+  */
+  public Map<String, String> retrieveKeys()
+  {
+    Map<String, String> apiKeys = new HashMap<>();
+    
+    Query query = new Query("apiKeys");
+    PreparedQuery pq = datastore.prepare(query);
+    Entity userEntity = pq.asSingleEntity();
+
+    String clientId = (String) userEntity.getProperty("CLIENT_ID");
+    String mapApi = (String) userEntity.getProperty("MAP_KEY");
+
+    apiKeys.put("CLIENT_ID", clientId); 
+    apiKeys.put("MAP_KEY", mapApi); 
+    
+    return apiKeys;
   }
 }
 

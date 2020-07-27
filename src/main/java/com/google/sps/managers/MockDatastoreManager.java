@@ -18,6 +18,7 @@ import com.google.sps.utils.*;
 
 import java.util.ArrayList;
 import java.lang.Math;
+import java.util.*;
 
 public class MockDatastoreManager implements IDataManager {
     public void createOrReplaceUser(User user) {}
@@ -192,6 +193,10 @@ public class MockDatastoreManager implements IDataManager {
     public void createOrReplaceIdentification(String email, String id){}
 
     public String retrieveIdByEmail(String email) {
+      return null;
+    }
+
+    public Map<String, String> retrieveKeys() {
       return null;
     }
 }
