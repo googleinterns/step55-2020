@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import java.util.ArrayList;
+import java.util.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -401,6 +402,23 @@ public class DatastoreManager implements IDataManager {
     
     String id = (String) idEntity.getProperty("id");
     return id;
+  }
+
+  public Map<String, String> retrieveKeys()
+  {
+    Map<String, String> apiKeys = new HashMap<>();
+    
+    Query query = new Query("apiKeys");
+    PreparedQuery pq = datastore.prepare(query);
+    Entity userEntity = pq.asSingleEntity();
+
+    String clientId = (String) userEntity.getProperty("CLIENT_ID");
+    String mapApi = (String) userEntity.getProperty("MAP_key");
+
+    apiKeys.put("CLIENT_ID", clientId); 
+    apiKeys.put("MAP_key", mapApi); 
+    
+    return apiKeys;
   }
 }
 

@@ -16,7 +16,7 @@ package com.google.sps.managers;
 import com.google.sps.data.*;
 import com.google.sps.utils.*;
 import com.google.appengine.api.datastore.EntityNotFoundException;
-
+import java.util.*;
 import java.util.ArrayList;
 
 public interface IDataManager {
@@ -116,5 +116,7 @@ public interface IDataManager {
   * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
   public String retrieveIdByEmail(String email) throws EntityNotFoundException;
+
+  public Map<String, String> retrieveKeys();
 }
 
