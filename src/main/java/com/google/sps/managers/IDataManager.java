@@ -116,7 +116,11 @@ public interface IDataManager {
   * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
   public String retrieveIdByEmail(String email) throws EntityNotFoundException;
-
+  
+  /**
+  * Retrieves API keys stored in datastore
+  * @return a Map with 2 api keys
+  */
   public Map<String, String> retrieveKeys();
 }
 

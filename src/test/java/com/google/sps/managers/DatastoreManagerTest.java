@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import com.google.appengine.api.datastore.PreparedQuery;
 import java.util.ArrayList;
+import java.util.*;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import javax.servlet.annotation.WebServlet;
@@ -533,6 +534,23 @@ public final class DatastoreManagerTest {
     String expected = testID;
 
     Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void retrieveAPITest() {
+    String expected = "thisclientisjustfortest.hcvdd76t36t42y98u47";
+    String expected1 = "mapkeybuhdgfewhu";
+
+    Entity apiEntity = new Entity("apiKeys");
+    apiEntity.setProperty("CLIENT_ID", "thisclientisjustfortest.hcvdd76t36t42y98u47");
+    apiEntity.setProperty("MAP_KEY", "mapkeybuhdgfewhu");
+    datastore.put(apiEntity);
+
+    Map<String, String> actual = new HashMap<>();
+    actual = datastoreManager.retrieveKeys();
+
+    Assert.assertEquals(expected, actual.get("CLIENT_ID"));
+    Assert.assertEquals(expected1, actual.get("MAP_KEY"));
   }
 
   /**
