@@ -394,20 +394,38 @@ span.buttonText {
   font-family: 'Roboto', sans-serif;
 }
 
-#minimap-button {
-  background-color: #fff;
-  border: 1px solid #000;
+#minimap-controls {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  display: flex;
+  background-color: black;
+  opacity: 70%;
+  border-top-right-radius: 2px;
   cursor: pointer;
   text-align: center;
+  width: 200px;
+}
+
+#minimap-button-left {
   float: left;
-  min-width: 30px;
-  min-height: 30px;
+  min-width: 35px;
+}
+
+#minimap-button-middle {
+  float: left;
+  min-width: 35px;
+  border-right: solid white 1px;
+  border-left: solid white 1px;
+}
+
+#minimap-button-right {
+    float: left;
+    flex-grow: 100;
 }
 
 #minimap-button-text {
-  color: rgb(25, 25, 25);
-  font-family: Roboto, Arial, sans-serif;
   font-size: 16px;
+  color: #fff;
   padding-left: 5px;
   padding-right: 5px;
   user-select: none;
@@ -418,9 +436,20 @@ span.buttonText {
   font-size: 1.2em;
 }
 
-#legend p {
- margin: 0;
- padding: 0;
+#legend {
+  padding: 10px;
+  background-color: black;
+  opacity: 70%;
+  border-radius: 2px;
+}
+
+#legend .legend-img {
+  vertical-align: middle;
+}
+
+#legend .legend-text {
+  color: #fff;
+  font-size: 16px;
 }
 
 #gotta-flex {
