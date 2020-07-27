@@ -33,9 +33,8 @@ function changeToOrFromDarkMode() {
 
 /** 
 * The function called when the user signs in
-* @param {Object} googleUser is a GoogleAuth instance with the signed in user data
 */
-function onSignIn(googleUser) {
+function onSignIn() {
   let params = new URLSearchParams();
   let tokenEmailDict = tokenAndEmail();
   params.append('email', tokenEmailDict['email']);
@@ -104,7 +103,7 @@ function createSideNav(page) {
 
   auth2.attachClickHandler(document.getElementById('customBtn2'), {},
     function(googleUser) { 
-        onSignIn(googleUser);
+        onSignIn();
         createNavBar(page)
     }, function(error) {
       alert(JSON.stringify(error, undefined, 2));
@@ -115,7 +114,6 @@ function createSideNav(page) {
   let instances = M.Sidenav.init(elems, {});
 }
 
-// Soon to be depreciated
 /** 
 * Creates the navigation bar and specifies which page is active
 * @param {string} page is which HTML the navbar should be placed on
@@ -152,8 +150,11 @@ async function createNavBar(page) {
 
   let liBrightness = document.createElement('li');
   a = document.createElement('a');
-  a.innerHTML = '<i class=\'material-icons\' onclick=\'changeToOrFromDarkMode()\'>brightness_4</i>';
+  a.innerHTML = '<i class=\'material-icons\'>brightness_4</i>';
   a.href = "#";
+  a.addEventListener('click', function() {
+    changeToOrFromDarkMode();
+  });
   liBrightness.appendChild(a);
 
   let liHome= document.createElement('li');
@@ -222,13 +223,12 @@ async function createNavBar(page) {
   
   auth2.attachClickHandler(document.getElementById('customBtn'), {},
     function(googleUser) { 
-        onSignIn(googleUser);
+        onSignIn();
         createNavBar(page)
     }, function(error) {
       alert(JSON.stringify(error, undefined, 2));
   });
 }
-
 
 /** 
 * Creates a static maps image
@@ -261,7 +261,7 @@ function createStaticMap(stageLocations, size, gameID) {
 * @param {string} captionID the id of the game info that is under the static image
 */
 function createStaticMapCaption(mapData, captionID) {
-  let avgDifficulty = mapData.difficulty;
+  let avgDifficulty = Math.round(mapData.difficulty);
 
   let difficulty = 'Easy';
   let difficultyColor = 'green-text';
@@ -316,18 +316,55 @@ function getStarRating(stars) {
 }
 
 /** 
-* Adds a featured map where the ID 'featured-map' is and the rest of the maps where the ID 'all-maps' is
+* Adds a featured map where the ID 'featured-map' is and to where the ID 'all-maps' is
 */
 function loadMaps() {
-  fetch('/load-mainpage-data').then(response => response.json()).then(async (data) => {
+  fetch('/load-mainpage-data?page='+0).then(response => response.json()).then(async (data) => {
+    var featuredMapText = document.getElementById('featured-map-text');
+    if (data.length == 0) {
+       featuredMapText.innerHTML = "No maps to play. Log in to create a map!"
+       return;
+    }
+    let moreMapsButtonDiv = document.getElementById('button-for-more-maps');
+    moreMapsButtonDiv.innerHTML = "<input type='button' id='more-maps' value='Load More Maps' onclick='loadMoreMaps(1)'/>";
+    featuredMapText.innerHTML = "Featured Map:"
     let featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
     let featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     let featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
+    if (data.length == 0 || data.length < 20) {
+      let moreMapsButton = document.getElementById('more-maps');
+      moreMapsButton.className =  'hidden';
+    }
+    data = data.splice(1,data.length);
+    addMaps(data);
+  });
+}
+
+/** 
+* Fetches the data of the maps that will be added to the maps to the page
+*/
+function loadMoreMaps(pageNum) {
+  fetch('/load-mainpage-data?page='+pageNum).then(response => response.json()).then((data) => {
+    addMaps(data);
+    let moreMapsButton = document.getElementById('more-maps');
+    if (data.length == 0 || data.length < 20) {
+      moreMapsButton.className =  'hidden';
+    } else {
+      moreMapsButton.setAttribute( "onClick", "loadMoreMaps("+ (pageNum + 1) +")" );
+    }
+  });
+}
+
+/** 
+* Adds maps where the ID 'all-maps' is
+* @param {object} data the information retrieved from '/load-mainpage-data' servlet
+*/
+function addMaps(data) {
     let allMaps = document.getElementById('all-maps');
-    for (let i = 1; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       let mapDiv = document.createElement('div');
       mapDiv.classList.add('col');
       mapDiv.classList.add('hoverable');
@@ -346,7 +383,6 @@ function loadMaps() {
       mapDiv.append(mapCaption)
       allMaps.append(mapDiv);
     }
-  });
 }
 
 // Depreciated

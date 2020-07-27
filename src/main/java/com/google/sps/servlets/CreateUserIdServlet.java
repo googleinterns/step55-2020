@@ -52,7 +52,7 @@ public class CreateUserIdServlet extends HttpServlet {
         User currentUser = datastoreManager.retrieveUser(userId);
 
         if (currentUser !=  null) {
-            response.sendRedirect("/profilePage.html");
+            return;
         }
         
         String randomUserName = generateRandomUsername();

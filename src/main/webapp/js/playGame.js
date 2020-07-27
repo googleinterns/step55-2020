@@ -126,7 +126,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   map = currGameData.getMap;
   let gameInfo = document.getElementById('game-info');
     
-  let gameName = document.createElement('h2');
+  let gameName = document.createElement('h4');
   gameName.innerHTML = data.gameName;
   gameName.className = 'center';
   gameInfo.appendChild(gameName);
