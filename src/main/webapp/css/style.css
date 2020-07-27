@@ -107,7 +107,6 @@
   background-color: #021b32ff;
 }
 
-
 .dark-mode textarea {
   color: white;
   background-color: #666666ff;
@@ -138,12 +137,16 @@
   width: 25%;
 }
 
+nav .brand-logo {
+  margin-left: 10px;
+}
+
 #finish, #addHint, #addStage, #stages input, #play-game-button, #more-maps, #back-home  {
   border: 0px;
   border-radius: 7px;
   height: 30px;
   margin: 5px;
-  font-size: 1em;
+  font-size: 1.6em;
 }
 
 #extra-margin {
@@ -157,7 +160,7 @@
   border-radius: 7px;
   height: 50px;
   margin-left: 15px;
-  font-size: 1em;
+  font-size: 1.5em;
 }  
 
 #featured-map {
