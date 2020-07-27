@@ -18,6 +18,7 @@ import com.google.sps.data.*;
 
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import java.util.Collections;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
@@ -67,7 +68,12 @@ public class UserVerifier {
             throw new IOException("UserVerifier has not been built correctly.");
         }
         String email = payload.getEmail();
-        String id = datastoreManager.retrieveIdByEmail(email);
+        String id;
+        try {
+            id = datastoreManager.retrieveIdByEmail(email);
+        } catch(Exception e) {
+            id = null;
+        }
         if(id == null) {
             id = IDGenerator.gen();
             datastoreManager.createOrReplaceIdentification(email, id);

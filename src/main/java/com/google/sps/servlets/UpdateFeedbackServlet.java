@@ -52,7 +52,12 @@ public class UpdateFeedbackServlet extends HttpServlet {
         // Currently not in use
         // String comment = request.getParameter("comment");
 
-        Game game = datastoreManager.retrieveGame(gameID);
+        Game game;
+        try {
+            game = datastoreManager.retrieveGame(gameID);
+        } catch(Exception e) {
+            game = null;
+        }
 
         int totalNumStarVotes = game.getNumStarVotes();
         int totalStars = game.getTotalStars();

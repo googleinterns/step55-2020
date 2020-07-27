@@ -123,7 +123,12 @@ public final class UpdateSinglePlayerProgressServletTest {
 
         servlet.doPost(request, response);
 
-        SinglePlayerProgress newProgress = datastoreManager.retrieveSinglePlayerProgress("abcUserId", "gameID");
+        SinglePlayerProgress newProgress;
+        try {
+            newProgress = datastoreManager.retrieveSinglePlayerProgress("abcUserId", "gameID");
+        } catch(Exception e) {
+            newProgress = null;
+        }
         Assert.assertTrue(newProgress == null);
     }
 }

@@ -15,6 +15,7 @@
 package com.google.sps.managers;
 import com.google.sps.data.*;
 import com.google.sps.utils.*;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 
 import java.util.ArrayList;
 
@@ -28,9 +29,10 @@ public interface IDataManager {
   /**
   * Retrieves a single user entity from the datastore.
   * @param userID the unique code used to identify this specific user.
-  * @return a user object with the properties specified in the Builder.
+  * @return a User object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public User retrieveUser(String userID);
+  public User retrieveUser(String userID) throws  EntityNotFoundException;
 
   /**
   * Creates or Replaces the static data of a single game in datastore as an entity
@@ -42,8 +44,9 @@ public interface IDataManager {
   * Retrieves a single game entity from the datastore.
   * @param gameID the unique code used to identify this specific game.
   * @return a Game object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public Game retrieveGame(String gameID);
+  public Game retrieveGame(String gameID) throws EntityNotFoundException;
   
   /**
   * Creates the static data of a single stage in datastore as an entity
@@ -55,8 +58,9 @@ public interface IDataManager {
   * Retrieves a single stage entity from the datastore.
   * @param stageID the unique code used to identify this specific stage.
   * @return a Stage object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public Stage retrieveStage(String stageID);
+  public Stage retrieveStage(String stageID) throws EntityNotFoundException;
 
   /**
   * Updates an entity of a single stage data in datastore
@@ -66,11 +70,12 @@ public interface IDataManager {
 
   /**
   * Retrieves a single progress entity from the datastore.
-  * @param userID the unique code used to identify this specific user
-  * @param gameID the unique code used to identify this specific game
-  * @return a SinglePlayerProgress object with the properties specified in the Builder
+  * @param userID the unique code used to identify this specific user.
+  * @param gameID the unique code used to identify this specific game.
+  * @return a SinglePlayerProgress object with the properties specified in the Builder.
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID);
+  public SinglePlayerProgress retrieveSinglePlayerProgress(String userID, String gameID) throws EntityNotFoundException;
   
   /**
   * Retrieves all Games entity from the datastore
@@ -108,7 +113,8 @@ public interface IDataManager {
   /**
   * Retrieves an id of a user in datastore by the email address
   * @param email a String variable representing a user's email address
+  * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public String retrieveIdByEmail(String email);
+  public String retrieveIdByEmail(String email) throws EntityNotFoundException;
 }
 

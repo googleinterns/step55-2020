@@ -37,7 +37,12 @@ public class BasicGameData {
     public BasicGameData(Game game) {
         this.gameID = game.getGameID();
         this.gameName = game.getGameName();
-        this.creatorUsername = datastoreManager.retrieveUser(game.getGameCreator()).getUsername();
+        try {
+            this.creatorUsername = datastoreManager.retrieveUser(game.getGameCreator()).getUsername();
+        } catch(Exception e) {
+            this.creatorUsername = null;
+        }
+        
         if(game.getNumDifficultyVotes() != 0) {
             this.difficulty = (double)game.getTotalDifficulty() / (double)game.getNumDifficultyVotes();
         }
@@ -46,7 +51,11 @@ public class BasicGameData {
         }
         ArrayList<String> stageIDs = game.getStages();
         for(String stageID: stageIDs) {
-            this.stageLocations.add(datastoreManager.retrieveStage(stageID).getStartingLocation());
+            try {
+                this.stageLocations.add(datastoreManager.retrieveStage(stageID).getStartingLocation());
+            } catch(Exception e) {
+                this.stageLocations.add(null);
+            }
         }
     }
 }

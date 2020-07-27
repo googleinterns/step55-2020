@@ -65,7 +65,12 @@ public class CreateUsernameServlet extends HttpServlet {
             userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
             String userId = userVerifier.getUserID();
             User.Builder user = new User.Builder(userId).setUsername(username);
-            User oldUser = datastoreManager.retrieveUser(userId);
+            User oldUser;
+            try {
+                oldUser = datastoreManager.retrieveUser(userId);
+            } catch(Exception e) {
+                oldUser = null;
+            }
 
             user.setFirstName(oldUser.getFirstName()).setLastName(oldUser.getLastName()).setProfilePictureUrl(oldUser.getProfilePictureUrl());
             user.setGamesCreated(oldUser.getGamesCreated()).setGamesCompletedWithTime(oldUser.getGamesCompletedWithTime());

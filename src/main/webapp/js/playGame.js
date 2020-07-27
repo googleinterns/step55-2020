@@ -55,16 +55,13 @@ function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
-    const minimapControlDiv = document.createElement("div");
-    addMinimap(minimapControlDiv, panorama);
-    minimapControlDiv.index = 1;
-    panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControlDiv);
+    let minimap = addMinimap(panorama);
 
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
     let markers = [];
     stageHints.forEach(hint => 
-      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber))
+      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, minimap))
     );
 
     currGameData.getHintsFound.forEach(hintNum => {
@@ -279,17 +276,18 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
+* @param {object} minimap the minimap to draw the marker on
 * @return {object} the marker created
 */
-function addHintMarker(latLng, hint, hintNum) {  
+function addHintMarker(latLng, hint, hintNum, minimap) {  
   let marker = new google.maps.Marker({
     position: latLng,
     map: currGameData.getMap,
     icon: 'images/marker_notfound.png'
-  }); 
+  });
 
   marker.addListener('click', function() {
-    changeData(latLng, hint, hintNum, true, marker);
+    changeData(latLng, hint, hintNum, true, marker, minimap);
   });
 
   return marker;
@@ -302,8 +300,9 @@ function addHintMarker(latLng, hint, hintNum) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {object} marker passes in a marker to remove
+* @param {object} minimap the minimap to draw the marker on
 */
-function changeData(latLng, hint, hintNum, updateProgress, marker) {
+function changeData(latLng, hint, hintNum, updateProgress, marker, minimap) {
   currGameData.addSingleHintFound = hintNum;
   if (marker != null) {
     marker.setMap(null);
@@ -313,7 +312,12 @@ function changeData(latLng, hint, hintNum, updateProgress, marker) {
     position: latLng,
     map: currGameData.getMap,
     icon: 'images/marker_found.png'
-  }); 
+  });
+  minimapmarker = new google.maps.Marker({
+    position: latLng,
+    map: minimap,
+    icon: 'images/marker_found_mini.png'
+  });
 
   addHint(hint, hintNum, updateProgress);
 }
@@ -358,21 +362,37 @@ function updateUserProgress() {
 }
 
 /**
-* Adds a minimap to the street view panorama
-* @param mapdiv the div in which to put the minimap.
-* @param panorama the panorama where the mapdiv will be placed.
+* Creates a stylized button element that is used for the minimap controls (zoom and map view).
+* @param text the text that should go in the button.
+* @return {Element} an HTML element of the button.
 */
-function addMinimap(mapdiv, panorama) {
+function createMinimapButton(text) {
+  const button = document.createElement("div");
+  button.id = "minimap-button";
+
+  const buttonText = document.createElement("div");
+  buttonText.id = "minimap-button-text";
+  buttonText.innerHTML = text;
+  button.appendChild(buttonText);
+  return button;
+}
+
+/**
+* Adds a minimap to the street view panorama
+* @param panorama the panorama where the mapdiv will be placed.
+* @return {object} the minimap.
+*/
+function addMinimap(panorama) {
   const minimapdiv = document.createElement("div");
   minimapdiv.id = "minimap";
   minimapdiv.style.height = "150px";
   minimapdiv.style.width = "200px";
-  mapdiv.style.pointerEvents = "none";
+  minimapdiv.style.pointerEvents = "none";
   minimapdiv.style.opacity = 0.55;
   
-  const minimap = new google.maps.Map(minimapdiv, {
+  let minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
-    zoom: 15,
+    zoom: 16,
     gestureHandling: 'none',
     clickableIcons: false,
     zoomControl: false,
@@ -383,9 +403,35 @@ function addMinimap(mapdiv, panorama) {
     fullscreenControl: false
   });
   minimap.setStreetView(panorama);
-  panorama.addListener("pano_changed", () => {
+  google.maps.event.addListener(panorama, 'position_changed', function() {
     minimap.setCenter(panorama.getPosition());
   });
+  panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapdiv);
 
-  mapdiv.appendChild(minimapdiv);
+  const minimapControls = document.createElement("div");
+  const zoomInButton = createMinimapButton("+");
+  zoomInButton.addEventListener("click", () => {
+    minimap.setZoom(minimap.getZoom()+1);
+  });
+
+  const zoomOutButton = createMinimapButton("-");
+  zoomOutButton.addEventListener("click", () => {
+    minimap.setZoom(minimap.getZoom()-1);
+  });
+
+  const toggleViewButton = createMinimapButton("Toggle View");
+  toggleViewButton.addEventListener("click", () => {
+    let currentType = minimap.getMapTypeId();
+    if(currentType === "roadmap") {
+      minimap.setMapTypeId("satellite");
+    } else {
+      minimap.setMapTypeId("roadmap");
+    }
+  });
+
+  minimapControls.appendChild(zoomInButton);
+  minimapControls.appendChild(zoomOutButton);
+  minimapControls.appendChild(toggleViewButton);
+  panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControls);
+  return minimap;
 }
