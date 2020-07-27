@@ -220,7 +220,9 @@ function getDataFromGameCreationForm() {
     window.alert('You must sign in before creating a game!')
     return;
   }
-  const numStages = document.getElementById('stages').getElementsByTagName('input').length;
+  let finishButton = document.getElementById("finish");
+  finishButton.disable = true;
+  let numStages = document.getElementById('stages').getElementsByTagName('input').length;
   let stageKeys = [];
   let stageSpawnLocations = []; // ex: [{'latitude': 1, 'longitude':2}, {'latitude': 3, 'longitude': 4}]
   let stageStarterHints = [];

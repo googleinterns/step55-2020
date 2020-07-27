@@ -60,12 +60,11 @@ function stars(numOfStars) {
 */
 function sendDataToServer(nextAction) { 
   let starsCount = document.getElementsByClassName('stars')[0].id;
-  if (starsCount == 0) {
-    starsCount = null;
-  }
+
   let difficultyButtons = document.getElementsByName('difficulty'); 
-  let difficulty = null;
+  let difficulty = 0;
   for(i = 0; i < difficultyButtons.length; i++) { 
+      console.log(difficultyButtons[i].checked)
     if(difficultyButtons[i].checked) { 
       if (difficultyButtons[i].value == 'Easy') {
         difficulty = 1;
@@ -76,17 +75,22 @@ function sendDataToServer(nextAction) {
       }
     } 
   } 
+
   let comment = document.getElementById('comment').value;
   if (comment == "") comment = null;
+
+  const urlParams = new URLSearchParams(window.location.search);
+  let gameID = urlParams.get('gameID');
+
   let fetchParams = new URLSearchParams();
-  fetchParams.append('stars', starsCount);
-  fetchParams.append('difficulty', difficulty);
+  fetchParams.append('starVote', starsCount);
+  fetchParams.append('difficultyVote', difficulty);
   fetchParams.append('comment', comment);
+  fetchParams.append('gameID', gameID);
   let request = new Request('/update-feedback-data', {method: 'POST', body: fetchParams});
   fetch(request);
   if (nextAction == 'Play Again') {
-    const urlParams = new URLSearchParams(window.location.search);
-    let gameID = urlParams.get('gameID');
+
     window.location.replace('playGame.html?gameID=' + gameID);
     return;
   }

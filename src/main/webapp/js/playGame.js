@@ -55,13 +55,13 @@ function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
-    addMinimap(panorama);
+    let minimap = addMinimap(panorama);
 
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
     let markers = [];
     stageHints.forEach(hint => 
-      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber))
+      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, minimap))
     );
 
     currGameData.getHintsFound.forEach(hintNum => {
@@ -123,7 +123,7 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   map = currGameData.getMap;
   let gameInfo = document.getElementById('game-info');
     
-  let gameName = document.createElement('h2');
+  let gameName = document.createElement('h4');
   gameName.innerHTML = data.gameName;
   gameName.className = 'center';
   gameInfo.appendChild(gameName);
@@ -276,9 +276,10 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
+* @param {object} minimap the minimap to draw the marker on
 * @return {object} the marker created
 */
-function addHintMarker(latLng, hint, hintNum) {  
+function addHintMarker(latLng, hint, hintNum, minimap) {  
   let marker = new google.maps.Marker({
     position: latLng,
     map: currGameData.getMap,
@@ -286,7 +287,7 @@ function addHintMarker(latLng, hint, hintNum) {
   });
 
   marker.addListener('click', function() {
-    changeData(latLng, hint, hintNum, true, marker);
+    changeData(latLng, hint, hintNum, true, marker, minimap);
   });
 
   return marker;
@@ -299,8 +300,9 @@ function addHintMarker(latLng, hint, hintNum) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {object} marker passes in a marker to remove
+* @param {object} minimap the minimap to draw the marker on
 */
-function changeData(latLng, hint, hintNum, updateProgress, marker) {
+function changeData(latLng, hint, hintNum, updateProgress, marker, minimap) {
   currGameData.addSingleHintFound = hintNum;
   if (marker != null) {
     marker.setMap(null);
@@ -378,6 +380,7 @@ function createMinimapButton(text) {
 /**
 * Adds a minimap to the street view panorama
 * @param panorama the panorama where the mapdiv will be placed.
+* @return {object} the minimap.
 */
 function addMinimap(panorama) {
   const minimapdiv = document.createElement("div");
@@ -430,4 +433,5 @@ function addMinimap(panorama) {
   minimapControls.appendChild(zoomOutButton);
   minimapControls.appendChild(toggleViewButton);
   panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControls);
+  return minimap;
 }

@@ -24,15 +24,16 @@ function loadGameData() {
 */
 function printMapNameAndDifficulty(data) {
   let mapName = document.getElementById('map-name-and-difficulty');
-  let difficultyClass = 'red-text';
-  let difficulty = '[Hard]';
-  if (data.difficulty == 1) {
-    difficultyClass = 'green-text';
-    difficulty = '[Easy]';
-  } else if (data.difficulty == 2) {
+  let difficultyClass = 'green-text';
+  let difficulty = '[Easy]';
+  if (Math.round(data.difficulty) == 2) {
     difficultyClass = 'orange-text';
     difficulty = '[Medium]';
-  }
+  } else if (Math.round(data.difficulty )== 3) {
+    difficultyClass = 'red-text';
+    difficulty = '[Hard]';
+  }  
+
   mapName.innerHTML = '<h1>' + data.gameName + ' <i class=' + difficultyClass +'>' + difficulty + '</i></h1>';
 }
 

@@ -52,7 +52,9 @@
 .light-mode #finish, 
 .light-mode #addHint, 
 .light-mode #addStage,
-.light-mode #play-game-button {
+.light-mode #play-game-button,
+.light-mode #more-maps,
+.light-mode #back-home {
   background: #74d3aeff;
 }
 
@@ -121,7 +123,9 @@
 .dark-mode #finish, 
 .dark-mode #addHint,
 .dark-mode #addStage,
-.dark-mode #play-game-button {
+.dark-mode #play-game-button,
+.dark-mode #more-maps,
+.dark-mode #back-home  {
   background: #32908F;
 }
 
@@ -134,12 +138,12 @@
   width: 25%;
 }
 
-#finish, #addHint, #addStage, #stages input, #play-game-button  {
+#finish, #addHint, #addStage, #stages input, #play-game-button, #more-maps, #back-home  {
   border: 0px;
   border-radius: 7px;
   height: 30px;
   margin: 5px;
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 #extra-margin {
@@ -153,7 +157,7 @@
   border-radius: 7px;
   height: 50px;
   margin-left: 15px;
-  font-size: 2em;
+  font-size: 1em;
 }  
 
 #featured-map {
@@ -408,4 +412,17 @@ span.buttonText {
   padding-right: 5px;
   user-select: none;
   line-height: 27px;
+}
+
+.font-size-slightly-larger {
+  font-size: 1.2em;
+}
+
+#legend p {
+ margin: 0;
+ padding: 0;
+}
+
+#gotta-flex {
+  flex: space-between;
 }

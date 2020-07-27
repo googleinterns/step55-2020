@@ -2,6 +2,8 @@
 <html>
 <head>
   <link href='images/streetExplorerLogo.png' rel='icon'>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <script src='https://www.gstatic.com/charts/loader.js'></script>
 
@@ -31,11 +33,12 @@
 </head>
 <body class='light-mode' onload='onLoadFunctions("createGame")'>
   <div id='nav-bar'></div>
-  <!-- <div class='container'> -->
+  <div id='gotta-flex'>
   <div>
     <input id='pac-input' class='controls black-text' type='text' placeholder='Search Box'/>
     <div id='map' class='black-text'></div> 
   </div>
+
   <div id='extra-margin'>
     <div class='input-field s3'>
         <input id='title' type='text' name='title' required>
@@ -59,24 +62,24 @@
       <div id='stage1Hints'>
         <div class='input-field'>
           <input id='key' type='text'>
-            <label for='key'>Stage Key</label>
-          </div>
-          <div class='input-field'>
-            <input type='text' id='starter-position'>
-            <label for='starter-position'>Starter Position (click on map to get coordinates)</label>
-          </div>
-          <div class='input-field'>
-            <input type='text' id='starter-hint' required>
-            <label for='starter-hint'>Starter Hint</label>
-          </div>
-          <div class='input-field'>
-            <input type='text' id='hint1-position'>
-            <label for='hint1-position'>Hint 1 Position (click on map to get coordinates)</label>
-          </div>
-          <div class='input-field'>
-            <input type='text' id='hint1'>
-            <label for='hint1'>Hint 1</label>
-          </div>
+          <label for='key'>Stage Key</label>
+        </div>
+        <div class='input-field'>
+          <input type='text' id='starter-position'>
+          <label for='starter-position'>Starter Position (click on map to get coordinates)</label>
+        </div>
+        <div class='input-field'>
+          <input type='text' id='starter-hint' required>
+          <label for='starter-hint'>Starter Hint</label>
+        </div>
+        <div class='input-field'>
+          <input type='text' id='hint1-position'>
+          <label for='hint1-position'>Hint 1 Position (click on map to get coordinates)</label>
+        </div>
+        <div class='input-field'>
+          <input type='text' id='hint1'>
+          <label for='hint1'>Hint 1</label>
+        </div>
       </div>
     </div>
     <input type='button' value='+ add hint' id='addHint' onclick='addNewHint()'> 
@@ -84,6 +87,6 @@
     <br/>
     <input type='button' value='Finish' id='finish' onclick='getDataFromGameCreationForm()'>
   </div>
-  
+  </div>
 </body>
 </html>

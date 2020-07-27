@@ -3,6 +3,8 @@
 <head>
   <link href='images/streetExplorerLogo.png' rel='icon'>
   
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   
@@ -55,8 +57,8 @@
     <textarea id='comment' placeholder='Enter your thoughts here on the map!' class='large-text-input'></textarea>
     <br/>
     <br/>
-    <input type='submit' value='Play Again' onclick='sendDataToServer("Play Again")'>
-    <input type='submit' value='Back To Home' onclick='sendDataToServer("Back To Home")'>
+    <input type='submit' id='play-game-button' value='Play Again' onclick='sendDataToServer("Play Again")'>
+    <input type='submit' id='back-home' value='Back To Home' onclick='sendDataToServer("Back To Home")'>
   </div>
 </body>
 </html>

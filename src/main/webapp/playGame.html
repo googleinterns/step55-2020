@@ -2,6 +2,9 @@
 <html>
 <head>
   <link href='images/streetExplorerLogo.png' rel='icon'>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
   <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -34,7 +37,15 @@
   <div id='nav-bar'></div>
   <div id='game'>
       <div id='playMap'></div>
-      <div id='game-info'></div>
+      <div id='game-info'>
+        <div id='legend'>
+          <p class='font-size-slightly-larger'>Legend for markers:</p>
+          <p>
+            Found: <img src='images/marker_found.png' alt='green marker found' width='3%'/>
+            Not Found: <img src='images/marker_notfound.png' alt='orange marker found' width='3%'/>
+          </p>
+        </div>
+      </div>
   </div>
 </body>
 </html>

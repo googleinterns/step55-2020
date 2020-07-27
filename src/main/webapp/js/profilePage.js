@@ -19,6 +19,11 @@ async function loadProfilePage() {
   params.append('idToken', tokenEmailDict['token']);
   let request = new Request('/load-currentuser-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then(async (data) => {
+    if (data == null) {
+      onSignIn();
+      loadProfilePage()
+      return;
+    }
     usernameBox.value = data.username;
   });
 
