@@ -233,8 +233,7 @@ ol#hints {
   margin: auto;
   box-shadow: none;
   max-width: 80%;
-  display: flex;
-  flex-wrap: wrap;
+  text-align: center;
 }
 
 .cursor-pointer {
@@ -489,4 +488,32 @@ span.buttonText {
 
 .max-width-half {
   max-width: 50%;
+}
+
+.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
+#gotta-flex {
+  flex: space-between;
+}
+
+#all-maps .col {
+  display: inline-block;
+  float: none;
+}
+
+#loading {
+  position: absolute;
+  top: 64px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 100;
+  background-color: white;
+  background-image: url('../images/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
 }

@@ -194,7 +194,11 @@ async function createNavBar(page) {
   var liSignout = document.createElement('li');
   a = document.createElement('a');
   a.innerHTML = 'Sign Out';
-  a.href = '#';
+  if (page == 'profilePage') {
+      a.href = 'index.html';
+  } else {
+    a.href = '#';
+  }
   a.addEventListener('click', function() {
     signOut(page);
   });
@@ -308,6 +312,15 @@ function getStarRating(stars) {
 * Adds a featured map where the ID 'featured-map' is and to where the ID 'all-maps' is
 */
 function loadMaps() {
+  // Gets rid of the loading gif once the maps are loaded
+  var gamesLoaded = false;
+  var intervalId = window.setInterval(function() {
+    if (gamesLoaded) {
+      window.clearInterval(intervalId);
+      document.getElementById("loading").classList.add('fade-out');
+    }
+  }, 100);
+
   fetch('/load-mainpage-data?page='+0).then(response => response.json()).then(async (data) => {
     var featuredMapText = document.getElementById('featured-map-text');
     if (data.length == 0) {
@@ -330,10 +343,11 @@ function loadMaps() {
     });
     if (data.length == 0 || data.length < 20) {
       let moreMapsButton = document.getElementById('more-maps');
-      moreMapsButton.className =  'hidden';
+      moreMapsButton.className = 'hidden';
     }
     removedFirst = data.splice(1,data.length);
     addMaps(removedFirst);
+    gamesLoaded = true;
   });
 }
 
