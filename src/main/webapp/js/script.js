@@ -120,6 +120,13 @@ function createSideNav(page) {
 * @example createNavBar("index")
 */
 async function createNavBar(page) {
+  let elems = document.querySelectorAll('.sidenav-overlay');
+  if (elems != undefined) {
+    for (let elem = 0; elem < elems.length; elem++) {
+        elems[elem].style="display: none;"
+    }
+  }
+  
   document.getElementById('nav-bar').innerHTML = "";
   createSideNav(page);
   let navbar = document.createElement('nav');
