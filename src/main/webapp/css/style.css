@@ -204,7 +204,7 @@ input {
   top: 64px;
   bottom: 0px;
   left: 0px;
-  right: max(20%, 200px);
+  right: max(20%, 325px);
 }
 
 .mapToPlay {
@@ -305,7 +305,7 @@ ol#hints {
   right: 0px;
   bottom: 0px;
   top: 64px;
-  width: max(20%, 200px);
+  width: max(20%, 325px);
   padding: 20px;
 }
 
