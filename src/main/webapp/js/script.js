@@ -112,7 +112,6 @@ function createSideNav(page) {
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');
   let instances = M.Sidenav.init(elems, {});
-  instances.close();
 }
 
 /** 
