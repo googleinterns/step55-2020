@@ -201,7 +201,11 @@ async function createNavBar(page) {
   var liSignout = document.createElement('li');
   a = document.createElement('a');
   a.innerHTML = 'Sign Out';
-  a.href = '#';
+  if (page == 'profilePage') {
+      a.href = 'index.html';
+  } else {
+    a.href = '#';
+  }
   a.addEventListener('click', function() {
     signOut(page);
   });
