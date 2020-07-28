@@ -56,6 +56,7 @@ function initMapToPlayGame() {
     panorama.setVisible(true);
 
     let minimap = addMinimap(panorama);
+    addLegend(panorama);
 
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
@@ -67,7 +68,7 @@ function initMapToPlayGame() {
     currGameData.getHintsFound.forEach(hintNum => {
       let num = parseInt(hintNum);
       let hintLatLng = {lat: stageHints[num - 1].location.latitude, lng: stageHints[num - 1].location.longitude};
-      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1]);
+      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1], minimap);
     });
   });
 }
@@ -123,8 +124,9 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   map = currGameData.getMap;
   let gameInfo = document.getElementById('game-info');
     
-  let gameName = document.createElement('h4');
+  let gameName = document.createElement('div');
   gameName.innerHTML = data.gameName;
+  gameName.id = 'game-name';
   gameName.className = 'center';
   gameInfo.appendChild(gameName);
 
@@ -164,11 +166,6 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   enterKeyText.className = 'center';
   keySpan.appendChild(enterKeyText);
 
-  let placeHolderForWrongInput =  document.createElement('div');
-  placeHolderForWrongInput.id = 'wrong-input';
-  placeHolderForWrongInput.className = 'wrong-input';
-  keySpan.appendChild(placeHolderForWrongInput);
-
   let inputKeyBox = document.createElement('input');
   inputKeyBox.type = 'text';
   inputKeyBox.classList = 'input-text-color';
@@ -206,8 +203,11 @@ async function checkKey(data, stage, panorama) {
   let keyInput = document.getElementById('key-input');
   let inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
-    document.getElementById('wrong-input').innerHTML = '<i class="red-text">Wrong Input! Try again!</i>';
-    document.getElementById('wrong-input').classList.remove('wrong-input');
+    let keyinput = document.getElementById('key-input');
+    keyinput.classList.add('wrong-input');
+    setTimeout(function() {
+      keyinput.classList.remove('wrong-input');
+    }, 300);
     return;
   }
   if (data.stages.length == stage.stageNumber) {
@@ -368,7 +368,6 @@ function updateUserProgress() {
 */
 function createMinimapButton(text) {
   const button = document.createElement("div");
-  button.id = "minimap-button";
 
   const buttonText = document.createElement("div");
   buttonText.id = "minimap-button-text";
@@ -388,7 +387,7 @@ function addMinimap(panorama) {
   minimapdiv.style.height = "150px";
   minimapdiv.style.width = "200px";
   minimapdiv.style.pointerEvents = "none";
-  minimapdiv.style.opacity = 0.55;
+  minimapdiv.style.opacity = 0.75;
   
   let minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
@@ -409,17 +408,21 @@ function addMinimap(panorama) {
   panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapdiv);
 
   const minimapControls = document.createElement("div");
+  minimapControls.id = "minimap-controls";
   const zoomInButton = createMinimapButton("+");
+  zoomInButton.id = "minimap-button-left";
   zoomInButton.addEventListener("click", () => {
     minimap.setZoom(minimap.getZoom()+1);
   });
 
   const zoomOutButton = createMinimapButton("-");
+  zoomOutButton.id = "minimap-button-middle";
   zoomOutButton.addEventListener("click", () => {
     minimap.setZoom(minimap.getZoom()-1);
   });
 
   const toggleViewButton = createMinimapButton("Toggle View");
+  toggleViewButton.id = "minimap-button-right";
   toggleViewButton.addEventListener("click", () => {
     let currentType = minimap.getMapTypeId();
     if(currentType === "roadmap") {
@@ -434,4 +437,36 @@ function addMinimap(panorama) {
   minimapControls.appendChild(toggleViewButton);
   panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControls);
   return minimap;
+}
+
+/**
+* Adds a legend to the top right of the panorama.
+* @param panorama the panorama where the legend will be placed.
+*/
+function addLegend(panorama) {
+    const legendDiv = document.createElement("div");
+    legendDiv.id = "legend";
+    let notFound = document.createElement("div");
+    let notFoundImg = document.createElement("img");
+    notFoundImg.className = "legend-img";
+    notFoundImg.src = "images/marker_notfound_mini.png";
+    let notFoundText = document.createElement("span");
+    notFoundText.className = "legend-text";
+    notFoundText.innerText = " - Undiscovered hint"
+    notFound.appendChild(notFoundImg);
+    notFound.appendChild(notFoundText);
+
+    let found = document.createElement("div");
+    let foundImg = document.createElement("img");
+    foundImg.className = "legend-img";
+    foundImg.src = "images/marker_found_mini.png";
+    let foundText = document.createElement("span");
+    foundText.className = "legend-text";
+    foundText.innerText = " - Discovered hint";
+    found.appendChild(foundImg);
+    found.appendChild(foundText);
+
+    legendDiv.appendChild(notFound);
+    legendDiv.appendChild(found);
+    panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(legendDiv);
 }
