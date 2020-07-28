@@ -93,10 +93,10 @@ function createSideNav(page) {
   googleSiginIn.id = 'gSignInWrapper';
   googleSiginIn.innerHTML += '<div id="customBtn2" class="customGPlusSignIn">'+
                                '<span class="icon"></span>' +
-                               '<span class="buttonText">Google</span></div>';
+                               '<span class="buttonText">Sign in with Google</span></div>';
                                
   if (isSignedIn()) {
-    googleSiginIn.querySelector('.buttonText').innerHTML = 'Signed In'
+    googleSiginIn.classList.add("hidden");
   } 
 
   navBarForMobile.appendChild(googleSiginIn);
@@ -112,6 +112,7 @@ function createSideNav(page) {
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');
   let instances = M.Sidenav.init(elems, {});
+  instances.close();
 }
 
 /** 
@@ -128,22 +129,18 @@ async function createNavBar(page) {
   navWrapperDiv.className = 'nav-wrapper';
   navbar.appendChild(navWrapperDiv);
 
-  let containerDiv = document.createElement('div');
-  containerDiv.className = 'container';
-  navWrapperDiv.appendChild(containerDiv);
-
   let a = document.createElement('a');
   a.innerHTML = 'Street Explorer';
   a.href = "index.html";
   a.className = 'brand-logo';
-  containerDiv.appendChild(a);
+  navWrapperDiv.appendChild(a);
 
   let mobileA = document.createElement('a');
   mobileA.innerHTML = '<i class="material-icons">menu</i>';
   mobileA.href = "#";
   mobileA.className = 'sidenav-trigger';
   mobileA.dataset.target = 'mobile-demo';
-  containerDiv.appendChild(mobileA);
+  navWrapperDiv.appendChild(mobileA);
 
   let ul = document.createElement('ul');
   ul.className = 'right hide-on-med-and-down';
@@ -183,11 +180,7 @@ async function createNavBar(page) {
   googleSiginIn.id = 'gSignInWrapper';
   googleSiginIn.innerHTML += '<div id="customBtn" class="customGPlusSignIn">'+
                                '<span class="icon"></span>' +
-                               '<span class="buttonText">Google</span></div>';
-                               
-  if (await isSignedIn()) {
-    googleSiginIn.querySelector('.buttonText').innerHTML = 'Signed In'
-  } 
+                               '<span class="buttonText">Sigin In with Google</span></div>';
                         
   signinAnchor.appendChild(googleSiginIn);
   liSignin.appendChild(signinAnchor);
@@ -218,10 +211,11 @@ async function createNavBar(page) {
     ul.appendChild(liCreateGame);
     ul.appendChild(liProfile);
     ul.appendChild(liSignout);
+    liSignin.classList.add("hidden");
   } 
   ul.appendChild(liSignin);
 
-  containerDiv.appendChild(ul);
+  navWrapperDiv.appendChild(ul);
 
   document.getElementById('nav-bar').appendChild(navbar);
   
@@ -238,10 +232,9 @@ async function createNavBar(page) {
 * Creates a static maps image
 * @param {array} stageLocations contains objects with longitude and latitude
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
-* @param {String} gameID is gameID from the server of the game that was clicked on
 * @return {Element} an img element is returned with the stage starting locations marked on the image
 */
-function createStaticMap(stageLocations, size, gameID) { 
+function createStaticMap(stageLocations, size) { 
   let staticImage = document.createElement('img');
   let staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
@@ -252,10 +245,6 @@ function createStaticMap(stageLocations, size, gameID) {
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
   staticImage.src = staticMapURL;
   staticImage.classList.add('cursor-pointer');
-
-  staticImage.addEventListener('click', function() {
-    window.location.replace('gameInfo.html?gameID=' + gameID);
-  });
   return staticImage;
 }
 
@@ -341,18 +330,23 @@ function loadMaps() {
     let moreMapsButtonDiv = document.getElementById('button-for-more-maps');
     moreMapsButtonDiv.innerHTML = "<input type='button' id='more-maps' value='Load More Maps' onclick='loadMoreMaps(1)'/>";
     featuredMapText.innerHTML = "Featured Map:"
-    let featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
+    let featuredMap = createStaticMap(data[0].stageLocations, '400');
     let featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     let featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
+    console.log(data[0].gameID);
+    featuredMapDiv.addEventListener('click', function() {
+      console.log(data[0].gameID);
+      window.location.replace('gameInfo.html?gameID=' + data[0].gameID);
+    });
     if (data.length == 0 || data.length < 20) {
       let moreMapsButton = document.getElementById('more-maps');
       moreMapsButton.className = 'hidden';
     }
-    data = data.splice(1,data.length);
-    addMaps(data);
+    removedFirst = data.splice(1,data.length);
+    addMaps(removedFirst);
     gamesLoaded = true;
   });
 }
@@ -384,7 +378,10 @@ function addMaps(data) {
       mapDiv.classList.add('hoverable');
       mapDiv.id = 'individual-map';
 
-      let mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
+      let mapImage = createStaticMap(data[i].stageLocations, '300');
+      mapImage.addEventListener('click', function() {
+        window.location.replace('gameInfo.html?gameID=' + data[i].gameID);
+      });
       let mapCaption = createStaticMapCaption(data[i], 'map-info');
       mapImage.classList.add('materialbox');
       mapImage.classList.add('responsive-img');

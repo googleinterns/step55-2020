@@ -107,7 +107,6 @@
   background-color: #021b32ff;
 }
 
-
 .dark-mode textarea {
   color: white;
   background-color: #666666ff;
@@ -138,27 +137,38 @@
   width: 25%;
 }
 
-#finish, #addHint, #addStage, #stages input, #play-game-button, #more-maps, #back-home  {
+nav .brand-logo {
+  margin-left: 10px;
+}
+
+#finish, #addHint, #addStage, #stages input,  #more-maps {
   border: 0px;
   border-radius: 7px;
   height: 30px;
   margin: 5px;
-  font-size: 1em;
+  font-size: 1.6em;
 }
 
-#extra-margin {
-  margin: 25px;
-  margin-right: 0;
-  width: 47%;
-}
+#play-game-button, #back-home {
+  border: 0px;
+  border-radius: 7px;
+  height: 50px;
+  font-size: 1.5em;
+}  
 
 #resume-or-startover-button {
   border: 0px;
   border-radius: 7px;
   height: 50px;
   margin-left: 15px;
-  font-size: 1em;
+  font-size: 1.5em;
 }  
+
+#extra-margin {
+  margin: 25px;
+  margin-right: 0;
+  width: 47%;
+}
 
 #featured-map {
   margin: auto;
@@ -326,7 +336,7 @@ ol#hints {
 }
 
 #enter-key-text {
-  font-size: 12px;
+  font-size: 16px;
   margin-bottom: 5px;
 }
 
@@ -341,12 +351,12 @@ ol#hints {
   border: 0px;
   margin-left: 15px;
   border-radius: 7px;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 #hints-container {
   margin-top: 30px;
-  font-size: 15px;
+  font-size: 16px;
   overflow: scroll;
   max-height: calc(100% - 220px);
 }
@@ -369,7 +379,6 @@ ol#hints {
   display: inline-block;
   background: white;
   color: #444;
-  width: 170px;
   border-radius: 5px;
   box-shadow: 1px 1px 1px grey;
   white-space: nowrap;
@@ -471,6 +480,14 @@ span.buttonText {
 @keyframes shake {
   0% { left: -5px; }
   100% { right: -5px; }
+}
+
+#flex-between {
+  flex: space-between;
+}
+
+.max-width-half {
+  max-width: 50%;
 }
 
 .fade-out {

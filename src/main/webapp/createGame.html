@@ -33,60 +33,60 @@
 </head>
 <body class='light-mode' onload='onLoadFunctions("createGame")'>
   <div id='nav-bar'></div>
-  <div id='gotta-flex'>
-  <div>
-    <input id='pac-input' class='controls black-text' type='text' placeholder='Search Box'/>
-    <div id='map' class='black-text'></div> 
-  </div>
-
-  <div id='extra-margin'>
-    <div class='input-field s3'>
-        <input id='title' type='text' name='title' required>
-        <label for='title'>Title</label>
+  <div id='flex-between'>
+    <div>
+      <input id='pac-input' class='controls black-text' type='text' placeholder='Search Box'/>
+      <div id='map' class='black-text'></div> 
     </div>
+
+    <div id='extra-margin'>
+      <div class='input-field s3'>
+          <input id='title' type='text' name='title' required>
+          <label for='title'>Title</label>
+      </div>
   
-    <div class='input-field'>
-      <textarea id='description' name='description'></textarea>
-      <label for='description'>Game Description</label> 
-    </div>
+      <div class='input-field'>
+        <textarea id='description' name='description'></textarea>
+        <label for='description'>Game Description</label> 
+      </div>
      
-    <!-- Div for the stages -->
-    <div id='stages'>
-      <input type='button' value='Stage 1' class='stage1 activeStage' onclick="setActive('stage1')">
-    </div>
+      <!-- Div for the stages -->
+      <div id='stages'>
+        <input type='button' value='Stage 1' class='stage1 activeStage' onclick="setActive('stage1')">
+      </div>
 
-    <input type='button' value='+ add stage' id='addStage' onclick='addNewStage()'>
+      <input type='button' value='+ add stage' id='addStage' onclick='addNewStage()'>
 
-    <!-- Div for the hints -->
-    <div id='hints'>
-      <div id='stage1Hints'>
-        <div class='input-field'>
-          <input id='key' type='text'>
-          <label for='key'>Stage Key</label>
-        </div>
-        <div class='input-field'>
-          <input type='text' id='starter-position'>
-          <label for='starter-position'>Starter Position (click on map to get coordinates)</label>
-        </div>
-        <div class='input-field'>
-          <input type='text' id='starter-hint' required>
-          <label for='starter-hint'>Starter Hint</label>
-        </div>
-        <div class='input-field'>
-          <input type='text' id='hint1-position'>
-          <label for='hint1-position'>Hint 1 Position (click on map to get coordinates)</label>
-        </div>
-        <div class='input-field'>
-          <input type='text' id='hint1'>
-          <label for='hint1'>Hint 1</label>
+      <!-- Div for the hints -->
+      <div id='hints'>
+        <div id='stage1Hints'>
+          <div class='input-field'>
+            <input id='key' type='text'>
+            <label for='key'>Stage Key</label>
+          </div>
+          <div class='input-field'>
+            <input type='text' id='starter-position'>
+            <label for='starter-position'>Starter Position (click on map to get coordinates)</label>
+          </div>
+          <div class='input-field'>
+            <input type='text' id='starter-hint' required>
+            <label for='starter-hint'>Starter Hint</label>
+          </div>
+          <div class='input-field'>
+            <input type='text' id='hint1-position'>
+            <label for='hint1-position'>Hint 1 Position (click on map to get coordinates)</label>
+          </div>
+          <div class='input-field'>
+            <input type='text' id='hint1'>
+            <label for='hint1'>Hint 1</label>
+          </div>
         </div>
       </div>
-    </div>
-    <input type='button' value='+ add hint' id='addHint' onclick='addNewHint()'> 
+      <input type='button' value='+ add hint' id='addHint' onclick='addNewHint()'> 
 
-    <br/>
-    <input type='button' value='Finish' id='finish' onclick='getDataFromGameCreationForm()'>
-  </div>
+      <br/>
+      <input type='button' value='Finish' id='finish' onclick='getDataFromGameCreationForm()'>
+    </div>
   </div>
 </body>
 </html>
