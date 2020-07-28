@@ -204,7 +204,7 @@ input {
   top: 64px;
   bottom: 0px;
   left: 0px;
-  right: 20%;
+  right: max(20%, 200px);
 }
 
 .mapToPlay {
@@ -305,8 +305,17 @@ ol#hints {
   right: 0px;
   bottom: 0px;
   top: 64px;
-  width: 20%;
+  width: max(20%, 200px);
   padding: 20px;
+}
+
+#game-info #game-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#game-info #stage-counter {
+  font-size: 20px;
 }
 
 #keybox {
@@ -317,28 +326,30 @@ ol#hints {
   text-align: center;
 }
 
-#inputBoxAndButton {
-  display: inline-block;
-}
-
 #enter-key-text {
-  font-size: 25px;
+  font-size: 12px;
+  margin-bottom: 5px;
 }
 
 #key-input {
-  width: 70%;
+  width: min(70%, 150px);
+  font-size: 12px;
+  height: 25px;
 }
 
 #key-input-button {
-  height: 40px;
+  height: 25px;
   border: 0px;
   margin-left: 15px;
   border-radius: 7px;
+  font-size: 12px;
 }
 
 #hints-container {
   margin-top: 30px;
-  font-size: 20px;
+  font-size: 15px;
+  overflow: scroll;
+  max-height: calc(100% - 220px);
 }
 
 ol#hints {
@@ -450,6 +461,17 @@ span.buttonText {
 #legend .legend-text {
   color: #fff;
   font-size: 16px;
+}
+
+.wrong-input {
+  position: relative;
+  animation: shake .1s linear;
+  animation-iteration-count: 3;
+}
+
+@keyframes shake {
+  0% { left: -5px; }
+  100% { right: -5px; }
 }
 
 #gotta-flex {

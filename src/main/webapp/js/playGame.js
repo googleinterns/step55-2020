@@ -124,8 +124,9 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   map = currGameData.getMap;
   let gameInfo = document.getElementById('game-info');
     
-  let gameName = document.createElement('h4');
+  let gameName = document.createElement('div');
   gameName.innerHTML = data.gameName;
+  gameName.id = 'game-name';
   gameName.className = 'center';
   gameInfo.appendChild(gameName);
 
@@ -165,11 +166,6 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   enterKeyText.className = 'center';
   keySpan.appendChild(enterKeyText);
 
-  let placeHolderForWrongInput =  document.createElement('div');
-  placeHolderForWrongInput.id = 'wrong-input';
-  placeHolderForWrongInput.className = 'wrong-input';
-  keySpan.appendChild(placeHolderForWrongInput);
-
   let inputKeyBox = document.createElement('input');
   inputKeyBox.type = 'text';
   inputKeyBox.classList = 'input-text-color';
@@ -207,8 +203,11 @@ async function checkKey(data, stage, panorama) {
   let keyInput = document.getElementById('key-input');
   let inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
-    document.getElementById('wrong-input').innerHTML = '<i class="red-text">Wrong Input! Try again!</i>';
-    document.getElementById('wrong-input').classList.remove('wrong-input');
+    let keyinput = document.getElementById('key-input');
+    keyinput.classList.add('wrong-input');
+    setTimeout(function() {
+      keyinput.classList.remove('wrong-input');
+    }, 300);
     return;
   }
   if (data.stages.length == stage.stageNumber) {
