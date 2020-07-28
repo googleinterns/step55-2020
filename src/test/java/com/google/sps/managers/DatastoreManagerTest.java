@@ -13,28 +13,28 @@
 // limitations under the License.
 
 package com.google.sps.managers;
+
 import com.google.sps.data.*;
 import com.google.sps.utils.*;
-
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.appengine.api.datastore.PreparedQuery;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import com.google.appengine.api.datastore.PreparedQuery;
 import java.util.ArrayList;
 import java.util.*;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -539,11 +539,11 @@ public final class DatastoreManagerTest {
   @Test
   public void retrieveAPITest() {
     String expected = "thisclientisjustfortest.hcvdd76t36t42y98u47";
-    String expected1 = "mapkeybuhdgfewhu";
+    String expected1 = "mapkeytestbuhdgfewhu";
 
     Entity apiEntity = new Entity("apiKeys");
     apiEntity.setProperty("CLIENT_ID", "thisclientisjustfortest.hcvdd76t36t42y98u47");
-    apiEntity.setProperty("MAP_KEY", "mapkeybuhdgfewhu");
+    apiEntity.setProperty("MAP_KEY", "mapkeytestbuhdgfewhu");
     datastore.put(apiEntity);
 
     Map<String, String> actual = new HashMap<>();
@@ -592,4 +592,3 @@ public final class DatastoreManagerTest {
     return res.build();
   }
 }
-
