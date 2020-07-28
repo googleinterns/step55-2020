@@ -141,7 +141,7 @@ nav .brand-logo {
   margin-left: 10px;
 }
 
-#finish, #addHint, #addStage, #stages input, #play-game-button, #more-maps, #back-home  {
+#finish, #addHint, #addStage, #stages input,  #more-maps, #back-home {
   border: 0px;
   border-radius: 7px;
   height: 30px;
@@ -149,11 +149,12 @@ nav .brand-logo {
   font-size: 1.6em;
 }
 
-#extra-margin {
-  margin: 25px;
-  margin-right: 0;
-  width: 47%;
-}
+#play-game-button {
+  border: 0px;
+  border-radius: 7px;
+  height: 50px;
+  font-size: 1.5em;
+}  
 
 #resume-or-startover-button {
   border: 0px;
@@ -162,6 +163,12 @@ nav .brand-logo {
   margin-left: 15px;
   font-size: 1.5em;
 }  
+
+#extra-margin {
+  margin: 25px;
+  margin-right: 0;
+  width: 47%;
+}
 
 #featured-map {
   margin: auto;
@@ -428,4 +435,8 @@ span.buttonText {
 
 #flex-between {
   flex: space-between;
+}
+
+.max-width-half {
+  max-width: 50%;
 }

@@ -230,10 +230,9 @@ async function createNavBar(page) {
 * Creates a static maps image
 * @param {array} stageLocations contains objects with longitude and latitude
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
-* @param {String} gameID is gameID from the server of the game that was clicked on
 * @return {Element} an img element is returned with the stage starting locations marked on the image
 */
-function createStaticMap(stageLocations, size, gameID) { 
+function createStaticMap(stageLocations, size) { 
   let staticImage = document.createElement('img');
   let staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
@@ -244,10 +243,6 @@ function createStaticMap(stageLocations, size, gameID) {
   staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
   staticImage.src = staticMapURL;
   staticImage.classList.add('cursor-pointer');
-
-  staticImage.addEventListener('click', function() {
-    window.location.replace('gameInfo.html?gameID=' + gameID);
-  });
   return staticImage;
 }
 
@@ -324,18 +319,23 @@ function loadMaps() {
     let moreMapsButtonDiv = document.getElementById('button-for-more-maps');
     moreMapsButtonDiv.innerHTML = "<input type='button' id='more-maps' value='Load More Maps' onclick='loadMoreMaps(1)'/>";
     featuredMapText.innerHTML = "Featured Map:"
-    let featuredMap = createStaticMap(data[0].stageLocations, '400', data[0].gameID);
+    let featuredMap = createStaticMap(data[0].stageLocations, '400');
     let featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     let featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
+    console.log(data[0].gameID);
+    featuredMapDiv.addEventListener('click', function() {
+      console.log(data[0].gameID);
+      window.location.replace('gameInfo.html?gameID=' + data[0].gameID);
+    });
     if (data.length == 0 || data.length < 20) {
       let moreMapsButton = document.getElementById('more-maps');
       moreMapsButton.className =  'hidden';
     }
-    data = data.splice(1,data.length);
-    addMaps(data);
+    removedFirst = data.splice(1,data.length);
+    addMaps(removedFirst);
   });
 }
 
@@ -366,7 +366,10 @@ function addMaps(data) {
       mapDiv.classList.add('hoverable');
       mapDiv.id = 'individual-map';
 
-      let mapImage = createStaticMap(data[i].stageLocations, '300', data[i].gameID);
+      let mapImage = createStaticMap(data[i].stageLocations, '300');
+      mapImage.addEventListener('click', function() {
+        window.location.replace('gameInfo.html?gameID=' + data[i].gameID);
+      });
       let mapCaption = createStaticMapCaption(data[i], 'map-info');
       mapImage.classList.add('materialbox');
       mapImage.classList.add('responsive-img');

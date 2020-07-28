@@ -7,7 +7,8 @@ function loadGameData() {
   params.append('gameID', gameID);
   let request = new Request('/load-gamepage-data', {method: 'POST', body: params});
   fetch(request).then(response => response.json()).then((data) => {
-    printMapNameAndDifficulty(data);
+    printMapName(data);
+    printDifficulty(data);
     printMapCreator(data);
     printMapDescription(data);
     printMapImage(data);
@@ -22,8 +23,17 @@ function loadGameData() {
 * Adds the game name and difficulty where the div with id 'map-name' is
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
-function printMapNameAndDifficulty(data) {
-  let mapName = document.getElementById('map-name-and-difficulty');
+function printMapName(data) {
+  let mapName = document.getElementById('map-name');
+  mapName.innerHTML = '<h3>' + data.gameName + '</h3>';
+}
+
+/**
+* Adds the game name and difficulty where the div with id 'map-name' is
+* @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
+*/
+function printDifficulty(data) {
+  let mapDifficulty = document.getElementById('map-difficulty');
   let difficultyClass = 'green-text';
   let difficulty = '[Easy]';
   if (Math.round(data.difficulty) == 2) {
@@ -34,7 +44,7 @@ function printMapNameAndDifficulty(data) {
     difficulty = '[Hard]';
   }  
 
-  mapName.innerHTML = '<h1>' + data.gameName + ' <i class=' + difficultyClass +'>' + difficulty + '</i></h1>';
+  mapDifficulty.innerHTML = '<h5><i class=' + difficultyClass + '>' + difficulty + '</i></h5>';
 }
 
 /**
@@ -43,8 +53,9 @@ function printMapNameAndDifficulty(data) {
 */
 function printMapDescription(data) {
   let mapDescription = document.getElementById('map-description');
-  mapDescription.innerHTML = '<h4>Game Description: </h4>';
-  mapDescription.innerHTML += '<h5>' + data.gameDescription + '</h5>';
+  mapDescription.innerHTML = '<p>Game Description: </p>';
+  mapDescription.innerHTML += '<p class="max-width-half">' + data.gameDescription + '</p>';
+  mapDescription.maxWidth = "50%";
 }
 
 /**
@@ -53,7 +64,9 @@ function printMapDescription(data) {
 */
 function printMapImage(data) {
   let mapImage = document.getElementById('map-image');
-  mapImage.append(createStaticMap(data.stageLocations, 500, data.gameID));
+  let img = createStaticMap(data.stageLocations, 500, data.gameID);
+  img.classList.remove('cursor-pointer');
+  mapImage.append(img);
 }
 
 /**
@@ -62,7 +75,7 @@ function printMapImage(data) {
 */
 function printMapRating(data) {
   let mapRating = document.getElementById('map-rating');
-  mapRating.innerHTML = getStarRating(data.stars).replace(/md-18/g, 'large');
+  mapRating.innerHTML = getStarRating(data.stars).replace(/md-18/g, 'md-36');
 }
 
 /**
