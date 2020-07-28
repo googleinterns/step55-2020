@@ -93,10 +93,10 @@ function createSideNav(page) {
   googleSiginIn.id = 'gSignInWrapper';
   googleSiginIn.innerHTML += '<div id="customBtn2" class="customGPlusSignIn">'+
                                '<span class="icon"></span>' +
-                               '<span class="buttonText">Google</span></div>';
+                               '<span class="buttonText">Sign in with Google</span></div>';
                                
   if (isSignedIn()) {
-    googleSiginIn.querySelector('.buttonText').innerHTML = 'Signed In'
+    googleSiginIn.classList.add("hidden");
   } 
 
   navBarForMobile.appendChild(googleSiginIn);
@@ -112,6 +112,7 @@ function createSideNav(page) {
   // These next two lines are for mobile version so that when the three lines are clicked on a side bar is shown
   let elems = document.querySelectorAll('.sidenav');
   let instances = M.Sidenav.init(elems, {});
+  instances.close();
 }
 
 /** 
@@ -179,11 +180,7 @@ async function createNavBar(page) {
   googleSiginIn.id = 'gSignInWrapper';
   googleSiginIn.innerHTML += '<div id="customBtn" class="customGPlusSignIn">'+
                                '<span class="icon"></span>' +
-                               '<span class="buttonText">Google</span></div>';
-                               
-  if (await isSignedIn()) {
-    googleSiginIn.querySelector('.buttonText').innerHTML = 'Signed In'
-  } 
+                               '<span class="buttonText">Sigin In with Google</span></div>';
                         
   signinAnchor.appendChild(googleSiginIn);
   liSignin.appendChild(signinAnchor);
@@ -210,6 +207,7 @@ async function createNavBar(page) {
     ul.appendChild(liCreateGame);
     ul.appendChild(liProfile);
     ul.appendChild(liSignout);
+    liSignin.classList.add("hidden");
   } 
   ul.appendChild(liSignin);
 
