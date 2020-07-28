@@ -223,8 +223,7 @@ ol#hints {
   margin: auto;
   box-shadow: none;
   max-width: 80%;
-  display: flex;
-  flex-wrap: wrap;
+  text-align: center;
 }
 
 .cursor-pointer {
@@ -482,6 +481,11 @@ span.buttonText {
 
 #gotta-flex {
   flex: space-between;
+}
+
+#all-maps .col {
+  display: inline-block;
+  float: none;
 }
 
 #loading {
