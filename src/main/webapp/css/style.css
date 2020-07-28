@@ -474,6 +474,25 @@ span.buttonText {
   100% { right: -5px; }
 }
 
+.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
 #gotta-flex {
   flex: space-between;
+}
+
+#loading {
+  position: absolute;
+  top: 64px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 100;
+  background-color: white;
+  background-image: url('../images/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
 }
