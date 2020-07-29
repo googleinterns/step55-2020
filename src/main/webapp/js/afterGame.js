@@ -23,6 +23,11 @@ function loadGameName() {
     let gameTitle = document.getElementById('game-title');
     gameTitle.innerHTML = '<h1>' + data.gameName + '</h1>';    
   });
+  window.addEventListener("beforeunload", function(event) { 
+      sendDataToServer(""); 
+      console.log('entered');
+      delete event['returnValue'];
+  });
 }
 
 /** 
@@ -76,23 +81,19 @@ function sendDataToServer(nextAction) {
     } 
   } 
 
-  let comment = document.getElementById('comment').value;
-  if (comment == "") comment = null;
-
   const urlParams = new URLSearchParams(window.location.search);
   let gameID = urlParams.get('gameID');
 
   let fetchParams = new URLSearchParams();
   fetchParams.append('starVote', starsCount);
   fetchParams.append('difficultyVote', difficulty);
-  fetchParams.append('comment', comment);
   fetchParams.append('gameID', gameID);
   let request = new Request('/update-feedback-data', {method: 'POST', body: fetchParams});
   fetch(request);
   if (nextAction == 'Play Again') {
-
     window.location.replace('playGame.html?gameID=' + gameID);
     return;
+  } else if (nextAction == 'Back To Home') {
+    window.location.replace('index.html');
   }
-  window.location.replace('index.html');
 }
