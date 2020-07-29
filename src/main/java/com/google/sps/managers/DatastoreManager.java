@@ -289,12 +289,12 @@ public class DatastoreManager implements IDataManager {
 
     batchHintEntity = datastore.get(hintEntityKey);
     
-    for (Entity hintEntity : batchHintEntity.values()) {
-      int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
-      String text = (String) hintEntity.getProperty("text");
-      String hintID = (String) hintEntity.getProperty("hintID");
-      double latitude = (double) hintEntity.getProperty("latitude");
-      double longitude = (double) hintEntity.getProperty("longitude");
+    for (Key hintEntity : hintEntityKey) {
+      int hintNumber = ((Long) batchHintEntity.get(hintEntity).getProperty("hintNumber")).intValue();
+      String text = (String) batchHintEntity.get(hintEntity).getProperty("text");
+      String hintID = (String) batchHintEntity.get(hintEntity).getProperty("hintID");
+      double latitude = (double) batchHintEntity.get(hintEntity).getProperty("latitude");
+      double longitude = (double) batchHintEntity.get(hintEntity).getProperty("longitude");
       Coordinates startingLocation;
       startingLocation = new Coordinates(latitude, longitude);
 
