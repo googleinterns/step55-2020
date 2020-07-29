@@ -34,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -155,6 +156,7 @@ public class DatastoreManager implements IDataManager {
   */
   public void createOrReplaceStage(Stage stage) {
     ArrayList<String> hints = new ArrayList<String>();
+    ArrayList<Hint> hintsStored = new ArrayList<Hint>();
     Entity stageEntity = new Entity("Stage", stage.getStageID());
     stageEntity.setProperty("stageNumber", stage.getStageNumber());
     stageEntity.setProperty("key", stage.getKey());
@@ -163,9 +165,10 @@ public class DatastoreManager implements IDataManager {
     stageEntity.setProperty("longitude", stage.getStartingLocation().getLongitude());
 
     for (Hint hint : stage.getHints()) {
-      createOrReplaceHint(hint);
+      hintsStored.add(hint);
       hints.add(hint.getHintID());
     }
+    createOrReplaceHint(hintsStored);
 
     stageEntity.setProperty("hints", hints);
     datastore.put(stageEntity);
@@ -195,10 +198,11 @@ public class DatastoreManager implements IDataManager {
     }
 
     ArrayList<Hint> hints = new ArrayList<Hint>();
-    for (String hintid : hintIDs) {
-      hints.add(retrieveHint(hintid));
-    }
-  
+    // for (String hintid : hintIDs) {
+    //   hints.add(retrieveHint(hintid));
+    // }
+    hints = retrieveHint(hintIDs);
+
     Stage.Builder stage = new Stage.Builder(stageID, stageNumber);
     stage.setKey(key).setStartingHint(startingHint).setStartingLocation(startingLocation).setHints(hints);
     return stage.build();
@@ -254,13 +258,18 @@ public class DatastoreManager implements IDataManager {
   * Creates or Replaces the static data of a single hint in datastore as an entity
   * @param hint a Hint variable representing a single instance of a hint.
   */
-  public void createOrReplaceHint(Hint hint) {
-    Entity hintEntity = new Entity("Hint", hint.getHintID());
-    hintEntity.setProperty("hintNumber", hint.getHintNumber());
-    hintEntity.setProperty("longitude", hint.getLocation().getLongitude());
-    hintEntity.setProperty("latitude", hint.getLocation().getLatitude());
-    hintEntity.setProperty("text", hint.getText());
-    datastore.put(hintEntity);
+  public void createOrReplaceHint(ArrayList<Hint> hintsStored) {
+    List<Entity> batchHintEntity = new ArrayList<>();
+    for (Hint hint : hintsStored) {
+      Entity hintEntity = new Entity("Hint", hint.getHintID());
+      hintEntity.setProperty("hintID", hint.getHintID());
+      hintEntity.setProperty("hintNumber", hint.getHintNumber());
+      hintEntity.setProperty("longitude", hint.getLocation().getLongitude());
+      hintEntity.setProperty("latitude", hint.getLocation().getLatitude());
+      hintEntity.setProperty("text", hint.getText());
+      batchHintEntity.add(hintEntity);
+    }
+    datastore.put(batchHintEntity);
   }
   
   /**
@@ -269,21 +278,32 @@ public class DatastoreManager implements IDataManager {
   * @return a Hint object with the properties specified in the Builder.
   * @throws EntityNotFoundException an exception thrown when an entity is not found
   */
-  public Hint retrieveHint(String hintID) throws EntityNotFoundException {
-    Key hintEntityKey = KeyFactory.createKey("Hint", hintID);
-    Entity hintEntity;
-    hintEntity = datastore.get(hintEntityKey);
+  public ArrayList<Hint> retrieveHint(ArrayList<String> hintIDs) throws EntityNotFoundException {
+    Map<Key, Entity> batchHintEntity = new HashMap<Key, Entity>();
+    List<Key> hintEntityKey = new ArrayList<>();
+    ArrayList<Hint> hintsRetrieved = new ArrayList<>();
+    for (String hint : hintIDs) {
+      hintEntityKey.add(KeyFactory.createKey("Hint", hint));
+      // hintEntity = datastore.get(hintEntityKey);
+    }
 
-    int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
-    String text = (String) hintEntity.getProperty("text");
-    double latitude = (double) hintEntity.getProperty("latitude");
-    double longitude = (double) hintEntity.getProperty("longitude");
-    Coordinates startingLocation;
-    startingLocation = new Coordinates(latitude, longitude);
+    batchHintEntity = datastore.get(hintEntityKey);
+    
+    for (Entity hintEntity : batchHintEntity.values()) {
+      int hintNumber = ((Long) hintEntity.getProperty("hintNumber")).intValue();
+      String text = (String) hintEntity.getProperty("text");
+      String hintID = (String) hintEntity.getProperty("hintID");
+      double latitude = (double) hintEntity.getProperty("latitude");
+      double longitude = (double) hintEntity.getProperty("longitude");
+      Coordinates startingLocation;
+      startingLocation = new Coordinates(latitude, longitude);
 
-    Hint.Builder hint = new Hint.Builder(hintID, hintNumber);
-    hint.setLocation(startingLocation).setText(text);
-    return hint.build();
+      Hint.Builder hint = new Hint.Builder(hintID, hintNumber);
+      hint.setLocation(startingLocation).setText(text);
+      //return hint.build();
+      hintsRetrieved.add(hint.build());
+    }
+    return hintsRetrieved;
   }
 
   /**
