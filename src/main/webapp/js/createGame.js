@@ -110,24 +110,24 @@ function addNewStage() {
   const newStageHints = document.createElement('div');
   newStageHints.id = getStageNumber(newStage) + 'Hints';
   newStageHints.innerHTML = "<div class='input-field'>"+
-                              "<input type='text' id='key'>" +
-                              "<label for='key'>Stage Key</label>" +
+                              "<input type='text' id='stage"+(numStages + 1)+"key'>" +
+                              "<label for='stage"+(numStages + 1)+"key'>Stage Key</label>" +
                             "</div>" +
                             "<div class='input-field'>" +
-                              "<input type='text' id='starter-position'>" +
-                              "<label for='starter-position'>Starter Position (click on map to get coordinates)</label>" +
+                              "<input type='text' id='stage"+(numStages + 1)+"starter-position'>" +
+                              "<label for='stage"+(numStages + 1)+"starter-position'>Starter Position (click on map to get coordinates)</label>" +
                             "</div>" +
                             "<div class='input-field'>" +
-                              "<input type='text' id='starter-hint' required>" +
-                              "<label for='starter-hint'>Starter Hint</label>" +
+                              "<input type='text' id='stage"+(numStages + 1)+"starter-hint' required>" +
+                              "<label for='stage"+(numStages + 1)+"starter-hint'>Starter Hint</label>" +
                             "</div>" +
                             "<div class='input-field'>" +
-                              "<input type='text' id='hint1-position'>" +
-                              "<label for='hint1-position'>Hint 1 Position (click on map to get coordinates)</label>" +
+                              "<input type='text' id='stage"+(numStages + 1)+"hint1-position'>" +
+                              "<label for='stage"+(numStages + 1)+"hint1-position'>Hint 1 Position (click on map to get coordinates)</label>" +
                             "</div>" + 
                             "<div class='input-field'>" +
-                              "<input type='text'  id='hint1'>" +
-                              "<label for='hint1'>Hint 1</label>" +
+                              "<input type='text'  id='stage"+(numStages + 1)+"hint1'>" +
+                              "<label for='stage"+(numStages + 1)+"hint1'>Hint 1</label>" +
                             "</div>";
 
   document.getElementById('hints').appendChild(newStageHints);
@@ -138,17 +138,19 @@ function addNewStage() {
 * Adds a hint to the corresponding active stage
 */
 function addNewHint() {
-  const activeStageNum = getActiveStageElement().classList[0] + 'Hints';
-  const activeHints = document.getElementById(activeStageNum);
+  const stageNum = getActiveStageElement().classList[0];
+  const activeStageNumHintsDiv = stageNum + 'Hints';
+  const activeHints = document.getElementById(activeStageNumHintsDiv);
   const numHintInputBoxes = activeHints.getElementsByTagName('input').length - 1;
   let numHints = numHintInputBoxes/2;
+  console.log(stageNum)
 
   const newHintPos = document.createElement('input');
-  newHintPos.id = 'hint' + numHints + '-position';
+  newHintPos.id = stageNum + 'hint' + numHints + '-position';
   newHintPos.type= 'text';
 
   let hintPosLabel = document.createElement('label');
-  hintPosLabel.for = 'hint' + numHints + '-position';
+  hintPosLabel.htmlFor = stageNum + 'hint' + numHints + '-position';
   hintPosLabel.innerText = 'Hint ' + numHints + ' Position (click on map to get coordinates)';
 
   let hintPosDiv = createInputDiv();
@@ -157,11 +159,11 @@ function addNewHint() {
   activeHints.appendChild(hintPosDiv);
 
   const newHint = document.createElement('input');
-  newHint.id = 'hint' + numHints;
+  newHint.id = stageNum + 'hint' + numHints;
   newHint.type= 'text';
 
   let hintLabel = document.createElement('label');
-  hintLabel.for = 'hint' + numHints;
+  hintLabel.htmlFor = stageNum + 'hint' + numHints;
   hintLabel.innerText = 'Hint ' + numHints;
   
   let hintDiv = createInputDiv();
@@ -229,10 +231,23 @@ function getDataFromGameCreationForm() {
   let hintLocations = []; // 2d array [[{'latitude': 1, 'longitude':2},{'latitude': 1, 'longitude':2}], [{'latitude': 1, 'longitude':2}]]
   let hintTexts = [];
 
+  let title = document.getElementById('title').value;
+  let description = document.getElementById('description').value;
+  if (title == "" || description == "") {
+    window.alert('You must fill out the title and description!')
+    finishButton.disable = false;
+    return;
+  }
+
   // Stages and hints are 1 indexed
   for (let count = 1; count <= numStages; count++) {
     let stage = document.getElementById('stage' + count + 'Hints');
-    let starterPos = stage.querySelector('#starter-position').value;
+    let starterPos = stage.querySelector('#stage' + count + 'starter-position').value;
+    if (starterPos == "") {
+      window.alert("Starter Position cannot be left empty");
+      finishButton.disable = false;
+      return;
+    }
     starterPos = starterPos.replace(")", "").replace("(", "").replace(" ", "").split(",");
 
     let dict = {};
@@ -240,36 +255,55 @@ function getDataFromGameCreationForm() {
     dict['longitude'] = starterPos[1];
     if (isNaN(starterPos[0]) || isNaN(starterPos[1])) {
       window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
+      finishButton.disable = false;
       return;
     }
     stageSpawnLocations.push(dict);
-    stageStarterHints.push(stage.querySelector('#starter-hint').value);
-
-    stageKeys.push(stage.querySelector('#key').value);
+    let starterHint = stage.querySelector('#stage' + count + 'starter-hint').value;
+    if (starterHint == "") {
+      window.alert("Starter hint cannot be left empty");
+      finishButton.disable = false;
+      return;
+    }
+    stageStarterHints.push(starterHint);
+    let stageKey = stage.querySelector('#stage' + count + 'key').value;
+    if (stageKey == "") {
+      window.alert("Stage Key cannot be left empty");
+      finishButton.disable = false;
+      return;
+    }
+    stageKeys.push(stageKey);
 
     let numHintsForThisStage = stage.getElementsByTagName('input').length - 1;
     let stageHintsLocation = [];
     let stageHintsText = [];
     for (let hint = 1; hint < numHintsForThisStage/2; hint++) {
-      let hintPos = stage.querySelector('#hint' + hint + '-position').value;
+      let hintPos = stage.querySelector('#stage' + count + 'hint' + hint + '-position').value;
       hintPos = hintPos.replace(")", "").replace("(", "").split(",");
       dict = {};
       dict['latitude'] = hintPos[0];
       dict['longitude'] = hintPos[1];
       if (isNaN(hintPos[0]) || isNaN(hintPos[1])) {
         window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
+        finishButton.disable = false;
         return;
       }
       stageHintsLocation.push(dict);
-      stageHintsText.push(stage.querySelector('#hint' + hint).value);
+      let hintText = stage.querySelector('#stage' + count + 'hint' + hint).value;
+      if (hintText == "") {
+        window.alert("Hint text cannot be left empty");
+        finishButton.disable = false;
+        return;
+      }
+      stageHintsText.push(hintText);
     }
     hintLocations.push(stageHintsLocation);
     hintTexts.push(stageHintsText);
   }
 
   let params = new URLSearchParams();
-  params.append('gameName', document.getElementById('title').value);
-  params.append('gameDescription', document.getElementById('description').value);
+  params.append('gameName', title);
+  params.append('gameDescription', description);
   params.append('stageKeys', JSON.stringify(stageKeys));
   params.append('stageSpawnLocations', JSON.stringify(stageSpawnLocations));
   params.append('stageStarterHints', JSON.stringify(stageStarterHints));
