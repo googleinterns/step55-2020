@@ -11,6 +11,13 @@ function initMapToCreateGame() {
       mapTypeId: 'hybrid',
       gestureHandling: 'greedy'
   });
+  let panorama = map.getStreetView();
+  let coordinatesDiv = document.createElement("div");
+  coordinatesDiv.id = 'coordinates-viewer';
+  panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(coordinatesDiv);
+  google.maps.event.addListener(panorama, 'position_changed', function() {
+    coordinatesDiv.innerText = "(" + panorama.getPosition().lat() + ", " + panorama.getPosition().lng() + ")";
+  });
 
   // Create the search box and link it to the UI element.
   let input = document.getElementById("pac-input");
@@ -215,7 +222,7 @@ function createInputDiv() {
 /**
 * Gets the data from the form on the createGame.html page and sends it to the server
 */
-function getDataFromGameCreationForm() {
+async function getDataFromGameCreationForm() {
   if(!isSignedIn()) {
     window.alert('You must sign in before creating a game!')
     return;
@@ -240,6 +247,9 @@ function getDataFromGameCreationForm() {
     dict['longitude'] = starterPos[1];
     if (isNaN(starterPos[0]) || isNaN(starterPos[1])) {
       window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
+      return;
+    } else if(!(await coordinatesOk(starterPos[0], starterPos[1]))) {
+      window.alert("Input coordinates are invalid! Latitude must be between -85 and 85, and longitude must be between -180 and 180. The location must also have Google Street View support.");
       return;
     }
     stageSpawnLocations.push(dict);
@@ -283,4 +293,22 @@ function getDataFromGameCreationForm() {
   fetch(request).then(response => response.json()).then((data) => {
     window.location.replace('gameInfo.html?gameID=' + data);
   });
+}
+
+/**
+* Checks whether the inputted coordinates are valid for the purposes of a game.
+* Latitude must be in the interval [-85, 85] and longitude must be in the interval
+* [-180, 180]. The location must also have Street View support.
+* 
+*/
+async function coordinatesOk(lat, lng) {
+  if(lat < -85 || 85 < lat) return false;
+  if(lng < -180 || 180 < lng) return false;
+  let coords = lat + ',' + lng;
+  let key = 'AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
+  let res = false;
+  await fetch('https://maps.googleapis.com/maps/api/streetview/metadata?location='+coords+'&key='+key).then(response => response.json()).then(async (data) => {
+    if(data.status == 'OK') res = true;
+  });
+  return res;
 }

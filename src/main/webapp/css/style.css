@@ -358,6 +358,8 @@ ol#hints {
   margin-top: 30px;
   font-size: 16px;
   overflow: scroll;
+  word-wrap: break-word;
+  padding-right: 10px;
   max-height: calc(100% - 220px);
 }
 
@@ -425,6 +427,11 @@ span.buttonText {
   width: 200px;
 }
 
+#teleport-button {
+  color: #4d90fe;
+  cursor: pointer;
+}
+
 #minimap-button-left {
   float: left;
   min-width: 35px;
@@ -467,6 +474,15 @@ span.buttonText {
 }
 
 #legend .legend-text {
+  color: #fff;
+  font-size: 16px;
+}
+
+#coordinates-viewer {
+  padding: 10px;
+  background-color: black;
+  opacity: 70%;
+  border-radius: 2px;
   color: #fff;
   font-size: 16px;
 }
