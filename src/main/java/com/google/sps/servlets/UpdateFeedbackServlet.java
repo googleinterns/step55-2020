@@ -49,8 +49,6 @@ public class UpdateFeedbackServlet extends HttpServlet {
         String gameID = request.getParameter("gameID");
         int difficultyVote = Integer.parseInt(request.getParameter("difficultyVote"));
         int starVote = Integer.parseInt(request.getParameter("starVote"));
-        // Currently not in use
-        // String comment = request.getParameter("comment");
 
         Game game;
         try {

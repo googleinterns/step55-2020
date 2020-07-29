@@ -1,3 +1,4 @@
+var originalUsername;
 /**
 * Sets up the functionality of the username input box and the submit button.
 */
@@ -24,6 +25,7 @@ async function loadProfilePage() {
       loadProfilePage()
       return;
     }
+    originalUsername = data.username;
     usernameBox.value = data.username;
   });
 
@@ -60,20 +62,20 @@ async function isTaken(desiredUsername) {
 */
 async function getAvailabilityText(desiredUsername) {
   let currentUsername = document.getElementById('userName').value;
-  if(desiredUsername.length == 0) {
+  
+  if (desiredUsername.length == 0) {
+
     return 'Username must be at least 1 character';
-  }
-  if(desiredUsername.length > 20) {
+  } else if (desiredUsername.length > 20) {
     return 'Username cannot be more than 20 characters';
   }
   let pattern = new RegExp(/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz._0123456789]*$/);
-  if(!pattern.test(desiredUsername)) {
+  if (!pattern.test(desiredUsername)) {
     return 'Only letters, digits, underscores, and periods are allowed';
-  }
-   if((await isTaken(desiredUsername)) && (currentUsername != desiredUsername)) {
+  } else if (originalUsername == desiredUsername) {
+    return 'That is your original username';
+  } else if (await isTaken(desiredUsername)) {
     return 'Username is already taken';
-  } else if((await isTaken(desiredUsername)) && (currentUsername == desiredUsername)) {
-    return 'Username already in use';
   }
   return 'Available';
 }
@@ -85,7 +87,7 @@ async function displayAvailability() {
   let desiredUsername = document.getElementById('userName').value;
   let availabilityBox = document.getElementById('username-availability-message');
   availabilityBox.innerText = await getAvailabilityText(desiredUsername);
-  if(availabilityBox.innerText == 'Available') {
+  if(availabilityBox.innerText == 'Available' || availabilityBox.innerText == 'That is your original username') {
     availabilityBox.className = 'green-text';
   } else if(availabilityBox.innerText == 'Username already in use') {
     availabilityBox.className = 'green-text';
@@ -114,6 +116,8 @@ async function submitUsername() {
     
     await fetch('/create-username-data', {method: 'POST', body: params});
     window.location = '/profilePage.html';
+  } else if (desiredUsername == originalUsername) {
+    return;
   } else {
     alert(availabilityBox.innerText);
   }
