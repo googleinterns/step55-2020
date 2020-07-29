@@ -214,6 +214,21 @@ function createInputDiv() {
   return div;
 }
 
+function checkValidLatLng(lat, lng) {
+  if (!(lat > -90 && lat < 90)) {
+    console.log(lat > -90)
+    console.log(lat < 90)
+    alert("invalid latitude");
+    return false;
+  }
+  if (!(lng > -180 && lng < 180)) {
+    alert("invalid longitiude");
+    console.log(lng)
+    return false;
+  }
+  return true;
+}
+
 /**
 * Gets the data from the form on the createGame.html page and sends it to the server
 */
@@ -258,6 +273,10 @@ function getDataFromGameCreationForm() {
       finishButton.disable = false;
       return;
     }
+    if (!checkValidLatLng(starterPos[0], starterPos[1])) {
+      finishButton.disable = false;
+      return;
+    }
     stageSpawnLocations.push(dict);
     let starterHint = stage.querySelector('#stage' + count + 'starter-hint').value;
     if (starterHint == "") {
@@ -285,6 +304,10 @@ function getDataFromGameCreationForm() {
       dict['longitude'] = hintPos[1];
       if (isNaN(hintPos[0]) || isNaN(hintPos[1])) {
         window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
+        finishButton.disable = false;
+        return;
+      }
+      if (!checkValidLatLng(hintPos[0], hintPos[1])) {
         finishButton.disable = false;
         return;
       }
