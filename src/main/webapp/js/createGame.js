@@ -215,9 +215,7 @@ function createInputDiv() {
 }
 
 function checkValidLatLng(lat, lng) {
-  if (!(lat > -90 && lat < 90)) {
-    console.log(lat > -90)
-    console.log(lat < 90)
+  if (!(lat > -85 && lat < 85)) {
     alert("invalid latitude");
     return false;
   }
@@ -272,11 +270,11 @@ function getDataFromGameCreationForm() {
       window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
       finishButton.disable = false;
       return;
-    }
-    if (!checkValidLatLng(starterPos[0], starterPos[1])) {
+    } else if (!checkValidLatLng(starterPos[0], starterPos[1])) {
       finishButton.disable = false;
       return;
     }
+
     stageSpawnLocations.push(dict);
     let starterHint = stage.querySelector('#stage' + count + 'starter-hint').value;
     if (starterHint == "") {
