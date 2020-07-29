@@ -221,17 +221,44 @@ function createInputDiv() {
   return div;
 }
 
+/**
+* Checks whether the inputted coordinates are valid for the purposes of a game.
+* Latitude must be in the interval [-85, 85] and longitude must be in the interval
+* [-180, 180].
+* @param {float} lat the latitude of the coordinates that are to be checked if there is a streetview of
+* @param {float} lng the longitude of the coordinates that are to be checked if there is a streetview of
+*/
 function checkValidLatLng(lat, lng) {
   if (!(lat > -85 && lat < 85)) {
-    alert("invalid latitude");
+    alert("Latitude must be betweekn -85 and 85");
     return false;
   }
   if (!(lng > -180 && lng < 180)) {
-    alert("invalid longitiude");
-    console.log(lng)
+    alert("Longitude must be betweekn -180 and 180");
     return false;
   }
   return true;
+}
+
+/**
+* Checks whether the inputted coordinates are valid for the purposes of a game.
+* Latitude must be in the interval [-85, 85] and longitude must be in the interval
+* [-180, 180]. The location must also have Street View support.
+* @param {float} lat the latitude of the coordinates that are to be checked if there is a streetview of
+* @param {float} lng the longitude of the coordinates that are to be checked if there is a streetview of
+*/
+async function coordinatesOk(lat, lng) {
+  if(!checkValidLatLng(lat, lng)) return false;
+  let coords = lat + ',' + lng;
+  let key = 'AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
+  let res = false;
+  await fetch('https://maps.googleapis.com/maps/api/streetview/metadata?location='+coords+'&key='+key).then(response => response.json()).then(async (data) => {
+    if(data.status == 'OK') res = true;
+  });
+  if (!res) {
+    window.alert("The location must also have Google Street View support.");
+  }
+  return res;
 }
 
 /**
@@ -277,11 +304,8 @@ async function getDataFromGameCreationForm() {
       window.alert("Input for latitude and longitude must be numbers! In format (123, 456) or 123, 456");
       finishButton.disable = false;
       return;
-    } else if (!checkValidLatLng(starterPos[0], starterPos[1])) {
-      finishButton.disable = false;
-      return;
     } else if(!(await coordinatesOk(starterPos[0], starterPos[1]))) {
-      window.alert("Input coordinates are invalid! Latitude must be between -85 and 85, and longitude must be between -180 and 180. The location must also have Google Street View support.");
+      finishButton.disable = false;
       return;
     }
 
@@ -348,22 +372,4 @@ async function getDataFromGameCreationForm() {
   fetch(request).then(response => response.json()).then((data) => {
     window.location.replace('gameInfo.html?gameID=' + data);
   });
-}
-
-/**
-* Checks whether the inputted coordinates are valid for the purposes of a game.
-* Latitude must be in the interval [-85, 85] and longitude must be in the interval
-* [-180, 180]. The location must also have Street View support.
-* 
-*/
-async function coordinatesOk(lat, lng) {
-  if(lat < -85 || 85 < lat) return false;
-  if(lng < -180 || 180 < lng) return false;
-  let coords = lat + ',' + lng;
-  let key = 'AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
-  let res = false;
-  await fetch('https://maps.googleapis.com/maps/api/streetview/metadata?location='+coords+'&key='+key).then(response => response.json()).then(async (data) => {
-    if(data.status == 'OK') res = true;
-  });
-  return res;
 }

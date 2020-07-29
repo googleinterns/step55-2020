@@ -89,17 +89,17 @@ function createSideNav(page) {
                                  '<li><a href="profilePage.html">Profile</a> </li>' + 
                                  '<li><a href="#" onclick="signOut(\''+page+'\')">Sign Out</a> </li>';
   }
-  let googleSiginIn = document.createElement('div');
-  googleSiginIn.id = 'gSignInWrapper';
-  googleSiginIn.innerHTML += '<div id="customBtn2" class="customGPlusSignIn">'+
+  let googleSignIn = document.createElement('div');
+  googleSignIn.id = 'gSignInWrapper';
+  googleSignIn.innerHTML += '<div id="customBtn2" class="customGPlusSignIn">'+
                                '<span class="icon"></span>' +
                                '<span class="buttonText">Sign in with Google</span></div>';
                                
   if (isSignedIn()) {
-    googleSiginIn.classList.add("hidden");
+    googleSignIn.classList.add("hidden");
   } 
 
-  navBarForMobile.appendChild(googleSiginIn);
+  navBarForMobile.appendChild(googleSignIn);
 
   auth2.attachClickHandler(document.getElementById('customBtn2'), {},
     function(googleUser) { 
@@ -182,13 +182,13 @@ async function createNavBar(page) {
   var signinAnchor = document.createElement('a');
   signinAnchor.href = '#';
 
-  let googleSiginIn = document.createElement('div');
-  googleSiginIn.id = 'gSignInWrapper';
-  googleSiginIn.innerHTML += '<div id="customBtn" class="customGPlusSignIn">'+
+  let googleSignIn = document.createElement('div');
+  googleSignIn.id = 'gSignInWrapper';
+  googleSignIn.innerHTML += '<div id="customBtn" class="customGPlusSignIn">'+
                                '<span class="icon"></span>' +
-                               '<span class="buttonText">Sigin In with Google</span></div>';
+                               '<span class="buttonText">Sign In with Google</span></div>';
                         
-  signinAnchor.appendChild(googleSiginIn);
+  signinAnchor.appendChild(googleSignIn);
   liSignin.appendChild(signinAnchor);
   
   var liProfile = document.createElement('li');
