@@ -62,13 +62,13 @@ function initMapToPlayGame() {
 
     let markers = [];
     stageHints.forEach(hint => 
-      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, minimap))
+      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, minimap, panorama))
     );
 
     currGameData.getHintsFound.forEach(hintNum => {
       let num = parseInt(hintNum);
       let hintLatLng = {lat: stageHints[num - 1].location.latitude, lng: stageHints[num - 1].location.longitude};
-      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1], minimap);
+      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1], minimap, panorama);
     });
   });
 }
@@ -238,7 +238,7 @@ async function checkKey(data, stage, panorama) {
   currGameData.clearHintsFound();
 
   stageHints.forEach(hint => {
-    addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber);
+    addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, panorama);
   });
 
   updateUserProgress();
@@ -277,9 +277,10 @@ async function getStage(stageID) {
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {object} minimap the minimap to draw the marker on
+* @param {object} panorama the street view instance the user is playing on
 * @return {object} the marker created
 */
-function addHintMarker(latLng, hint, hintNum, minimap) {  
+function addHintMarker(latLng, hint, hintNum, minimap, panorama) {  
   let marker = new google.maps.Marker({
     position: latLng,
     map: currGameData.getMap,
@@ -287,7 +288,7 @@ function addHintMarker(latLng, hint, hintNum, minimap) {
   });
 
   marker.addListener('click', function() {
-    changeData(latLng, hint, hintNum, true, marker, minimap);
+    changeData(latLng, hint, hintNum, true, marker, minimap, panorama);
   });
 
   return marker;
@@ -301,8 +302,9 @@ function addHintMarker(latLng, hint, hintNum, minimap) {
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {object} marker passes in a marker to remove
 * @param {object} minimap the minimap to draw the marker on
+* @param {object} panorama the street view instance the user is playing on
 */
-function changeData(latLng, hint, hintNum, updateProgress, marker, minimap) {
+function changeData(latLng, hint, hintNum, updateProgress, marker, minimap, panorama) {
   currGameData.addSingleHintFound = hintNum;
   if (marker != null) {
     marker.setMap(null);
@@ -319,19 +321,32 @@ function changeData(latLng, hint, hintNum, updateProgress, marker, minimap) {
     icon: 'images/marker_found_mini.png'
   });
 
-  addHint(hint, hintNum, updateProgress);
+  addHint(hint, latLng, hintNum, updateProgress, panorama);
 }
 
 /** 
 * Given the the number of the hint (hintNum) it adds to the element with the id being the hintNum with the text of the hint
 * @param {string} hint the plain text of the hint
+* @param {object} latLng the location of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint #1, #2, #3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {string} stageID the stageID in which the hint is at
+* @param {object} panorama the street view instance the user is playing on
 */
-function addHint(hint, hintNum, updateProgress) {
+function addHint(hint, latLng, hintNum, updateProgress, panorama) {
   let hintsWithNum = document.getElementById(hintNum);
-  hintsWithNum.innerText = hint;
+  let teleportButton = document.createElement("span");
+  teleportButton.id = 'teleport-button';
+  teleportButton.innerText = '[Teleport]';
+  teleportButton.addEventListener("click", function() {
+    panorama.setPosition(latLng);
+  });
+
+  let hintText = document.createElement("span");
+  hintText.innerText = hint + " ";
+
+  hintsWithNum.appendChild(hintText);
+  hintsWithNum.appendChild(teleportButton);
   if (updateProgress) updateUserProgress();
 }
 
