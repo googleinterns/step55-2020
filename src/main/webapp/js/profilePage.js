@@ -54,6 +54,7 @@ async function isTaken(desiredUsername) {
 * @return {string} 'Available' if this username is good; otherwise a string describing the issue.
 */
 async function getAvailabilityText(desiredUsername) {
+  let currentUsername = document.getElementById('userName').value;
   if(desiredUsername.length == 0) {
     return 'Username must be at least 1 character';
   }
@@ -64,8 +65,10 @@ async function getAvailabilityText(desiredUsername) {
   if(!pattern.test(desiredUsername)) {
     return 'Only letters, digits, underscores, and periods are allowed';
   }
-  if(await isTaken(desiredUsername)) {
+   if((await isTaken(desiredUsername)) && (currentUsername != desiredUsername)) {
     return 'Username is already taken';
+  } else if((await isTaken(desiredUsername)) && (currentUsername == desiredUsername)) {
+    return 'Username already in use';
   }
   return 'Available';
 }
@@ -79,7 +82,10 @@ async function displayAvailability() {
   availabilityBox.innerText = await getAvailabilityText(desiredUsername);
   if(availabilityBox.innerText == 'Available') {
     availabilityBox.className = 'green-text';
-  } else {
+  } else if(availabilityBox.innerText == 'Username already in use') {
+    availabilityBox.className = 'green-text';
+  }
+   else {
     availabilityBox.className = 'red-text';
   }
 }
