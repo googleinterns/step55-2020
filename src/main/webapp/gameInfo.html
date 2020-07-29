@@ -2,6 +2,8 @@
 <html>
 <head>
   <link href='images/streetExplorerLogo.png' rel='icon'>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   
   <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -34,11 +36,12 @@
 </head>
 <body class='light-mode' onload='onLoadFunctions("gameInfo")'>
   <div id='nav-bar'></div>
-  <div class='container'>
-    <div id='map-rating' class='float-right'></div>
-    <div id='map-name-and-difficulty'></div>
-    <div id='map-creator'></div>
+  <div class='container'>  
+    <div id='map-name'></div>
     <div id='map-image' class='float-right'></div>
+    <div id='map-creator'></div>
+    <div id='map-difficulty'></div>
+    <div id='map-rating'></div>
     <div id='map-description'></div>
     <div id='play-game'></div>
     <div id='rate-map'></div>

@@ -3,6 +3,9 @@
 <head>
   <link href='images/streetExplorerLogo.png' rel='icon'>
 
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk'></script>
   <script src='https://www.gstatic.com/charts/loader.js'></script>
 
@@ -16,8 +19,7 @@
   <script src='https://code.jquery.com/jquery-2.1.1.min.js'></script>
   <script src='js/materialize.min.js'></script>
 
-  <!--Let browser know website is optimized for mobile-->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
   <link rel='stylesheet' href='css/style.css'>
 
   <script src="https://apis.google.com/js/platform.js" async defer></script>
@@ -33,13 +35,15 @@
   <div id='nav-bar'></div>
   <!-- TODO: Rather than using JS to generate the Nav-Bar use an iframe -->
   <!-- <iframe src='navBar.html' width='100%'></iframe> -->
+  <div id='loading'></div>
   <div class=container>
     <div class='center'>
-      <h1> Featured Map</h1>
+      <h2 id='featured-map-text'></h2>
         <div id='featured-map'></div>
         <br/>
     </div>
   </div>
   <div id='all-maps' class='row card'></div>
+  <div class='center' id='button-for-more-maps'></div>
 </body>
 </html>

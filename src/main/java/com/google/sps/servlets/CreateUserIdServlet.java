@@ -57,7 +57,7 @@ public class CreateUserIdServlet extends HttpServlet {
         }
 
         if (currentUser !=  null) {
-            response.sendRedirect("/profilePage.html");
+            return;
         }
         
         String randomUserName = generateRandomUsername();

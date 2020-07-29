@@ -52,7 +52,9 @@
 .light-mode #finish, 
 .light-mode #addHint, 
 .light-mode #addStage,
-.light-mode #play-game-button {
+.light-mode #play-game-button,
+.light-mode #more-maps,
+.light-mode #back-home {
   background: #74d3aeff;
 }
 
@@ -105,7 +107,6 @@
   background-color: #021b32ff;
 }
 
-
 .dark-mode textarea {
   color: white;
   background-color: #666666ff;
@@ -121,7 +122,9 @@
 .dark-mode #finish, 
 .dark-mode #addHint,
 .dark-mode #addStage,
-.dark-mode #play-game-button {
+.dark-mode #play-game-button,
+.dark-mode #more-maps,
+.dark-mode #back-home  {
   background: #32908F;
 }
 
@@ -134,27 +137,38 @@
   width: 25%;
 }
 
-#finish, #addHint, #addStage, #stages input, #play-game-button  {
+nav .brand-logo {
+  margin-left: 10px;
+}
+
+#finish, #addHint, #addStage, #stages input,  #more-maps {
   border: 0px;
   border-radius: 7px;
   height: 30px;
   margin: 5px;
-  font-size: 1.5em;
+  font-size: 1.6em;
 }
 
-#extra-margin {
-  margin: 25px;
-  margin-right: 0;
-  width: 47%;
-}
+#play-game-button, #back-home {
+  border: 0px;
+  border-radius: 7px;
+  height: 50px;
+  font-size: 1.5em;
+}  
 
 #resume-or-startover-button {
   border: 0px;
   border-radius: 7px;
   height: 50px;
   margin-left: 15px;
-  font-size: 2em;
+  font-size: 1.5em;
 }  
+
+#extra-margin {
+  margin: 25px;
+  margin-right: 0;
+  width: 47%;
+}
 
 #featured-map {
   margin: auto;
@@ -200,7 +214,7 @@ input {
   top: 64px;
   bottom: 0px;
   left: 0px;
-  right: 20%;
+  right: max(20%, 325px);
 }
 
 .mapToPlay {
@@ -219,8 +233,7 @@ ol#hints {
   margin: auto;
   box-shadow: none;
   max-width: 80%;
-  display: flex;
-  flex-wrap: wrap;
+  text-align: center;
 }
 
 .cursor-pointer {
@@ -301,8 +314,17 @@ ol#hints {
   right: 0px;
   bottom: 0px;
   top: 64px;
-  width: 20%;
+  width: max(20%, 325px);
   padding: 20px;
+}
+
+#game-info #game-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#game-info #stage-counter {
+  font-size: 20px;
 }
 
 #keybox {
@@ -313,28 +335,30 @@ ol#hints {
   text-align: center;
 }
 
-#inputBoxAndButton {
-  display: inline-block;
-}
-
 #enter-key-text {
-  font-size: 25px;
+  font-size: 16px;
+  margin-bottom: 5px;
 }
 
 #key-input {
-  width: 70%;
+  width: min(70%, 150px);
+  font-size: 12px;
+  height: 25px;
 }
 
 #key-input-button {
-  height: 40px;
+  height: 25px;
   border: 0px;
   margin-left: 15px;
   border-radius: 7px;
+  font-size: 14px;
 }
 
 #hints-container {
   margin-top: 30px;
-  font-size: 20px;
+  font-size: 16px;
+  overflow: scroll;
+  max-height: calc(100% - 220px);
 }
 
 ol#hints {
@@ -355,7 +379,6 @@ ol#hints {
   display: inline-block;
   background: white;
   color: #444;
-  width: 170px;
   border-radius: 5px;
   box-shadow: 1px 1px 1px grey;
   white-space: nowrap;
@@ -389,4 +412,108 @@ span.buttonText {
   /* Use the Roboto font that is loaded in the <head> */
   font-family: 'Roboto', sans-serif;
 }
-    
+
+#minimap-controls {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  display: flex;
+  background-color: black;
+  opacity: 70%;
+  border-top-right-radius: 2px;
+  cursor: pointer;
+  text-align: center;
+  width: 200px;
+}
+
+#minimap-button-left {
+  float: left;
+  min-width: 35px;
+}
+
+#minimap-button-middle {
+  float: left;
+  min-width: 35px;
+  border-right: solid white 1px;
+  border-left: solid white 1px;
+}
+
+#minimap-button-right {
+    float: left;
+    flex-grow: 100;
+}
+
+#minimap-button-text {
+  font-size: 16px;
+  color: #fff;
+  padding-left: 5px;
+  padding-right: 5px;
+  user-select: none;
+  line-height: 27px;
+}
+
+.font-size-slightly-larger {
+  font-size: 1.2em;
+}
+
+#legend {
+  padding: 10px;
+  background-color: black;
+  opacity: 70%;
+  border-radius: 2px;
+}
+
+#legend .legend-img {
+  vertical-align: middle;
+}
+
+#legend .legend-text {
+  color: #fff;
+  font-size: 16px;
+}
+
+.wrong-input {
+  position: relative;
+  animation: shake .1s linear;
+  animation-iteration-count: 3;
+}
+
+@keyframes shake {
+  0% { left: -5px; }
+  100% { right: -5px; }
+}
+
+#flex-between {
+  flex: space-between;
+}
+
+.max-width-half {
+  max-width: 50%;
+}
+
+.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.5s, opacity 0.5s linear;
+}
+
+#gotta-flex {
+  flex: space-between;
+}
+
+#all-maps .col {
+  display: inline-block;
+  float: none;
+}
+
+#loading {
+  position: absolute;
+  top: 64px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: 100;
+  background-color: white;
+  background-image: url('../images/loading.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+}

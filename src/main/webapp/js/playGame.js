@@ -1,5 +1,4 @@
 var currGameData = new Progress([]);
-var minimap;
 
 /** 
 * Initalizes a map where there is an id of 'playMap'
@@ -56,19 +55,20 @@ function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
-    addMinimap(panorama);
+    let minimap = addMinimap(panorama);
+    addLegend(panorama);
 
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
     let markers = [];
     stageHints.forEach(hint => 
-      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber))
+      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, minimap))
     );
 
     currGameData.getHintsFound.forEach(hintNum => {
       let num = parseInt(hintNum);
       let hintLatLng = {lat: stageHints[num - 1].location.latitude, lng: stageHints[num - 1].location.longitude};
-      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1]);
+      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1], minimap);
     });
   });
 }
@@ -124,8 +124,9 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   map = currGameData.getMap;
   let gameInfo = document.getElementById('game-info');
     
-  let gameName = document.createElement('h2');
+  let gameName = document.createElement('div');
   gameName.innerHTML = data.gameName;
+  gameName.id = 'game-name';
   gameName.className = 'center';
   gameInfo.appendChild(gameName);
 
@@ -165,11 +166,6 @@ function createGameInfoOnSideOfMap(data, stage, panorama) {
   enterKeyText.className = 'center';
   keySpan.appendChild(enterKeyText);
 
-  let placeHolderForWrongInput =  document.createElement('div');
-  placeHolderForWrongInput.id = 'wrong-input';
-  placeHolderForWrongInput.className = 'wrong-input';
-  keySpan.appendChild(placeHolderForWrongInput);
-
   let inputKeyBox = document.createElement('input');
   inputKeyBox.type = 'text';
   inputKeyBox.classList = 'input-text-color';
@@ -207,8 +203,11 @@ async function checkKey(data, stage, panorama) {
   let keyInput = document.getElementById('key-input');
   let inputValue = keyInput.value;
   if (stage.key.toLowerCase() != inputValue.toLowerCase()) {
-    document.getElementById('wrong-input').innerHTML = '<i class="red-text">Wrong Input! Try again!</i>';
-    document.getElementById('wrong-input').classList.remove('wrong-input');
+    let keyinput = document.getElementById('key-input');
+    keyinput.classList.add('wrong-input');
+    setTimeout(function() {
+      keyinput.classList.remove('wrong-input');
+    }, 300);
     return;
   }
   if (data.stages.length == stage.stageNumber) {
@@ -277,9 +276,10 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
+* @param {object} minimap the minimap to draw the marker on
 * @return {object} the marker created
 */
-function addHintMarker(latLng, hint, hintNum) {  
+function addHintMarker(latLng, hint, hintNum, minimap) {  
   let marker = new google.maps.Marker({
     position: latLng,
     map: currGameData.getMap,
@@ -287,7 +287,7 @@ function addHintMarker(latLng, hint, hintNum) {
   });
 
   marker.addListener('click', function() {
-    changeData(latLng, hint, hintNum, true, marker);
+    changeData(latLng, hint, hintNum, true, marker, minimap);
   });
 
   return marker;
@@ -300,8 +300,9 @@ function addHintMarker(latLng, hint, hintNum) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {object} marker passes in a marker to remove
+* @param {object} minimap the minimap to draw the marker on
 */
-function changeData(latLng, hint, hintNum, updateProgress, marker) {
+function changeData(latLng, hint, hintNum, updateProgress, marker, minimap) {
   currGameData.addSingleHintFound = hintNum;
   if (marker != null) {
     marker.setMap(null);
@@ -361,28 +362,15 @@ function updateUserProgress() {
 }
 
 /**
-* Creates a button element that is used for the minimap.
+* Creates a stylized button element that is used for the minimap controls (zoom and map view).
 * @param text the text that should go in the button.
-* @return {Element} an HTML element.
+* @return {Element} an HTML element of the button.
 */
 function createMinimapButton(text) {
   const button = document.createElement("div");
-  button.style.backgroundColor = "#fff";
-  button.style.border = "1px solid #000";
-  button.style.cursor = "pointer";
-  button.style.textAlign = "center";
-  button.style.float = "left";
-  button.style.minWidth = "30px";
-  button.style.height = "30px";
 
   const buttonText = document.createElement("div");
-  buttonText.style.color = "rgb(25,25,25)";
-  buttonText.style.fontFamily = "Roboto,Arial,sans-serif";
-  buttonText.style.fontSize = "16px";
-  buttonText.style.paddingLeft = "5px";
-  buttonText.style.paddingRight = "5px";
-  buttonText.style.userSelect = "none";
-  buttonText.style.lineHeight = "27px";
+  buttonText.id = "minimap-button-text";
   buttonText.innerHTML = text;
   button.appendChild(buttonText);
   return button;
@@ -391,6 +379,7 @@ function createMinimapButton(text) {
 /**
 * Adds a minimap to the street view panorama
 * @param panorama the panorama where the mapdiv will be placed.
+* @return {object} the minimap.
 */
 function addMinimap(panorama) {
   const minimapdiv = document.createElement("div");
@@ -398,9 +387,9 @@ function addMinimap(panorama) {
   minimapdiv.style.height = "150px";
   minimapdiv.style.width = "200px";
   minimapdiv.style.pointerEvents = "none";
-  minimapdiv.style.opacity = 0.55;
+  minimapdiv.style.opacity = 0.75;
   
-  minimap = new google.maps.Map(minimapdiv, {
+  let minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
     zoom: 16,
     gestureHandling: 'none',
@@ -419,17 +408,21 @@ function addMinimap(panorama) {
   panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapdiv);
 
   const minimapControls = document.createElement("div");
+  minimapControls.id = "minimap-controls";
   const zoomInButton = createMinimapButton("+");
+  zoomInButton.id = "minimap-button-left";
   zoomInButton.addEventListener("click", () => {
     minimap.setZoom(minimap.getZoom()+1);
   });
 
   const zoomOutButton = createMinimapButton("-");
+  zoomOutButton.id = "minimap-button-middle";
   zoomOutButton.addEventListener("click", () => {
     minimap.setZoom(minimap.getZoom()-1);
   });
 
   const toggleViewButton = createMinimapButton("Toggle View");
+  toggleViewButton.id = "minimap-button-right";
   toggleViewButton.addEventListener("click", () => {
     let currentType = minimap.getMapTypeId();
     if(currentType === "roadmap") {
@@ -443,4 +436,37 @@ function addMinimap(panorama) {
   minimapControls.appendChild(zoomOutButton);
   minimapControls.appendChild(toggleViewButton);
   panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapControls);
+  return minimap;
+}
+
+/**
+* Adds a legend to the top right of the panorama.
+* @param panorama the panorama where the legend will be placed.
+*/
+function addLegend(panorama) {
+    const legendDiv = document.createElement("div");
+    legendDiv.id = "legend";
+    let notFound = document.createElement("div");
+    let notFoundImg = document.createElement("img");
+    notFoundImg.className = "legend-img";
+    notFoundImg.src = "images/marker_notfound_mini.png";
+    let notFoundText = document.createElement("span");
+    notFoundText.className = "legend-text";
+    notFoundText.innerText = " - Undiscovered hint"
+    notFound.appendChild(notFoundImg);
+    notFound.appendChild(notFoundText);
+
+    let found = document.createElement("div");
+    let foundImg = document.createElement("img");
+    foundImg.className = "legend-img";
+    foundImg.src = "images/marker_found_mini.png";
+    let foundText = document.createElement("span");
+    foundText.className = "legend-text";
+    foundText.innerText = " - Discovered hint";
+    found.appendChild(foundImg);
+    found.appendChild(foundText);
+
+    legendDiv.appendChild(notFound);
+    legendDiv.appendChild(found);
+    panorama.controls[google.maps.ControlPosition.RIGHT_TOP].push(legendDiv);
 }
