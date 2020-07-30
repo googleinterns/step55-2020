@@ -72,7 +72,7 @@ public final class DatastoreManagerTest {
     gamesCreated.add("game4");
     
     //Makes use of the User class defined previously to build a single user for testing purposes
-    User.Builder user = new User.Builder("0001").setUsername("firstUser").setFirstName("Ade").setLastName("Ademiluyi");
+    User.Builder user = new User.Builder("0001").setUsername("firstUser").setlowerCaseUserName("firstuser").setFirstName("Ade").setLastName("Ademiluyi");
     user.setProfilePictureUrl("images/defaultProfilePicture.jpg").setGamesCreated(gamesCreated);
     user.setGamesCompletedWithTime(new ArrayList<Pair<String, Long>>());
     expected = user.build();
@@ -87,6 +87,7 @@ public final class DatastoreManagerTest {
 
     Assert.assertEquals(expected.getUserID(), actual.getUserID());
     Assert.assertEquals(expected.getUsername(), actual.getUsername());
+    Assert.assertEquals(expected.getlowerCaseUserName(), actual.getlowerCaseUserName());
     Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
     Assert.assertEquals(expected.getLastName(), actual.getLastName());
     Assert.assertEquals(expected.getGamesCreated(), actual.getGamesCreated());
@@ -102,7 +103,7 @@ public final class DatastoreManagerTest {
     replacedGamesCreated.add("game8");
     
     //Makes use of the User class defined previously to build a single user for testing purposes
-    User.Builder replacedUser = new User.Builder("0001").setUsername("replacedUser").setFirstName("sara").setLastName("lawrence");
+    User.Builder replacedUser = new User.Builder("0001").setUsername("replacedUser").setlowerCaseUserName("replaceduser").setFirstName("sara").setLastName("lawrence");
     replacedUser.setProfilePictureUrl("images/defaultProfilePicture.jpg").setGamesCreated(replacedGamesCreated);
     replacedUser.setGamesCompletedWithTime(new ArrayList<Pair<String, Long>>());
     expected = replacedUser.build();
@@ -117,6 +118,7 @@ public final class DatastoreManagerTest {
 
     Assert.assertEquals(expected.getUserID(), actual.getUserID());
     Assert.assertEquals(expected.getUsername(), actual.getUsername());
+    Assert.assertEquals(expected.getlowerCaseUserName(), actual.getlowerCaseUserName());
     Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
     Assert.assertEquals(expected.getLastName(), actual.getLastName());
     Assert.assertEquals(expected.getGamesCreated(), actual.getGamesCreated());
@@ -405,7 +407,7 @@ public final class DatastoreManagerTest {
     boolean expected = true;
     
     //Makes use of the User class defined previously to build a single user for testing purposes
-    User.Builder user = new User.Builder("0001").setUsername("user1").setFirstName("Ade").setLastName("Ademiluyi");
+    User.Builder user = new User.Builder("0001").setUsername("user1").setlowerCaseUserName("user1").setFirstName("Ade").setLastName("Ademiluyi");
     user.setProfilePictureUrl("images/defaultProfilePicture.jpg").setGamesCreated(new ArrayList<String>());
     user.setGamesCompletedWithTime(new ArrayList<Pair<String, Long>>());
     test = user.build();

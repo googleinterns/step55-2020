@@ -49,6 +49,7 @@ public class CreateUsernameServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String username = request.getParameter("userName");
+        String lowerCaseUserName = request.getParameter("lowerCaseUserName");
         if(username.length() == 0) {
             throw new IOException("Username must be at least 1 character");
         }
@@ -64,7 +65,7 @@ public class CreateUsernameServlet extends HttpServlet {
         if (!doesUsernameExist) {
             userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
             String userId = userVerifier.getUserID();
-            User.Builder user = new User.Builder(userId).setUsername(username);
+            User.Builder user = new User.Builder(userId).setUsername(username).setlowerCaseUserName(lowerCaseUserName);
             User oldUser;
             try {
                 oldUser = datastoreManager.retrieveUser(userId);

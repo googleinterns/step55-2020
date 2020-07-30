@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class User {
     private final String userID;
     private final String username;
+    private final String lowerCaseUserName;
     private final String firstName;
     private final String lastName;
     private final String profilePictureUrl;
@@ -37,6 +38,7 @@ public class User {
 
         // Optional parameters - initialized to default values
         private String username = "N/A";
+        private String lowerCaseUserName = "N/A";
         private String firstName = "N/A";
         private String lastName = "N/A";
         private String profilePictureUrl = "N/A";
@@ -58,6 +60,16 @@ public class User {
         */
         public Builder setUsername(String username) {
             this.username = username;
+            return this;
+        }
+
+        /**
+        * Sets the username of this user in lowercase.
+        * @param lowerCaseUserName a String containing the new username in lowercase.
+        * @return a Builder with the modified username.
+        */
+        public Builder setlowerCaseUserName(String lowerCaseUserName) {
+            this.lowerCaseUserName = lowerCaseUserName;
             return this;
         }
 
@@ -130,6 +142,7 @@ public class User {
     private User(Builder builder) {
         this.userID = builder.userID;
         this.username = builder.username;
+        this.lowerCaseUserName = builder.lowerCaseUserName;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.profilePictureUrl = builder.profilePictureUrl;
@@ -151,6 +164,14 @@ public class User {
     */
     public String getUsername() {
         return this.username;
+    }
+    
+    /**
+    * Retrieves the username of this user in lowercase.
+    * @return a String containing the username of this user in lowercase.
+    */
+    public String getlowerCaseUserName() {
+      return this.lowerCaseUserName;
     }
 
     /**

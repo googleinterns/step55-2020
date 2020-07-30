@@ -56,6 +56,7 @@ public class DatastoreManager implements IDataManager {
     Entity userEntity = new Entity("User", user.getUserID());
     userEntity.setProperty("userID", user.getUserID());
     userEntity.setProperty("username", user.getUsername());
+    userEntity.setProperty("lowerCaseUserName", user.getlowerCaseUserName());
     userEntity.setProperty("firstname", user.getFirstName());
     userEntity.setProperty("lastname", user.getLastName());
     userEntity.setProperty("gamesCreated", user.getGamesCreated());
@@ -77,6 +78,7 @@ public class DatastoreManager implements IDataManager {
     userEntity = datastore.get(userEntityKey);
     
     String userName = (String) userEntity.getProperty("username");
+    String lowerCaseUserName = (String) userEntity.getProperty("lowerCaseUserName");
     String firstName = (String) userEntity.getProperty("firstname");
     String lastName = (String) userEntity.getProperty("lastname");
     ArrayList<String> gamesCreated = (ArrayList<String>) userEntity.getProperty("gamesCreated");
@@ -92,7 +94,7 @@ public class DatastoreManager implements IDataManager {
       gamesCompletedWithTime = new ArrayList<>();
     }
 
-    User.Builder user = new User.Builder(userID).setUsername(userName).setFirstName(firstName).setLastName(lastName);
+    User.Builder user = new User.Builder(userID).setUsername(userName).setlowerCaseUserName(lowerCaseUserName).setFirstName(firstName).setLastName(lastName);
     user.setProfilePictureUrl(profilePictureUrl).setGamesCreated(gamesCreated);
     user.setGamesCompletedWithTime(gamesCompletedWithTime);
     return user.build();
@@ -347,7 +349,7 @@ public class DatastoreManager implements IDataManager {
   * @return a boolean if the userName exists or not
   */
   public boolean doesUsernameExist(String userName) {
-    Query query = new Query("User").setFilter(new FilterPredicate("username", FilterOperator.EQUAL, userName));
+    Query query = new Query("User").setFilter(new FilterPredicate("lowerCaseUserName", FilterOperator.EQUAL, userName));
     PreparedQuery pq = datastore.prepare(query);
   
     return pq.countEntities() > 0;
