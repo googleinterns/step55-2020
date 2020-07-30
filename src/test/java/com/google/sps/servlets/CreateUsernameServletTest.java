@@ -104,21 +104,21 @@ public final class CreateUsernameServletTest {
     // * Simulates user with id 'abcUserId' trying to change their username from 'usernameB' to 'usernameA',
     // * which is already taken by the user with id 'UserA'.
     // */
-    // @Test
-    // public void testTakenUsername() throws Exception {
-    //     User userA = new User.Builder("UserA").setUsername("usernameA").build();
-    //     User userB = new User.Builder("abcUserId").setUsername("usernameB").build();
-    //     datastoreManager.createOrReplaceUser(userA);
-    //     datastoreManager.createOrReplaceUser(userB);
-    //     when(request.getParameter("userName")).thenReturn("usernameA");
+    @Test
+    public void testTakenUsername() throws Exception {
+        User userA = new User.Builder("UserA").setUsername("usernameA").build();
+        User userB = new User.Builder("abcUserId").setUsername("usernameB").build();
+        datastoreManager.createOrReplaceUser(userA);
+        datastoreManager.createOrReplaceUser(userB);
+        when(request.getParameter("userName")).thenReturn("usernameA");
 
-    //     servlet.doPost(request, response);
+        servlet.doPost(request, response);
 
-    //     String usernameA = datastoreManager.retrieveUser("UserA").getUsername();
-    //     Assert.assertTrue(usernameA.equals("usernameA"));
-    //     String usernameB = datastoreManager.retrieveUser("abcUserId").getUsername();
-    //     Assert.assertTrue(usernameB.equals("usernameB"));
-    // }
+        String usernameA = datastoreManager.retrieveUser("UserA").getUsername();
+        Assert.assertTrue(usernameA.equals("usernameA"));
+        String usernameB = datastoreManager.retrieveUser("abcUserId").getUsername();
+        Assert.assertTrue(usernameB.equals("usernameB"));
+    }
 
     /**
     * Tests a user attempting to create a username of just the empty string.

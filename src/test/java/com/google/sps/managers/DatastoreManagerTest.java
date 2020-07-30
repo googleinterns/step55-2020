@@ -72,7 +72,7 @@ public final class DatastoreManagerTest {
     gamesCreated.add("game4");
     
     //Makes use of the User class defined previously to build a single user for testing purposes
-    User.Builder user = new User.Builder("0001").setUsername("firstUser").setlowerCaseUserName("firstuser").setFirstName("Ade").setLastName("Ademiluyi");
+    User.Builder user = new User.Builder("0001").setUsername("firstUser").setFirstName("Ade").setLastName("Ademiluyi");
     user.setProfilePictureUrl("images/defaultProfilePicture.jpg").setGamesCreated(gamesCreated);
     user.setGamesCompletedWithTime(new ArrayList<Pair<String, Long>>());
     expected = user.build();
@@ -87,7 +87,6 @@ public final class DatastoreManagerTest {
 
     Assert.assertEquals(expected.getUserID(), actual.getUserID());
     Assert.assertEquals(expected.getUsername(), actual.getUsername());
-    Assert.assertEquals(expected.getlowerCaseUserName(), actual.getlowerCaseUserName());
     Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
     Assert.assertEquals(expected.getLastName(), actual.getLastName());
     Assert.assertEquals(expected.getGamesCreated(), actual.getGamesCreated());
@@ -103,7 +102,7 @@ public final class DatastoreManagerTest {
     replacedGamesCreated.add("game8");
     
     //Makes use of the User class defined previously to build a single user for testing purposes
-    User.Builder replacedUser = new User.Builder("0001").setUsername("replacedUser").setlowerCaseUserName("replaceduser").setFirstName("sara").setLastName("lawrence");
+    User.Builder replacedUser = new User.Builder("0001").setUsername("replacedUser").setFirstName("sara").setLastName("lawrence");
     replacedUser.setProfilePictureUrl("images/defaultProfilePicture.jpg").setGamesCreated(replacedGamesCreated);
     replacedUser.setGamesCompletedWithTime(new ArrayList<Pair<String, Long>>());
     expected = replacedUser.build();
@@ -118,7 +117,6 @@ public final class DatastoreManagerTest {
 
     Assert.assertEquals(expected.getUserID(), actual.getUserID());
     Assert.assertEquals(expected.getUsername(), actual.getUsername());
-    Assert.assertEquals(expected.getlowerCaseUserName(), actual.getlowerCaseUserName());
     Assert.assertEquals(expected.getFirstName(), actual.getFirstName());
     Assert.assertEquals(expected.getLastName(), actual.getLastName());
     Assert.assertEquals(expected.getGamesCreated(), actual.getGamesCreated());
@@ -219,51 +217,51 @@ public final class DatastoreManagerTest {
     Assert.assertEquals(expected, actual);
   }
 
-  // @Test
-  // public void createOrReplaceStageAndRetrieveTest() {
-  //   Stage expected;
-  //   Stage actual;
+  @Test
+  public void createOrReplaceStageAndRetrieveTest() {
+    Stage expected;
+    Stage actual;
     
-  //   //Makes use of the Stage class and it's functions defined previously to build a single stage for testing purposes
-  //   Stage.Builder stage = new Stage.Builder("0001", 4);
-  //   stage.setKey("Test").setStartingHint("Testing").setStartingLocation(new Coordinates()).setHints(new ArrayList<Hint>());
-  //   expected = stage.build();
+    //Makes use of the Stage class and it's functions defined previously to build a single stage for testing purposes
+    Stage.Builder stage = new Stage.Builder("0001", 4);
+    stage.setKey("Test").setStartingHint("Testing").setStartingLocation(new Coordinates()).setHints(new ArrayList<Hint>());
+    expected = stage.build();
 
-  //   datastoreManager.createOrReplaceStage(expected);
+    datastoreManager.createOrReplaceStage(expected);
 
-  //   try {
-  //     actual = datastoreManager.retrieveStage("0001");
-  //   } catch(Exception e) {
-  //     actual = null;
-  //   }
+    try {
+      actual = datastoreManager.retrieveStage("0001");
+    } catch(Exception e) {
+      actual = null;
+    }
 
-  //   Assert.assertEquals(expected.getStageID(), actual.getStageID());
-  //   Assert.assertEquals(expected.getStageNumber(), actual.getStageNumber());
-  //   Assert.assertEquals(expected.getKey(), actual.getKey());
-  //   Assert.assertEquals(expected.getStartingHint(), actual.getStartingHint());
-  //   Assert.assertEquals(expected.getHints(), actual.getHints());
+    Assert.assertEquals(expected.getStageID(), actual.getStageID());
+    Assert.assertEquals(expected.getStageNumber(), actual.getStageNumber());
+    Assert.assertEquals(expected.getKey(), actual.getKey());
+    Assert.assertEquals(expected.getStartingHint(), actual.getStartingHint());
+    Assert.assertEquals(expected.getHints(), actual.getHints());
 
-  //   //--- Replaces the information in the previously created user(with the same userID) and test to see if it actually replaces in datastore---//
+    //--- Replaces the information in the previously created user(with the same userID) and test to see if it actually replaces in datastore---//
 
-  //   //Makes use of the Stage class and it's functions defined previously to build a single stage for testing purposes
-  //   Stage.Builder replacedStage = new Stage.Builder("0001", 4);
-  //   replacedStage.setKey("repleacedTest").setStartingHint("replacedTesting").setStartingLocation(new Coordinates()).setHints(new ArrayList<Hint>());
-  //   expected = replacedStage.build();
+    //Makes use of the Stage class and it's functions defined previously to build a single stage for testing purposes
+    Stage.Builder replacedStage = new Stage.Builder("0001", 4);
+    replacedStage.setKey("repleacedTest").setStartingHint("replacedTesting").setStartingLocation(new Coordinates()).setHints(new ArrayList<Hint>());
+    expected = replacedStage.build();
 
-  //   datastoreManager.createOrReplaceStage(expected);
+    datastoreManager.createOrReplaceStage(expected);
 
-  //   try {
-  //     actual = datastoreManager.retrieveStage("0001");
-  //   } catch(Exception e) {
-  //     actual = null;
-  //   }
+    try {
+      actual = datastoreManager.retrieveStage("0001");
+    } catch(Exception e) {
+      actual = null;
+    }
 
-  //   Assert.assertEquals(expected.getStageID(), actual.getStageID());
-  //   Assert.assertEquals(expected.getStageNumber(), actual.getStageNumber());
-  //   Assert.assertEquals(expected.getKey(), actual.getKey());
-  //   Assert.assertEquals(expected.getStartingHint(), actual.getStartingHint());
-  //   Assert.assertEquals(expected.getHints(), actual.getHints());
-  // }
+    Assert.assertEquals(expected.getStageID(), actual.getStageID());
+    Assert.assertEquals(expected.getStageNumber(), actual.getStageNumber());
+    Assert.assertEquals(expected.getKey(), actual.getKey());
+    Assert.assertEquals(expected.getStartingHint(), actual.getStartingHint());
+    Assert.assertEquals(expected.getHints(), actual.getHints());
+  }
 
   @Test 
   public void retrieveStageTest() {
@@ -333,58 +331,58 @@ public final class DatastoreManagerTest {
     Assert.assertEquals(expected, actual);
   }
 
-  // @Test
-  // public void createOrReplaceHintAndRetrieveTest() {
-  //   Hint expected;
-  //   Hint actual;
+  @Test
+  public void createOrReplaceHintAndRetrieveTest() {
+    double latitude;
+    double longitude;
+    ArrayList<Hint> expected = new ArrayList<Hint> ();
+    ArrayList<Hint> actual = new ArrayList<Hint> ();
+    ArrayList<Hint> hints = new ArrayList<Hint>();
+    // NEED TO BUILD THREE HINTS
+    latitude = 1.00;
+    longitude = 4.00;
+    Coordinates startingLocation;
+    startingLocation = new Coordinates(latitude, longitude);
+    Hint.Builder hint = new Hint.Builder("01", 1);
+    hint.setLocation(startingLocation).setText("hintsnumberone");
+    hints.add(hint.build());
+
+    latitude = 2.00;
+    longitude = 5.00;
+    Coordinates startingLocation2;
+    startingLocation2 = new Coordinates(latitude, longitude);
+    Hint.Builder hint2 = new Hint.Builder("02", 2);
+    hint.setLocation(startingLocation2).setText("hintsnumbertwo");
+    hints.add(hint2.build());
+
+    datastoreManager.createOrReplaceHint(hints);
+    ArrayList<String> ids = new ArrayList<String>();
+    ids.add("01");
+    ids.add("02");
+    try {
+      actual = datastoreManager.retrieveHint(ids);
+    } catch(Exception e) {
+      actual = null;
+    }
     
-  //   //Makes use of the Hint class defined previously to build a single Hint for testing purposes
-  //   Hint.Builder hint = new Hint.Builder("0001", 3);
-  //   hint.setLocation(new Coordinates()).setText("For testing");
-  //   expected = hint.build();
+    expected = hints;
+    Assert.assertEquals(expected, actual);
+  }
 
-  //   datastoreManager.createOrReplaceHint(expected);
+  @Test 
+  public void retrieveHintTest() {
+    ArrayList<String> ids = new ArrayList<String>();
+    ArrayList<Hint> expected = new ArrayList<Hint>();
+    ArrayList<Hint> actual = new ArrayList<Hint>();
 
-  //   try {
-  //     actual = datastoreManager.retrieveHint("0001");
-  //   } catch(Exception e) {
-  //     actual = null;
-  //   }
+    try {
+      actual = datastoreManager.retrieveHint(ids);
+    } catch(Exception e) {
+      actual = null;
+    }
 
-  //   Assert.assertEquals(expected.getHintID(), actual.getHintID());
-  //   Assert.assertEquals(expected.getText(), actual.getText());
-
-  //   //--- Replaces the information in the previously created user(with the same userID) and test to see if it actually replaces in datastore---//
-
-  //   //Makes use of the Hint class defined previously to build a single Hint for testing purposes
-  //   Hint.Builder replacedHint = new Hint.Builder("0001", 3);
-  //   replacedHint.setLocation(new Coordinates()).setText("For testing");
-  //   expected = replacedHint.build();
-
-  //   datastoreManager.createOrReplaceHint(expected);
-
-  //   try {
-  //     actual = datastoreManager.retrieveHint("0001");
-  //   } catch(Exception e) {
-  //     actual = null;
-  //   }
-
-  //   Assert.assertEquals(expected.getHintID(), actual.getHintID());
-  //   Assert.assertEquals(expected.getText(), actual.getText());
-  // }
-
-  // @Test 
-  // public void retrieveHintTest() {
-  //   Hint expected = null;
-  //   Hint actual;
-  //   try {
-  //     actual = datastoreManager.retrieveHint("0000");
-  //   } catch(Exception e) {
-  //     actual = null;
-  //   }
-
-  //   Assert.assertEquals(expected, actual);
-  // }
+    Assert.assertEquals(expected, actual);
+  }
 
   @Test
   public void retrieveAllGamesTest() {
@@ -407,7 +405,7 @@ public final class DatastoreManagerTest {
     boolean expected = true;
     
     //Makes use of the User class defined previously to build a single user for testing purposes
-    User.Builder user = new User.Builder("0001").setUsername("user1").setlowerCaseUserName("user1").setFirstName("Ade").setLastName("Ademiluyi");
+    User.Builder user = new User.Builder("0001").setUsername("user1").setFirstName("Ade").setLastName("Ademiluyi");
     user.setProfilePictureUrl("images/defaultProfilePicture.jpg").setGamesCreated(new ArrayList<String>());
     user.setGamesCompletedWithTime(new ArrayList<Pair<String, Long>>());
     test = user.build();

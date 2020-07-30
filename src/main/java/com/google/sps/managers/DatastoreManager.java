@@ -56,7 +56,7 @@ public class DatastoreManager implements IDataManager {
     Entity userEntity = new Entity("User", user.getUserID());
     userEntity.setProperty("userID", user.getUserID());
     userEntity.setProperty("username", user.getUsername());
-    userEntity.setProperty("lowerCaseUserName", user.getlowerCaseUserName());
+    userEntity.setProperty("lowerCaseUserName", (user.getUsername()).toLowerCase());
     userEntity.setProperty("firstname", user.getFirstName());
     userEntity.setProperty("lastname", user.getLastName());
     userEntity.setProperty("gamesCreated", user.getGamesCreated());
@@ -78,7 +78,6 @@ public class DatastoreManager implements IDataManager {
     userEntity = datastore.get(userEntityKey);
     
     String userName = (String) userEntity.getProperty("username");
-    String lowerCaseUserName = (String) userEntity.getProperty("lowerCaseUserName");
     String firstName = (String) userEntity.getProperty("firstname");
     String lastName = (String) userEntity.getProperty("lastname");
     ArrayList<String> gamesCreated = (ArrayList<String>) userEntity.getProperty("gamesCreated");
@@ -94,7 +93,7 @@ public class DatastoreManager implements IDataManager {
       gamesCompletedWithTime = new ArrayList<>();
     }
 
-    User.Builder user = new User.Builder(userID).setUsername(userName).setlowerCaseUserName(lowerCaseUserName).setFirstName(firstName).setLastName(lastName);
+    User.Builder user = new User.Builder(userID).setUsername(userName).setFirstName(firstName).setLastName(lastName);
     user.setProfilePictureUrl(profilePictureUrl).setGamesCreated(gamesCreated);
     user.setGamesCompletedWithTime(gamesCompletedWithTime);
     return user.build();
@@ -200,9 +199,6 @@ public class DatastoreManager implements IDataManager {
     }
 
     ArrayList<Hint> hints = new ArrayList<Hint>();
-    // for (String hintid : hintIDs) {
-    //   hints.add(retrieveHint(hintid));
-    // }
     hints = retrieveHint(hintIDs);
 
     Stage.Builder stage = new Stage.Builder(stageID, stageNumber);
@@ -286,7 +282,6 @@ public class DatastoreManager implements IDataManager {
     ArrayList<Hint> hintsRetrieved = new ArrayList<>();
     for (String hint : hintIDs) {
       hintEntityKey.add(KeyFactory.createKey("Hint", hint));
-      // hintEntity = datastore.get(hintEntityKey);
     }
 
     batchHintEntity = datastore.get(hintEntityKey);
@@ -302,7 +297,7 @@ public class DatastoreManager implements IDataManager {
 
       Hint.Builder hint = new Hint.Builder(hintID, hintNumber);
       hint.setLocation(startingLocation).setText(text);
-      //return hint.build();
+      
       hintsRetrieved.add(hint.build());
     }
     return hintsRetrieved;
@@ -348,8 +343,8 @@ public class DatastoreManager implements IDataManager {
   * @param userName the userName that is being looked for
   * @return a boolean if the userName exists or not
   */
-  public boolean doesUsernameExist(String userName) {
-    Query query = new Query("User").setFilter(new FilterPredicate("lowerCaseUserName", FilterOperator.EQUAL, userName));
+  public boolean doesUsernameExist(String lowerCaseUserName) {
+    Query query = new Query("User").setFilter(new FilterPredicate("lowerCaseUserName", FilterOperator.EQUAL, lowerCaseUserName));
     PreparedQuery pq = datastore.prepare(query);
   
     return pq.countEntities() > 0;
