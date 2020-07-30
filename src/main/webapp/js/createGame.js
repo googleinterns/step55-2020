@@ -230,11 +230,11 @@ function createInputDiv() {
 */
 function checkValidLatLng(lat, lng) {
   if (!(lat > -85 && lat < 85)) {
-    alert("Latitude must be betweekn -85 and 85");
+    alert("Latitude must be between -85 and 85");
     return false;
   }
   if (!(lng > -180 && lng < 180)) {
-    alert("Longitude must be betweekn -180 and 180");
+    alert("Longitude must be between -180 and 180");
     return false;
   }
   return true;
