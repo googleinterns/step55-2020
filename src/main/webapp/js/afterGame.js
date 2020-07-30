@@ -25,7 +25,6 @@ function loadGameName() {
   });
   window.addEventListener("beforeunload", function(event) { 
       sendDataToServer(""); 
-      console.log('entered');
       delete event['returnValue'];
   });
 }
@@ -89,11 +88,12 @@ function sendDataToServer(nextAction) {
   fetchParams.append('difficultyVote', difficulty);
   fetchParams.append('gameID', gameID);
   let request = new Request('/update-feedback-data', {method: 'POST', body: fetchParams});
-  fetch(request);
   if (nextAction == 'Play Again') {
     window.location.replace('playGame.html?gameID=' + gameID);
     return;
   } else if (nextAction == 'Back To Home') {
     window.location.replace('index.html');
+  } else {
+    fetch(request);
   }
 }
