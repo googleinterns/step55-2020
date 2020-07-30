@@ -330,7 +330,8 @@ function loadMaps() {
   fetch('/load-mainpage-data?page='+0).then(response => response.json()).then(async (data) => {
     var featuredMapText = document.getElementById('featured-map-text');
     if (data.length == 0) {
-       featuredMapText.innerHTML = "No maps to play. Log in to create a map!"
+       featuredMapText.innerHTML = "No maps to play. Log in to create a map!";
+       gamesLoaded = true;
        return;
     }
     let moreMapsButtonDiv = document.getElementById('button-for-more-maps');
