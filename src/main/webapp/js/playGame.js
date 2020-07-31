@@ -55,20 +55,20 @@ function initMapToPlayGame() {
     // puts the user in streetView
     panorama.setVisible(true);
 
-    let minimap = addMinimap(panorama);
+    currGameData.setMiniMap = addMinimap(panorama);
     addLegend(panorama);
 
     createGameInfoOnSideOfMap(data, initStage, panorama);
 
     let markers = [];
     stageHints.forEach(hint => 
-      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, minimap, panorama))
+      markers.push(addHintMarker({lat: hint.location.latitude, lng: hint.location.longitude}, hint.text, hint.hintNumber, panorama))
     );
 
     currGameData.getHintsFound.forEach(hintNum => {
       let num = parseInt(hintNum);
       let hintLatLng = {lat: stageHints[num - 1].location.latitude, lng: stageHints[num - 1].location.longitude};
-      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1], minimap, panorama);
+      changeData(hintLatLng, stageHints[num - 1].text, hintNum, false, markers[num - 1], panorama);
     });
   });
 }
@@ -83,19 +83,16 @@ async function getUserProgress() {
   
   const params = new URLSearchParams();
   if (isSignedIn()) {
-    console.log("signed in in user progress")
     let tokenEmailDict = tokenAndEmail();
     params.append('email', tokenEmailDict['email']);
     params.append('idToken', tokenEmailDict['token']);
   }
   params.append('gameID', gameID);
-  console.log(params)
 
   let request = new Request('/load-singleplayerprogress-data', {method: 'POST', body: params});
   await fetch(request).then(response => response.json()).then(data => {
     result = data;
   });
-  console.log(result);
   return result;
 }
 
@@ -276,11 +273,10 @@ async function getStage(stageID) {
 * @param {LatLng} latLng an object that contains the latitude and longitude of where the marker should be
 * @param {string} hint the plain text of the hint
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
-* @param {object} minimap the minimap to draw the marker on
 * @param {object} panorama the street view instance the user is playing on
 * @return {object} the marker created
 */
-function addHintMarker(latLng, hint, hintNum, minimap, panorama) {  
+function addHintMarker(latLng, hint, hintNum, panorama) {  
   let marker = new google.maps.Marker({
     position: latLng,
     map: currGameData.getMap,
@@ -288,7 +284,7 @@ function addHintMarker(latLng, hint, hintNum, minimap, panorama) {
   });
 
   marker.addListener('click', function() {
-    changeData(latLng, hint, hintNum, true, marker, minimap, panorama);
+    changeData(latLng, hint, hintNum, true, marker, panorama);
   });
 
   return marker;
@@ -301,10 +297,9 @@ function addHintMarker(latLng, hint, hintNum, minimap, panorama) {
 * @param {int} hintNum the number of the hint, which hint is it (i.e. hint 1, 2, 3, etc.)
 * @param {boolean} updateProgress boolean indicating if the user progress should be updated or not
 * @param {object} marker passes in a marker to remove
-* @param {object} minimap the minimap to draw the marker on
 * @param {object} panorama the street view instance the user is playing on
 */
-function changeData(latLng, hint, hintNum, updateProgress, marker, minimap, panorama) {
+function changeData(latLng, hint, hintNum, updateProgress, marker, panorama) {
   currGameData.addSingleHintFound = hintNum;
   if (marker != null) {
     marker.setMap(null);
@@ -315,10 +310,9 @@ function changeData(latLng, hint, hintNum, updateProgress, marker, minimap, pano
     map: currGameData.getMap,
     icon: 'images/marker_found.png'
   });
-  
   minimapmarker = new google.maps.Marker({
     position: latLng,
-    map: minimap,
+    map: currGameData.getMiniMap,
     icon: 'images/marker_found_mini.png'
   });
 
@@ -400,8 +394,11 @@ function createMinimapButton(text) {
 function addMinimap(panorama) {
   const minimapdiv = document.createElement("div");
   minimapdiv.id = "minimap";
+  minimapdiv.style.height = "150px";
+  minimapdiv.style.width = "200px";
   minimapdiv.style.pointerEvents = "none";
-
+  minimapdiv.style.opacity = 0.75;
+  
   let minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
     zoom: 16,
@@ -414,17 +411,14 @@ function addMinimap(panorama) {
     rotateControl: false,
     fullscreenControl: false
   });
-
   minimap.setStreetView(panorama);
   google.maps.event.addListener(panorama, 'position_changed', function() {
     minimap.setCenter(panorama.getPosition());
   });
-
   panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapdiv);
 
   const minimapControls = document.createElement("div");
   minimapControls.id = "minimap-controls";
-  
   const zoomInButton = createMinimapButton("+");
   zoomInButton.id = "minimap-button-left";
   zoomInButton.addEventListener("click", () => {
