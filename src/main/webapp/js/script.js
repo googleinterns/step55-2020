@@ -1,6 +1,6 @@
 var auth2;
 
-// Depreciated
+// Deprecated
 /** 
 * initalizes the GoogleAuth instance and creates the nav bar
 * @param {string} page is which HTML the navbar should be placed on
@@ -403,7 +403,7 @@ function addMaps(data) {
     }
 }
 
-// Depreciated
+// Deprecated
 /** 
 * Stops the JS from executing any code for the amount of miliseconds provided
 * @param {int} ms number miliseconds to stop the JS for
