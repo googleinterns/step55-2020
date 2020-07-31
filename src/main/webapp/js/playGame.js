@@ -315,6 +315,7 @@ function changeData(latLng, hint, hintNum, updateProgress, marker, minimap, pano
     map: currGameData.getMap,
     icon: 'images/marker_found.png'
   });
+  
   minimapmarker = new google.maps.Marker({
     position: latLng,
     map: minimap,
@@ -399,11 +400,8 @@ function createMinimapButton(text) {
 function addMinimap(panorama) {
   const minimapdiv = document.createElement("div");
   minimapdiv.id = "minimap";
-  minimapdiv.style.height = "150px";
-  minimapdiv.style.width = "200px";
   minimapdiv.style.pointerEvents = "none";
-  minimapdiv.style.opacity = 0.75;
-  
+
   let minimap = new google.maps.Map(minimapdiv, {
     center: panorama.getPosition(),
     zoom: 16,
@@ -416,14 +414,17 @@ function addMinimap(panorama) {
     rotateControl: false,
     fullscreenControl: false
   });
+
   minimap.setStreetView(panorama);
   google.maps.event.addListener(panorama, 'position_changed', function() {
     minimap.setCenter(panorama.getPosition());
   });
+
   panorama.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(minimapdiv);
 
   const minimapControls = document.createElement("div");
   minimapControls.id = "minimap-controls";
+  
   const zoomInButton = createMinimapButton("+");
   zoomInButton.id = "minimap-button-left";
   zoomInButton.addEventListener("click", () => {
