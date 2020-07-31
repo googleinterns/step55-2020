@@ -333,50 +333,50 @@ public final class DatastoreManagerTest {
 
   @Test
   public void createOrReplaceHintAndRetrieveTest() {
-    Hint expected;
-    Hint actual;
+    double latitude;
+    double longitude;
+    ArrayList<Hint> expected = new ArrayList<Hint> ();
+    ArrayList<Hint> actual = new ArrayList<Hint> ();
+    ArrayList<Hint> hints = new ArrayList<Hint>();
+    // NEED TO BUILD THREE HINTS
+    latitude = 1.00;
+    longitude = 4.00;
+    Coordinates startingLocation;
+    startingLocation = new Coordinates(latitude, longitude);
+    Hint.Builder hint = new Hint.Builder("01", 1);
+    hint.setLocation(startingLocation).setText("hintsnumberone");
+    hints.add(hint.build());
+
+    latitude = 2.00;
+    longitude = 5.00;
+    Coordinates startingLocation2;
+    startingLocation2 = new Coordinates(latitude, longitude);
+    Hint.Builder hint2 = new Hint.Builder("02", 2);
+    hint.setLocation(startingLocation2).setText("hintsnumbertwo");
+    hints.add(hint2.build());
+
+    datastoreManager.createOrReplaceHint(hints);
+    ArrayList<String> ids = new ArrayList<String>();
+    ids.add("01");
+    ids.add("02");
+    try {
+      actual = datastoreManager.retrieveHint(ids);
+    } catch(Exception e) {
+      actual = null;
+    }
     
-    //Makes use of the Hint class defined previously to build a single Hint for testing purposes
-    Hint.Builder hint = new Hint.Builder("0001", 3);
-    hint.setLocation(new Coordinates()).setText("For testing");
-    expected = hint.build();
-
-    datastoreManager.createOrReplaceHint(expected);
-
-    try {
-      actual = datastoreManager.retrieveHint("0001");
-    } catch(Exception e) {
-      actual = null;
-    }
-
-    Assert.assertEquals(expected.getHintID(), actual.getHintID());
-    Assert.assertEquals(expected.getText(), actual.getText());
-
-    //--- Replaces the information in the previously created user(with the same userID) and test to see if it actually replaces in datastore---//
-
-    //Makes use of the Hint class defined previously to build a single Hint for testing purposes
-    Hint.Builder replacedHint = new Hint.Builder("0001", 3);
-    replacedHint.setLocation(new Coordinates()).setText("For testing");
-    expected = replacedHint.build();
-
-    datastoreManager.createOrReplaceHint(expected);
-
-    try {
-      actual = datastoreManager.retrieveHint("0001");
-    } catch(Exception e) {
-      actual = null;
-    }
-
-    Assert.assertEquals(expected.getHintID(), actual.getHintID());
-    Assert.assertEquals(expected.getText(), actual.getText());
+    expected = hints;
+    Assert.assertEquals(expected, actual);
   }
 
   @Test 
   public void retrieveHintTest() {
-    Hint expected = null;
-    Hint actual;
+    ArrayList<String> ids = new ArrayList<String>();
+    ArrayList<Hint> expected = new ArrayList<Hint>();
+    ArrayList<Hint> actual = new ArrayList<Hint>();
+
     try {
-      actual = datastoreManager.retrieveHint("0000");
+      actual = datastoreManager.retrieveHint(ids);
     } catch(Exception e) {
       actual = null;
     }

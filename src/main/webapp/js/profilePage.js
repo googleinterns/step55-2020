@@ -60,18 +60,18 @@ async function isTaken(desiredUsername) {
 * @param {string} desiredUsername the username to be checked.
 * @return {string} 'Available' if this username is good; otherwise a string describing the issue.
 */
-async function getAvailabilityText(desiredUsername) {
-  if (desiredUsername.length == 0) {
+async function getAvailabilityText(lowerCaseUserName) {
+  if (lowerCaseUserName.length == 0) {
     return 'Username must be at least 1 character';
-  } else if (desiredUsername.length > 20) {
+  } else if (lowerCaseUserName.length > 20) {
     return 'Username cannot be more than 20 characters';
   }
   let pattern = new RegExp(/^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz._0123456789]*$/);
-  if (!pattern.test(desiredUsername)) {
+  if (!pattern.test(lowerCaseUserName)) {
     return 'Only letters, digits, underscores, and periods are allowed';
-  } else if (originalUsername == desiredUsername) {
-    return 'That is your original username';
-  } else if (await isTaken(desiredUsername)) {
+  } else if (originalUsername.toLowerCase() == lowerCaseUserName) {
+    return 'Username Currently in use by you';
+  } else if (await isTaken(lowerCaseUserName)) {
     return 'Username is already taken';
   }
   return 'Available';
@@ -82,9 +82,10 @@ async function getAvailabilityText(desiredUsername) {
 */
 async function displayAvailability() {
   let desiredUsername = document.getElementById('userName').value;
+  let lowerCaseUserName = desiredUsername.toLowerCase();
   let availabilityBox = document.getElementById('username-availability-message');
-  availabilityBox.innerText = await getAvailabilityText(desiredUsername);
-  if(availabilityBox.innerText == 'Available' || availabilityBox.innerText == 'That is your original username') {
+  availabilityBox.innerText = await getAvailabilityText(lowerCaseUserName);
+  if(availabilityBox.innerText == 'Available' || availabilityBox.innerText == 'Username Currently in use by you') {
     availabilityBox.className = 'green-text';
   } else {
     availabilityBox.className = 'red-text';
@@ -98,6 +99,7 @@ async function submitUsername() {
   }
   
   let desiredUsername = document.getElementById('userName').value;
+  let lowerCaseUserName = desiredUsername.toLowerCase();
   let availabilityBox = document.getElementById('username-availability-message');
   await displayAvailability();
   if(availabilityBox.innerText == 'Available') {
@@ -105,6 +107,7 @@ async function submitUsername() {
     let tokenEmailDict = tokenAndEmail();
 
     params.append('userName', desiredUsername);
+    params.append('lowerCaseUserName', lowerCaseUserName);
     params.append('email', tokenEmailDict['email']);
     params.append('idToken', tokenEmailDict['token']);
     
