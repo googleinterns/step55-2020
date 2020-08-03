@@ -240,7 +240,7 @@ async function createNavBar(page) {
 * @param {string} size is dimension of the static image in pixels (ex: '200' for a 200x200 image)
 * @return {Element} an img element is returned with the stage starting locations marked on the image
 */
-function createStaticMap(stageLocations, size) { 
+function createStaticMap(stageLocations, size, mapKey) { 
   let staticImage = document.createElement('img');
   let staticMapURL = 'https://maps.googleapis.com/maps/api/staticmap?center=';
   staticMapURL += stageLocations[0].latitude + ',' + stageLocations[0].longitude;
@@ -248,7 +248,7 @@ function createStaticMap(stageLocations, size) {
   for (let i = 0; i < stageLocations.length; i++) {
     staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
   }
-  staticMapURL += '&key=AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
+  staticMapURL += '&key=' + mapKey;
   staticImage.src = staticMapURL;
   staticImage.classList.add('cursor-pointer');
   return staticImage;
@@ -317,7 +317,7 @@ function getStarRating(stars) {
 /** 
 * Adds a featured map where the ID 'featured-map' is and to where the ID 'all-maps' is
 */
-function loadMaps() {
+function loadMaps(mapKey) {
   // Gets rid of the loading gif once the maps are loaded
   var gamesLoaded = false;
   var intervalId = window.setInterval(function() {
@@ -334,20 +334,20 @@ function loadMaps() {
        gamesLoaded = true;
        return;
     }
+
     let moreMapsButtonDiv = document.getElementById('button-for-more-maps');
     moreMapsButtonDiv.innerHTML = "<input type='button' id='more-maps' value='Load More Maps' onclick='loadMoreMaps(1)'/>";
-    featuredMapText.innerHTML = "Featured Map:"
-    let featuredMap = createStaticMap(data[0].stageLocations, '400');
+    featuredMapText.innerHTML = "Featured Map:";
+    let featuredMap = createStaticMap(data[0].stageLocations, '400', mapKey);
     let featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     let featuredMapDiv = document.getElementById('featured-map');
     featuredMapDiv.classList.add('hoverable');
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
-    console.log(data[0].gameID);
     featuredMapDiv.addEventListener('click', function() {
-      console.log(data[0].gameID);
       window.location.replace('gameInfo.html?gameID=' + data[0].gameID);
     });
+
     if (data.length == 0 || data.length < 20) {
       let moreMapsButton = document.getElementById('more-maps');
       moreMapsButton.className = 'hidden';
@@ -377,30 +377,34 @@ function loadMoreMaps(pageNum) {
 * Adds maps where the ID 'all-maps' is
 * @param {object} data the information retrieved from '/load-mainpage-data' servlet
 */
-function addMaps(data) {
-    let allMaps = document.getElementById('all-maps');
-    for (let i = 0; i < data.length; i++) {
-      let mapDiv = document.createElement('div');
-      mapDiv.classList.add('col');
-      mapDiv.classList.add('hoverable');
-      mapDiv.id = 'individual-map';
+async function addMaps(data) {
+  let mapKey;
+  await fetch('/load-mapsapikey-data').then(response => response.json()).then((data) => {
+    mapKey = data;
+  });
+  let allMaps = document.getElementById('all-maps');
+  for (let i = 0; i < data.length; i++) {
+    let mapDiv = document.createElement('div');
+    mapDiv.classList.add('col');
+    mapDiv.classList.add('hoverable');
+    mapDiv.id = 'individual-map';
 
-      let mapImage = createStaticMap(data[i].stageLocations, '300');
-      mapImage.addEventListener('click', function() {
-        window.location.replace('gameInfo.html?gameID=' + data[i].gameID);
-      });
-      let mapCaption = createStaticMapCaption(data[i], 'map-info');
-      mapImage.classList.add('materialbox');
-      mapImage.classList.add('responsive-img');
-      mapImage.classList.add('width300');
+    let mapImage = createStaticMap(data[i].stageLocations, '300', mapKey);
+    mapImage.addEventListener('click', function() {
+      window.location.replace('gameInfo.html?gameID=' + data[i].gameID);
+    });
+    let mapCaption = createStaticMapCaption(data[i], 'map-info');
+    mapImage.classList.add('materialbox');
+    mapImage.classList.add('responsive-img');
+    mapImage.classList.add('width300');
 
-      mapCaption.classList.add('materialbox');
-      mapCaption.classList.add('width300');
+    mapCaption.classList.add('materialbox');
+    mapCaption.classList.add('width300');
 
-      mapDiv.append(mapImage)
-      mapDiv.append(mapCaption)
-      allMaps.append(mapDiv);
-    }
+    mapDiv.append(mapImage)
+    mapDiv.append(mapCaption)
+    allMaps.append(mapDiv);
+  }
 }
 
 // Deprecated
@@ -430,6 +434,26 @@ async function onLoadFunctions(page) {
     document.body.className = "light-mode";
   }
 
+  let mapKey;
+  await fetch('/load-mapsapikey-data').then(response => response.json()).then((data) => {
+    mapKey = data;
+  });
+
+//   <meta name="google-signin-client_id" content="683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com">
+  let apiScript = document.createElement('script');
+  apiScript.src = 'https://maps.googleapis.com/maps/api/js?key='+mapKey+'&libraries=places';
+  document.head.appendChild(apiScript);
+
+  let clientID;
+  await fetch('/load-clientid-data').then(response => response.json()).then((data) => {
+    clientID = data;
+  });
+
+  let googleClientID = document.createElement('meta');
+  googleClientID.content = clientID;
+  googleClientID.name = "google-signin-client_id";
+  document.head.appendChild(googleClientID);
+
   gapi.load('auth2', async function() {
     gapi.auth2.init({
       client_id: '683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com',
@@ -453,7 +477,7 @@ async function onLoadFunctions(page) {
     } else if (page == 'gameInfo') {
       loadGameData();
     } else if (page == 'index') {
-      loadMaps();
+      loadMaps(mapKey);
       $(document).ready(function(){
         $('.materialbox').materialbox();
       });

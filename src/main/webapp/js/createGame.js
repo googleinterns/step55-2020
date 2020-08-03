@@ -49,7 +49,6 @@ function initMapToCreateGame() {
     let bounds = new google.maps.LatLngBounds();
     places.forEach(function(place) {
       if (!place.geometry) {
-        console.log("Returned place contains no geometry");
         return;
       }
       let icon = {
@@ -150,7 +149,6 @@ function addNewHint() {
   const activeHints = document.getElementById(activeStageNumHintsDiv);
   const numHintInputBoxes = activeHints.getElementsByTagName('input').length - 1;
   let numHints = numHintInputBoxes/2;
-  console.log(stageNum)
 
   const newHintPos = document.createElement('input');
   newHintPos.id = stageNum + 'hint' + numHints + '-position';
@@ -250,7 +248,10 @@ function checkValidLatLng(lat, lng) {
 async function coordinatesOk(lat, lng) {
   if(!checkValidLatLng(lat, lng)) return false;
   let coords = lat + ',' + lng;
-  let key = 'AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
+  let key;
+  await fetch('/load-mapsapikey-data').then(response => response.json()).then((data) => {
+    key = data;
+  });
   let res = false;
   await fetch('https://maps.googleapis.com/maps/api/streetview/metadata?location='+coords+'&key='+key).then(response => response.json()).then(async (data) => {
     if(data.status == 'OK') res = true;

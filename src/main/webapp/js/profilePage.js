@@ -1,4 +1,5 @@
 var originalUsername;
+
 /**
 * Sets up the functionality of the username input box and the submit button.
 */

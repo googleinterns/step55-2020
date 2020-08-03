@@ -62,9 +62,13 @@ function printMapDescription(data) {
 * Adds the game image where the div with id 'map-image' is
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
-function printMapImage(data) {
+async function printMapImage(data) {
+  let mapKey;
+  await fetch('/load-mapsapikey-data').then(response => response.json()).then((data) => {
+    mapKey = data;
+  });
   let mapImage = document.getElementById('map-image');
-  let img = createStaticMap(data.stageLocations, 500, data.gameID);
+  let img = createStaticMap(data.stageLocations, 500, mapKey);
   img.classList.remove('cursor-pointer');
   mapImage.append(img);
 }
