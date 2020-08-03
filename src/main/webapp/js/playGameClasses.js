@@ -5,6 +5,7 @@ class Progress {
   hintsFound;
   stageID;
   map;
+  minimap;
   
   /**
   * Constructor for the class to set the hintsFound
@@ -74,6 +75,22 @@ class Progress {
   */
   get getMap() {
     return this.map;
+  }
+
+  /**
+  * Setter method to set the current minimap
+  * @param {object} minimap is an object with the current minimap 
+  */
+  set setMiniMap(minimap) {
+    this.minimap = minimap;
+  }
+  
+  /**
+  * Getter method to get the current minimap
+  * @return {object} an object with the current minimap 
+  */
+  get getMiniMap() {
+    return this.minimap;
   }
 
   /**

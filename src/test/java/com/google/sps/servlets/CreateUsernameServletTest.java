@@ -100,10 +100,10 @@ public final class CreateUsernameServletTest {
         Assert.assertTrue(username.equals("abc"));
     }
 
-    /**
-    * Simulates user with id 'abcUserId' trying to change their username from 'usernameB' to 'usernameA',
-    * which is already taken by the user with id 'UserA'.
-    */
+    // /**
+    // * Simulates user with id 'abcUserId' trying to change their username from 'usernameB' to 'usernameA',
+    // * which is already taken by the user with id 'UserA'.
+    // */
     @Test
     public void testTakenUsername() throws Exception {
         User userA = new User.Builder("UserA").setUsername("usernameA").build();

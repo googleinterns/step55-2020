@@ -60,7 +60,7 @@ public class CreateUsernameServlet extends HttpServlet {
             throw new IOException("Only letters, digits, underscores, and periods are allowed");
         }
 
-        boolean doesUsernameExist = datastoreManager.doesUsernameExist(username);
+        boolean doesUsernameExist = datastoreManager.doesUsernameExist(username.toLowerCase());
         if (!doesUsernameExist) {
             userVerifier.build(request.getParameter("idToken"), request.getParameter("email"));
             String userId = userVerifier.getUserID();
