@@ -46,7 +46,6 @@ public class UserVerifier {
     public void build(String idTokenString, String email) throws IOException {
         try {
             CLIENT_ID = datastoreManager.retrieveKeys().get("CLIENT_ID");
-            System.out.println(CLIENT_ID);
         } catch (Exception e) {
             throw new IOException("Client id is missing");
         }

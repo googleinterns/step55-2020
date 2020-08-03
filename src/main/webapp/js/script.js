@@ -248,7 +248,6 @@ function createStaticMap(stageLocations, size, mapKey) {
   for (let i = 0; i < stageLocations.length; i++) {
     staticMapURL += '&markers=color:red%7C' + stageLocations[i].latitude + ',' + stageLocations[i].longitude;
   }
-  console.log(mapKey)
   staticMapURL += '&key=' + mapKey;
   staticImage.src = staticMapURL;
   staticImage.classList.add('cursor-pointer');
@@ -339,7 +338,6 @@ function loadMaps(mapKey) {
     let moreMapsButtonDiv = document.getElementById('button-for-more-maps');
     moreMapsButtonDiv.innerHTML = "<input type='button' id='more-maps' value='Load More Maps' onclick='loadMoreMaps(1)'/>";
     featuredMapText.innerHTML = "Featured Map:";
-    console.log(mapKey);
     let featuredMap = createStaticMap(data[0].stageLocations, '400', mapKey);
     let featuredMapCaption = createStaticMapCaption(data[0], 'featured-map-info');
     let featuredMapDiv = document.getElementById('featured-map');
@@ -384,7 +382,6 @@ async function addMaps(data) {
   await fetch('/load-mapsapikey-data').then(response => response.json()).then((data) => {
     mapKey = data;
   });
-  console.log(mapKey)
   let allMaps = document.getElementById('all-maps');
   for (let i = 0; i < data.length; i++) {
     let mapDiv = document.createElement('div');
@@ -441,9 +438,21 @@ async function onLoadFunctions(page) {
   await fetch('/load-mapsapikey-data').then(response => response.json()).then((data) => {
     mapKey = data;
   });
+
+//   <meta name="google-signin-client_id" content="683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com">
   let apiScript = document.createElement('script');
   apiScript.src = 'https://maps.googleapis.com/maps/api/js?key='+mapKey+'&libraries=places';
   document.head.appendChild(apiScript);
+
+  let clientID;
+  await fetch('/load-clientid-data').then(response => response.json()).then((data) => {
+    clientID = data;
+  });
+
+  let googleClientID = document.createElement('meta');
+  googleClientID.content = clientID;
+  googleClientID.name = "google-signin-client_id";
+  document.head.appendChild(googleClientID);
 
   gapi.load('auth2', async function() {
     gapi.auth2.init({

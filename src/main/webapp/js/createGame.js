@@ -250,7 +250,10 @@ function checkValidLatLng(lat, lng) {
 async function coordinatesOk(lat, lng) {
   if(!checkValidLatLng(lat, lng)) return false;
   let coords = lat + ',' + lng;
-  let key = 'AIzaSyDtRpnDqBAeTBM0gjAXIqe2u5vBLj15mtk';
+  let key;
+  await fetch('/load-mapsapikey-data').then(response => response.json()).then((data) => {
+    key = data;
+  });
   let res = false;
   await fetch('https://maps.googleapis.com/maps/api/streetview/metadata?location='+coords+'&key='+key).then(response => response.json()).then(async (data) => {
     if(data.status == 'OK') res = true;
