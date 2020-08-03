@@ -49,7 +49,6 @@ function initMapToCreateGame() {
     let bounds = new google.maps.LatLngBounds();
     places.forEach(function(place) {
       if (!place.geometry) {
-        console.log("Returned place contains no geometry");
         return;
       }
       let icon = {
@@ -150,7 +149,6 @@ function addNewHint() {
   const activeHints = document.getElementById(activeStageNumHintsDiv);
   const numHintInputBoxes = activeHints.getElementsByTagName('input').length - 1;
   let numHints = numHintInputBoxes/2;
-  console.log(stageNum)
 
   const newHintPos = document.createElement('input');
   newHintPos.id = stageNum + 'hint' + numHints + '-position';

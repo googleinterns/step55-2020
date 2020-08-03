@@ -68,7 +68,6 @@ function sendDataToServer(nextAction) {
   let difficultyButtons = document.getElementsByName('difficulty'); 
   let difficulty = 0;
   for(i = 0; i < difficultyButtons.length; i++) { 
-      console.log(difficultyButtons[i].checked)
     if(difficultyButtons[i].checked) { 
       if (difficultyButtons[i].value == 'Easy') {
         difficulty = 1;
