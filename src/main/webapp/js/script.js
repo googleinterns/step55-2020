@@ -283,7 +283,7 @@ function createStaticMapCaption(mapData, captionID) {
   staticMapInfo.classList.add('cursor-pointer');
 
   staticMapInfo.addEventListener('click', function() {
-    window.location.replace('gameInfo.html?gameID=' + mapData.gameID);
+    window.location = 'gameInfo.html?gameID=' + mapData.gameID;
   });
 
   return staticMapInfo;
@@ -345,7 +345,7 @@ function loadMaps(mapKey) {
     featuredMapDiv.append(featuredMap);
     featuredMapDiv.append(featuredMapCaption);
     featuredMapDiv.addEventListener('click', function() {
-      window.location.replace('gameInfo.html?gameID=' + data[0].gameID);
+      window.location = 'gameInfo.html?gameID=' + data[0].gameID;
     });
 
     if (data.length == 0 || data.length < 20) {
@@ -391,7 +391,7 @@ async function addMaps(data) {
 
     let mapImage = createStaticMap(data[i].stageLocations, '300', mapKey);
     mapImage.addEventListener('click', function() {
-      window.location.replace('gameInfo.html?gameID=' + data[i].gameID);
+      window.location = 'gameInfo.html?gameID=' + data[i].gameID;
     });
     let mapCaption = createStaticMapCaption(data[i], 'map-info');
     mapImage.classList.add('materialbox');

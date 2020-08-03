@@ -11,13 +11,13 @@ function initMapToPlayGame() {
   fetch(request).then(response => response.json()).then(async (data) => {
     if (data == null) {
       window.alert('The data for this game does not exist, failure to initialize game');
-      window.location.replace('index.html');
+      window.location = ('index.html');
       return;
     }
 
     if (data.stages == null) {
       window.alert('There are no stages, failure to initialize game');
-      window.location.replace('index.html');
+      window.location = ('index.html');
       return;
     }
 
@@ -32,7 +32,7 @@ function initMapToPlayGame() {
     let stageHints = initStage.hints;
     if (stageHints.length == null) {
       window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
-      window.location.replace('index.html');
+      window.location = ('index.html');
       return;
     }
 
@@ -105,7 +105,7 @@ function getGameID() {
   let gameID = urlParams.get('gameID');
   if(!urlParams.has('gameID')) {
     window.alert('Failure to initialize game');
-    window.location.replace('index.html');
+    window.location = ('index.html');
     return;
   }
   return gameID;
@@ -212,7 +212,7 @@ async function checkKey(data, stage, panorama) {
     updateUserProgress();
     const urlParams = new URLSearchParams(window.location.search)
     let gameID = urlParams.get('gameID');
-    window.location.replace('afterGame.html?gameID=' + gameID);
+    window.location = ('afterGame.html?gameID=' + gameID);
     return;
   }
 
@@ -229,7 +229,7 @@ async function checkKey(data, stage, panorama) {
   let stageHints = nextStage.hints;
   if (stageHints.length == null) {
     window.alert('Sorry there was an error retrieving the hints, failure to initialize game');
-    window.location.replace('index.html');
+    window.location = ('index.html');
     return;
   }
   currGameData.clearHintsFound();

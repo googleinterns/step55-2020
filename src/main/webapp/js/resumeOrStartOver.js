@@ -20,7 +20,7 @@ function checkIfUserHasSavedProgress() {
   let request = new Request('/has-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request).then(response => response.json()).then(async (data) => {
     if (data == 0) {
-      window.location.replace('playGame.html?gameID=' + gameID);
+      window.location = ('playGame.html?gameID=' + gameID);
     } 
   });
 }
@@ -44,7 +44,7 @@ function restartGame() {
 
   let request = new Request('/reset-singleplayerprogress-data', {method: 'POST', body: fetchParams});
   fetch(request);
-  window.location.replace('playGame.html?gameID=' + gameID);
+  window.location = ('playGame.html?gameID=' + gameID);
 }
 
 /** 
@@ -54,5 +54,5 @@ function continueGame() {
   const urlParams = new URLSearchParams(window.location.search)
   let gameID = urlParams.get('gameID');
 
-  window.location.replace('playGame.html?gameID=' + gameID);
+  window.location = ('playGame.html?gameID=' + gameID);
 }
