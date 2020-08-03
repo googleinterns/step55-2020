@@ -30,7 +30,7 @@ import java.io.IOException;
 */
 public class UserVerifier {
     private DatastoreManager datastoreManager = new DatastoreManager();
-    private final String CLIENT_ID = "683964064238-ccubt4o7k5oc9pml8n72id8q1p1phukl.apps.googleusercontent.com";
+    private String CLIENT_ID;
     private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new UrlFetchTransport(), new JacksonFactory()).setAudience(Collections.singletonList(CLIENT_ID)).build();
     private boolean isValid = false;
     private GoogleIdToken idToken;
@@ -44,6 +44,11 @@ public class UserVerifier {
     * @param email the email corresponding to the same id token string.
     */
     public void build(String idTokenString, String email) throws IOException {
+        try {
+            CLIENT_ID = datastoreManager.retrieveKeys().get("CLIENT_ID");
+        } catch (Exception e) {
+            throw new IOException("Client id is missing");
+        }
         isValid = false;
         try {
             this.idToken = verifier.verify(idTokenString);
