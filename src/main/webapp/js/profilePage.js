@@ -10,7 +10,7 @@ async function loadProfilePage() {
 
   if (!isSignedIn()) {
     alert('You must be signed in to access this page')
-    window.location.replace('index.html');
+    window.location = ('index.html');
     return;
   }
 

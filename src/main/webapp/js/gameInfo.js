@@ -103,7 +103,7 @@ async function printPlayGameButton(gameID) {
   playGameButton.id = 'play-game-button'; 
   playGameButton.addEventListener("click", function(){
     if (!isSignedIn()) {
-      window.location.replace('playGame.html?gameID=' + gameID);
+      window.location = ('playGame.html?gameID=' + gameID);
       return;
     }
     const params = new URLSearchParams();
@@ -115,9 +115,9 @@ async function printPlayGameButton(gameID) {
     let request = new Request('/has-singleplayerprogress-data', {method: 'POST', body: params});
     fetch(request).then(response => response.json()).then(async (data) => {
       if (data == 0) {
-        window.location.replace('playGame.html?gameID=' + gameID);
+        window.location = ('playGame.html?gameID=' + gameID);
       } else {
-        window.location.replace('resumeOrStartOver.html?gameID=' + gameID);
+        window.location = ('resumeOrStartOver.html?gameID=' + gameID);
       }
     }); 
   }); 

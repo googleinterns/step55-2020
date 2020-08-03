@@ -7,7 +7,7 @@ function loadGameName() {
 
   if (gameID == null) {
     alert("Failure to load game");
-    window.location.replace("index.html");
+    window.location ("index.html");
     return;
   }
 
@@ -17,7 +17,7 @@ function loadGameName() {
   fetch(request).then(response => response.json()).then(async (data) => {
     if (data == null) {
       alert("Failure to load game, this is not a valid game");
-      window.location.replace("index.html");
+      window.location = ("index.html");
       return;
     }
     let gameTitle = document.getElementById('game-title');
@@ -88,10 +88,10 @@ function sendDataToServer(nextAction) {
   fetchParams.append('gameID', gameID);
   let request = new Request('/update-feedback-data', {method: 'POST', body: fetchParams});
   if (nextAction == 'Play Again') {
-    window.location.replace('playGame.html?gameID=' + gameID);
+    window.location = ('playGame.html?gameID=' + gameID);
     return;
   } else if (nextAction == 'Back To Home') {
-    window.location.replace('index.html');
+    window.location = ('index.html');
   } else {
     fetch(request);
   }
