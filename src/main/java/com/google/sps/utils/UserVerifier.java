@@ -31,7 +31,7 @@ import java.io.IOException;
 public class UserVerifier {
     private DatastoreManager datastoreManager = new DatastoreManager();
     private String CLIENT_ID;
-    private GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new UrlFetchTransport(), new JacksonFactory()).setAudience(Collections.singletonList(CLIENT_ID)).build();
+    private GoogleIdTokenVerifier verifier;
     private boolean isValid = false;
     private GoogleIdToken idToken;
     private Payload payload;
@@ -49,6 +49,7 @@ public class UserVerifier {
         } catch (Exception e) {
             throw new IOException("Client id is missing");
         }
+        verifier = new GoogleIdTokenVerifier.Builder(new UrlFetchTransport(), new JacksonFactory()).setAudience(Collections.singletonList(CLIENT_ID)).build();
         isValid = false;
         try {
             this.idToken = verifier.verify(idTokenString);
