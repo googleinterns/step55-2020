@@ -225,6 +225,7 @@ function createInputDiv() {
 * [-180, 180].
 * @param {float} lat the latitude of the coordinates that are to be checked if there is a streetview of
 * @param {float} lng the longitude of the coordinates that are to be checked if there is a streetview of
+* @return {boolean} true if the coordinates are valid and false otherwise
 */
 function checkValidLatLng(lat, lng) {
   if (!(lat > -85 && lat < 85)) {
@@ -244,6 +245,7 @@ function checkValidLatLng(lat, lng) {
 * [-180, 180]. The location must also have Street View support.
 * @param {float} lat the latitude of the coordinates that are to be checked if there is a streetview of
 * @param {float} lng the longitude of the coordinates that are to be checked if there is a streetview of
+* @return {boolean} true if the coordinates are valid and false otherwise
 */
 async function coordinatesOk(lat, lng) {
   if(!checkValidLatLng(lat, lng)) return false;

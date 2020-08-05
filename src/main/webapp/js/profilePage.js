@@ -71,7 +71,7 @@ async function getAvailabilityText(lowerCaseUserName) {
   if (!pattern.test(lowerCaseUserName)) {
     return 'Only letters, digits, underscores, and periods are allowed';
   } else if (originalUsername.toLowerCase() == lowerCaseUserName) {
-    return 'Username Currently in use by you';
+    return 'Username currently in use by you';
   } else if (await isTaken(lowerCaseUserName)) {
     return 'Username is already taken';
   }
