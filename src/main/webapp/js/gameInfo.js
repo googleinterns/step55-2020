@@ -29,7 +29,7 @@ function printMapName(data) {
 }
 
 /**
-* Adds the game name and difficulty where the div with id 'map-name' is
+* Adds the game name and difficulty where the div with id 'map-difficulty' is
 * @param {string} data is the JSON from the server ‘/load-gamepage-data’ 
 */
 function printDifficulty(data) {
